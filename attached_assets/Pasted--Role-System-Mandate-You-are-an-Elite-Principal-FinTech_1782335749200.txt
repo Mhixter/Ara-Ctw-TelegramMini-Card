@@ -1,0 +1,101 @@
+# Role & System Mandate
+You are an Elite Principal FinTech Architect and Lead Engineer. Your task is to generate the production-ready code, architecture blueprints, and implementation scripts for a high-security Telegram Mini App (TMA) payment platform tailored for the Nigerian market. 
+
+The system allows users to onboard via Telegram, verify their identities (KYC), fund individual wallets via automated virtual bank accounts (NGN), and instantly issue co-branded Virtual Visa/Mastercard profiles (USD/NGN) categorized by tiers (Gold vs. Platinum) with dynamic spending limits. 
+
+The implementation must strictly enforce double-entry ledgers, banking-grade security protocols, responsive glassmorphic UI matching Telegram's native design tokens, and a multi-role corporate back-office administrative console.
+
+---
+
+# 1. Comprehensive Tech Stack & Architectural Patterns
+
+### Frontend Architecture (Telegram Client & Internal Admin View)
+- **Framework:** Next.js 15+ App Router (React 19). Fully optimized for Static Site Generation (SSG) with dynamic client hydration.
+- **Styling & Components:** TailwindCSS 4, Shadcn/ui, Radix UI primitives, Lucide React icons.
+- **Telegram Native Interactivity:** `@telegram-apps/sdk-react` for deep bridge operations (haptics, theme tracking, cloud storage integration).
+- **State Management & Data Fetching:** TanStack Query v5 (React Query) for aggressive caching, optimistic UI state updates, and auto-polling transaction logs.
+
+### Backend Infrastructure & Financial Engine
+- **Engine Framework:** Node.js (TypeScript) using NestJS OR Go (Golang) using the Gin-Gonic framework.
+- **Primary Database:** PostgreSQL 17 with strict connection pooling via PgBouncer.
+- **Cache & Real-time Layer:** Redis Stack for session management, API rate-limiting tokens, idempotent request tracking, and low-latency webhook locking.
+
+### Key Fintech Infrastructure Integrations (Nigeria-focused)
+- **Virtual Cards & Global Settlement Rails:** Bridgecard API or Miden API. Must support strict billing address passing for platforms like Microsoft, Netflix, Epic Games, and PlayStation Network.
+- **Local Rails & Virtual Account Inbound Funding:** Mono API or Kora API. For provisioning dedicated bank transfer accounts (Wema, Sterling, Moniepoint) per user.
+- **Identity & Liveness Checking Pipeline:** Smile ID API (NIN/BVN validation + Document verification with client-side liveness video frames).
+
+---
+
+# 2. Database Schema Blueprint (PostgreSQL DDL)
+Generate the fully optimized DDL SQL schema. Ensure it features the following specific tables and security constraints:
+
+1. **`users` Table:**
+   - Fields: `id` (UUIDv4), `telegram_id` (BigInt, Unique, Indexed), `phone_number`, `email`, `kyc_status` (ENUM: PENDING, TIER_1, TIER_2, BANNED), `is_active` (Boolean), `created_at`.
+2. **`user_kyc` Table:**
+   - Fields: `id`, `user_id` (FK), `bvn_hash` (Encrypted), `nin_hash` (Encrypted), `full_name`, `date_of_birth`, `id_document_url`, `liveness_score`, `verified_at`.
+3. **`wallets` Table:**
+   - Fields: `id`, `user_id` (FK), `currency` (ENUM: NGN, USD), `balance` (Numeric(20, 4) to eliminate floating-point penny errors), `reserved_balance` (Numeric(20, 4)), `virtual_account_number`, `virtual_bank_name`, `updated_at`.
+4. **`cards` Table:**
+   - Fields: `id`, `user_id` (FK), `provider_card_id` (Indexed), `card_token` (Encrypted reference token), `mask_pan` (e.g., 411111XXXXXX1111), `card_tier` (ENUM: GOLD, PLATINUM), `card_brand` (ENUM: VISA, MASTERCARD, VERVE), `card_currency` (ENUM: NGN, USD), `daily_limit` (Numeric), `monthly_limit` (Numeric), `amount_spent_today` (Numeric), `status` (ENUM: ACTIVE, FROZEN, TERMINATED), `created_at`.
+5. **`ledger_entries` Table (Strict Double-Entry Standard):**
+   - Fields: `id` (UUID), `transaction_reference` (Unique tracking hash), `debit_wallet_id` (FK, Nullable), `credit_wallet_id` (FK, Nullable), `amount` (Numeric(20,4)), `purpose` (ENUM: WALLET_FUNDING, CARD_ISSUANCE, CARD_FUNDING, MERCHANT_PURCHASE, FEE_CHARGE), `metadata` (JSONB for auditing structural logs), `created_at`.
+6. **`admin_users` Table:**
+   - Fields: `id`, `email`, `password_hash`, `role` (ENUM: SUPER_ADMIN, COMPLIANCE_OFFICER, CUSTOMER_SUPPORT, FINANCE_AUDITOR), `is_active`, `two_factor_secret`.
+
+---
+
+# 3. Step-by-Step Code Generation & Logic Flows
+
+Implement fully written, production-grade boilerplate modules for the following core loops. Do not mock or emit code structures:
+
+### Task A: Cryptographic Telegram Handshake & Verification
+- Create the backend authentication service middleware. It must parse the raw `window.Telegram.WebApp.initData` payload string sent in the Authorization header.
+- Re-compute the HMAC-SHA256 signature using your server-side secret `TELEGRAM_BOT_TOKEN` as the cryptographic salt. Reject any connection attempts if signatures mismatch. 
+- Return a secure, short-lived JWT token containing the verified Telegram User ID.
+
+### Task B: Tiered KYC & Dynamic Onboarding Logic
+- Write the onboarding API controllers.
+- **Tier 1 Route:** Collects BVN/NIN. Calls Smile ID backend registries asynchronously. Validates that full names match. Elevates account state to `TIER_1` and assigns the user to the **Gold Card Tier** (Max \$500 limit).
+- **Tier 2 Route:** Captures secure S3 secure upload handles for official identification items and handles input strings from Smile ID liveness checks. Elevates status to `TIER_2`, unlocking the **Platinum Card Tier** (Max \$5,000+ limit).
+
+### Task C: Virtual Inbound Account Provisioning & Webhook Engine
+- Write the API controller handling inbound bank-funding webhooks from Mono/Kora.
+- **Idempotency Check:** Verify if the incoming reference ID already exists in Redis or `ledger_entries`. If it exists, drop the request with a `200 OK` to prevent multi-crediting duplication.
+- **Atomic Operations:** Implement a database transaction block (`BEGIN TRANSACTION`). Credit the user’s wallet, create a row inside `ledger_entries`, and commit safely.
+
+### Task D: Dual-Layer Card Authorization Engine
+- Build the service method executing card lifecycle routines against Miden or Bridgecard APIs.
+- When an API request for an action occurs, run your local application validation *first*: Verify that `requested_amount + amount_spent_today <= daily_limit` based on their tier (Gold vs. Platinum). 
+- If valid, issue a server-to-server POST request payload to the card provider configuration endpoint to temporarily lower or adjust limits, then authorize the movement. Create an endpoint enabling the user to pause, unpause, or manually throttle their virtual card limits directly inside the app.
+
+---
+
+# 4. Premium Telegram Mini App UI/UX Design System
+Generate component codes for the frontend layer utilizing Tailwind CSS 4. Apply these layout patterns:
+
+- **Theme Sync Engine:** Integrate a React hook mapping to native Telegram variables (`window.Telegram.WebApp.themeParams`). Dynamically adapt text elements to `--tg-theme-text-color` and container assets to `--tg-theme-bg-color`.
+- **The Glassmorphic Card Engine:** Code an interactive, high-fidelity virtual card mockup UI element. 
+  - Gold Card Tier features a sleek, metallic gold brushing overlay effect. 
+  - Platinum Tier features an ultra-premium deep holographic obsidian dark profile.
+  - Implement a tactile "Reveal Card Credentials" micro-interaction that triggers the SDK haptic click (`Telegram.WebApp.HapticFeedback.notificationOccurred('success')`) and replaces masked string components with real card data retrieved from a secured query endpoint.
+
+---
+
+# 5. Multi-Role Company Back-Office Administrative Console
+Develop the structure for a corporate admin panel dashboard using Next.js layout routes. Implement strict Role-Based Access Control (RBAC) validations:
+
+- **Super Admin:** Complete cryptographic systems access. Can modify system-wide fee metrics, freeze operations globally, and create admin staff rows.
+- **Compliance Officer:** Access to a tailored user ledger interface. Can review flagged Smile ID KYC documents, override validation states manually, and view verified IDs.
+- **Customer Support:** Read-only access to user details. Can trigger the card-freezing endpoint or re-send webhook notifications on customer request.
+- **Finance Auditor:** Read-only access to structural balance files. Can export real-time `ledger_entries` files and verify that total internal wallet assets match the real-time liquidity pools sitting with Bridgecard/Miden/Kora.
+
+---
+
+# 6. Technical Hardening, Security Audits & Edge Conditions
+Ensure the generated code base explicitly enforces these structural security strategies:
+- **AES-256-GCM Data Encryption:** All raw internal card tracking payloads, authorization hashes, or personal registry vectors must be encrypted before database ingestion using a primary master environment variable key.
+- **Race Condition Controls:** Use PostgreSQL's explicit row-level locking mechanism (`SELECT FOR UPDATE`) or Redis locks during financial balance evaluations. This prevents double-spend attempts if a user attempts multiple transactions simultaneously.
+- **Strict Network Isolation:** Implement validation rules within the webhook endpoint architectures to reject any payload incoming from non-whitelisted provider server IP clusters.
+
+Begin generation by establishing the database schema layers first, then proceed to the implementation blocks step-by-step.
