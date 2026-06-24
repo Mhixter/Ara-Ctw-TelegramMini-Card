@@ -182,7 +182,7 @@ export default function ProfilePage({ user, onLogout }: Props) {
       </button>
 
       <p style={{ textAlign: 'center', fontSize: '11px', color: 'var(--tg-theme-hint-color)', marginTop: '24px' }}>
-        NairaVault v1.0.0 · Built on Replit
+        NairaVault v1.0.0 · Powered by Ara Tech
       </p>
     </div>
   );
