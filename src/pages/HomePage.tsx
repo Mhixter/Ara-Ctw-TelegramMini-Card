@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowDownCircle, ArrowUpCircle, TrendingUp, RefreshCw, Send, Plus, AlertCircle } from 'lucide-react';
+import { ArrowDownCircle, ArrowUpCircle, RefreshCw, Send, Plus, AlertCircle, Wallet } from 'lucide-react';
 import { walletApi } from '../lib/api';
 import { User } from '../hooks/useAuth';
 import { useTelegram } from '../hooks/useTelegram';
@@ -12,7 +12,6 @@ export default function HomePage({ user }: Props) {
   const { haptic } = useTelegram();
   const [fundModal, setFundModal] = useState(false);
   const [fundAmount, setFundAmount] = useState('');
-  const [fundCurrency, setFundCurrency] = useState<'NGN' | 'USD'>('NGN');
 
   const { data: wallets = [], isLoading: walletsLoading } = useQuery({
     queryKey: ['wallets'],
@@ -27,7 +26,7 @@ export default function HomePage({ user }: Props) {
   });
 
   const fundMutation = useMutation({
-    mutationFn: () => walletApi.fund(parseFloat(fundAmount), fundCurrency),
+    mutationFn: () => walletApi.fund(parseFloat(fundAmount), 'NGN'),
     onSuccess: () => {
       haptic('success');
       setFundModal(false);
@@ -38,23 +37,16 @@ export default function HomePage({ user }: Props) {
   });
 
   const ngnWallet = wallets.find((w: any) => w.currency === 'NGN');
-  const usdWallet = wallets.find((w: any) => w.currency === 'USD');
-
   const kycBanner = user.kycStatus === 'PENDING';
-
-  function formatAmount(amount: number, currency: string) {
-    if (currency === 'NGN') return `₦${Number(amount).toLocaleString('en-NG', { minimumFractionDigits: 2 })}`;
-    return `$${Number(amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-  }
 
   function purposeLabel(p: string) {
     const map: Record<string, string> = {
-      WALLET_FUNDING: 'Wallet Funded',
-      CARD_ISSUANCE: 'Card Issued',
-      CARD_SPEND: 'Card Purchase',
-      CARD_FUNDING: 'Card Funded',
+      WALLET_FUNDING:    'Wallet Funded',
+      CARD_ISSUANCE:     'Card Issued',
+      CARD_SPEND:        'Card Purchase',
+      CARD_FUNDING:      'Card Funded',
       MERCHANT_PURCHASE: 'Purchase',
-      FEE_CHARGE: 'Fee'
+      FEE_CHARGE:        'Fee',
     };
     return map[p] || p;
   }
@@ -98,50 +90,52 @@ export default function HomePage({ user }: Props) {
         </div>
       )}
 
-      {/* Wallet Balances */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '24px' }}>
+      {/* NGN Wallet Card */}
+      <div className="glass" style={{
+        padding: '24px', marginBottom: '20px',
+        borderColor: 'rgba(34,197,94,0.25)', background: 'rgba(34,197,94,0.05)'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(34,197,94,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Wallet size={16} color="var(--success)" />
+            </div>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--tg-theme-hint-color)', letterSpacing: '1px' }}>NGN WALLET</span>
+          </div>
+          {ngnWallet && (
+            <span className="badge badge-success" style={{ fontSize: '10px' }}>Active</span>
+          )}
+        </div>
+
         {walletsLoading ? (
-          <>
-            <div className="skeleton" style={{ height: '100px', borderRadius: '16px' }} />
-            <div className="skeleton" style={{ height: '100px', borderRadius: '16px' }} />
-          </>
+          <div className="skeleton" style={{ height: '40px', borderRadius: '8px' }} />
         ) : (
           <>
-            <div className="glass" style={{ padding: '16px', borderColor: 'rgba(34,197,94,0.2)', background: 'rgba(34,197,94,0.04)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
-                <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--tg-theme-hint-color)', letterSpacing: '1px' }}>NGN WALLET</span>
-                <ArrowDownCircle size={16} color="var(--success)" />
-              </div>
-              <p style={{ fontSize: '20px', fontWeight: 800, lineHeight: 1, color: 'var(--success)' }}>
-                ₦{Number(ngnWallet?.balance || 0).toLocaleString('en-NG', { minimumFractionDigits: 0 })}
-              </p>
-              {ngnWallet?.virtual_account_number && (
-                <p style={{ fontSize: '10px', color: 'var(--tg-theme-hint-color)', marginTop: '6px' }}>
-                  {ngnWallet.virtual_bank_name} · {ngnWallet.virtual_account_number}
+            <p style={{ fontSize: '32px', fontWeight: 900, lineHeight: 1, color: 'var(--success)', marginBottom: '8px' }}>
+              ₦{Number(ngnWallet?.balance || 0).toLocaleString('en-NG', { minimumFractionDigits: 2 })}
+            </p>
+            {ngnWallet?.virtual_account_number ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px' }}>
+                <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--success)' }} />
+                <p style={{ fontSize: '11px', color: 'var(--tg-theme-hint-color)' }}>
+                  {ngnWallet.virtual_bank_name} · <strong style={{ color: 'white' }}>{ngnWallet.virtual_account_number}</strong>
                 </p>
-              )}
-            </div>
-
-            <div className="glass" style={{ padding: '16px', borderColor: 'rgba(108,99,255,0.2)', background: 'rgba(108,99,255,0.04)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
-                <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--tg-theme-hint-color)', letterSpacing: '1px' }}>USD WALLET</span>
-                <TrendingUp size={16} color="var(--accent)" />
               </div>
-              <p style={{ fontSize: '20px', fontWeight: 800, lineHeight: 1, color: 'var(--accent)' }}>
-                ${Number(usdWallet?.balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            ) : (
+              <p style={{ fontSize: '11px', color: 'var(--tg-theme-hint-color)', marginTop: '4px' }}>
+                Complete KYC to get a virtual bank account
               </p>
-              <p style={{ fontSize: '10px', color: 'var(--tg-theme-hint-color)', marginTop: '6px' }}>Available balance</p>
-            </div>
+            )}
           </>
         )}
       </div>
 
       {/* Quick Actions */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '28px' }}>
-        <button className="btn-primary" style={{ padding: '12px', fontSize: '14px' }} onClick={() => setFundModal(true)}>
+        <button className="btn-primary" style={{ padding: '14px', fontSize: '14px' }} onClick={() => setFundModal(true)}>
           <Plus size={16} /> Fund Wallet
         </button>
-        <button className="btn-ghost" style={{ padding: '12px', fontSize: '14px' }} onClick={() => qc.invalidateQueries()}>
+        <button className="btn-ghost" style={{ padding: '14px', fontSize: '14px' }} onClick={() => qc.invalidateQueries()}>
           <RefreshCw size={16} /> Refresh
         </button>
       </div>
@@ -164,64 +158,82 @@ export default function HomePage({ user }: Props) {
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {transactions.slice(0, 20).map((tx: any) => (
-            <div key={tx.id} className="glass" style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{
-                width: '36px', height: '36px', borderRadius: '50%', flexShrink: 0,
-                background: `${purposeColor(tx.purpose)}20`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center'
-              }}>
-                {tx.credit_wallet_id
-                  ? <ArrowDownCircle size={16} color="var(--success)" />
-                  : <ArrowUpCircle size={16} color="var(--danger)" />
-                }
-              </div>
-              <div style={{ flex: 1 }}>
-                <p style={{ fontSize: '13px', fontWeight: 600 }}>{purposeLabel(tx.purpose)}</p>
-                <p style={{ fontSize: '11px', color: 'var(--tg-theme-hint-color)', marginTop: '2px' }}>
-                  {new Date(tx.created_at).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+          {transactions.slice(0, 20).map((tx: any) => {
+            const isCredit = !!tx.credit_wallet_id;
+            const meta = (() => { try { return JSON.parse(tx.metadata || '{}'); } catch { return {}; } })();
+            return (
+              <div key={tx.id} className="glass" style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{
+                  width: '38px', height: '38px', borderRadius: '50%', flexShrink: 0,
+                  background: `${purposeColor(tx.purpose)}18`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                  {isCredit
+                    ? <ArrowDownCircle size={17} color="var(--success)" />
+                    : <ArrowUpCircle size={17} color="var(--danger)" />
+                  }
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: '13px', fontWeight: 600, marginBottom: '2px' }}>{purposeLabel(tx.purpose)}</p>
+                  <p style={{ fontSize: '11px', color: 'var(--tg-theme-hint-color)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {meta.merchant
+                      ? `${meta.merchant} · ${meta.mask_pan || ''}`
+                      : new Date(tx.created_at).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+                    }
+                  </p>
+                  {meta.merchant && (
+                    <p style={{ fontSize: '10px', color: 'var(--tg-theme-hint-color)' }}>
+                      {new Date(tx.created_at).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  )}
+                </div>
+                <p style={{ fontSize: '14px', fontWeight: 700, color: isCredit ? 'var(--success)' : 'var(--danger)', flexShrink: 0 }}>
+                  {isCredit ? '+' : '-'}₦{Number(tx.amount).toLocaleString('en-NG')}
                 </p>
               </div>
-              <p style={{ fontSize: '14px', fontWeight: 700, color: tx.credit_wallet_id ? 'var(--success)' : 'var(--danger)' }}>
-                {tx.credit_wallet_id ? '+' : '-'}
-                {tx.debit_currency === 'NGN' || tx.credit_currency === 'NGN'
-                  ? `₦${Number(tx.amount).toLocaleString()}`
-                  : `$${Number(tx.amount).toFixed(2)}`}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
       {/* Fund Modal */}
       {fundModal && (
         <div style={{
-          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)',
-          display: 'flex', alignItems: 'flex-end', justifyContent: 'center', zIndex: 200, padding: '0 0 env(safe-area-inset-bottom)'
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(8px)',
+          display: 'flex', alignItems: 'flex-end', justifyContent: 'center', zIndex: 200
         }}>
-          <div className="glass-strong" style={{ width: '100%', maxWidth: '480px', padding: '28px 24px 32px', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '20px' }}>Fund Wallet</h3>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-              {(['NGN', 'USD'] as const).map(c => (
-                <button key={c} onClick={() => setFundCurrency(c)} style={{
-                  flex: 1, padding: '10px', borderRadius: '10px', border: '1px solid',
-                  borderColor: fundCurrency === c ? 'var(--accent)' : 'var(--glass-border)',
-                  background: fundCurrency === c ? 'rgba(108,99,255,0.15)' : 'transparent',
-                  color: 'white', fontSize: '13px', fontWeight: 600, cursor: 'pointer'
-                }}>{c}</button>
-              ))}
-            </div>
+          <div className="glass-strong" style={{ width: '100%', maxWidth: '480px', padding: '28px 24px 36px', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '6px' }}>Fund NGN Wallet</h3>
+            <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)', marginBottom: '20px' }}>
+              {ngnWallet?.virtual_account_number
+                ? `Transfer to ${ngnWallet.virtual_bank_name} · ${ngnWallet.virtual_account_number}`
+                : 'Enter an amount to add to your wallet'}
+            </p>
             <input
               className="input-field"
               type="number"
-              placeholder={fundCurrency === 'NGN' ? 'Amount in ₦ (e.g. 5000)' : 'Amount in $ (e.g. 10)'}
+              placeholder="Amount in ₦ (e.g. 10,000)"
               value={fundAmount}
               onChange={e => setFundAmount(e.target.value)}
-              style={{ marginBottom: '16px' }}
+              style={{ marginBottom: '20px' }}
               autoFocus
             />
+            {/* Quick amount chips */}
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
+              {[5000, 10000, 20000, 50000].map(amt => (
+                <button key={amt} onClick={() => setFundAmount(String(amt))} style={{
+                  padding: '6px 14px', borderRadius: '20px', border: '1px solid',
+                  borderColor: fundAmount === String(amt) ? 'var(--success)' : 'var(--glass-border)',
+                  background: fundAmount === String(amt) ? 'rgba(34,197,94,0.12)' : 'transparent',
+                  color: fundAmount === String(amt) ? 'var(--success)' : 'var(--tg-theme-hint-color)',
+                  fontSize: '12px', fontWeight: 600, cursor: 'pointer'
+                }}>
+                  ₦{amt.toLocaleString()}
+                </button>
+              ))}
+            </div>
             <div style={{ display: 'flex', gap: '10px' }}>
-              <button className="btn-ghost" onClick={() => setFundModal(false)} style={{ flex: 1 }}>Cancel</button>
+              <button className="btn-ghost" onClick={() => { setFundModal(false); setFundAmount(''); }} style={{ flex: 1 }}>Cancel</button>
               <button
                 className="btn-primary"
                 style={{ flex: 1 }}

@@ -38,8 +38,8 @@ router.post('/telegram', async (req: Request, res: Response) => {
       user = insertResult.rows[0];
 
       await pool.query(
-        'INSERT INTO wallets (user_id, currency, balance) VALUES ($1, $2, 0), ($1, $3, 0)',
-        [user.id, 'NGN', 'USD']
+        'INSERT INTO wallets (user_id, currency, balance) VALUES ($1, $2, 0)',
+        [user.id, 'NGN']
       );
     }
 
