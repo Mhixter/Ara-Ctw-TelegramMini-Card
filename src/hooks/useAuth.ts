@@ -11,31 +11,55 @@ export interface User {
   isActive: boolean;
 }
 
+function getGuestId(): number {
+  const key = 'nv_guest_id';
+  const stored = localStorage.getItem(key);
+  if (stored) return parseInt(stored, 10);
+  const id = Math.floor(Math.random() * 9_000_000_000) + 1_000_000_000;
+  localStorage.setItem(key, String(id));
+  return id;
+}
+
 export function useAuth() {
-  const { telegramId, username, firstName, initData, isInTelegram } = useTelegram();
+  const { telegramId, username, firstName, initData } = useTelegram();
+
   const [user, setUser] = useState<User | null>(() => {
     try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
   });
-  const [loading, setLoading] = useState(!user);
+  const [loading, setLoading] = useState(() => {
+    const hasSession = !!(localStorage.getItem('user') && localStorage.getItem('token'));
+    return !hasSession;
+  });
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user) authenticate();
+    const hasSession = !!(localStorage.getItem('user') && localStorage.getItem('token'));
+    if (!hasSession) {
+      authenticate();
+    }
   }, []);
 
   async function authenticate() {
     setLoading(true);
     setError(null);
     try {
-      const payload = isInTelegram && initData
+      // Use real Telegram initData only if it carries actual data (>20 chars)
+      const hasTgData = !!(initData && initData.length > 20);
+      const payload = hasTgData
         ? { initData }
-        : { telegramId: telegramId || Math.floor(Math.random() * 9000000000) + 1000000000, username, firstName };
+        : {
+            telegramId: telegramId || getGuestId(),
+            username: username || undefined,
+            firstName: firstName || 'Guest',
+          };
+
       const data = await authApi.telegram(payload);
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       setUser(data.user);
     } catch (e: any) {
-      setError(e.response?.data?.error || 'Authentication failed');
+      const msg = e.response?.data?.error || e.message || 'Authentication failed';
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -44,7 +68,9 @@ export function useAuth() {
   function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    // Keep nv_guest_id so the same guest re-authenticates to the same account
     setUser(null);
+    authenticate();
   }
 
   function refreshUser(updated: Partial<User>) {
