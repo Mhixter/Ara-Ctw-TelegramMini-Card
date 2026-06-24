@@ -80,6 +80,103 @@ router.post('/issue', requireAuth, async (req: AuthRequest, res: Response) => {
   }
 });
 
+router.post('/:cardId/spend', requireAuth, async (req: AuthRequest, res: Response) => {
+  const client = await pool.connect();
+  try {
+    const { cardId } = req.params;
+    const { amount, merchant = 'Online Merchant' } = req.body;
+    const spendAmount = Number(amount);
+    if (!spendAmount || spendAmount <= 0) {
+      return res.status(400).json({ error: 'Invalid spend amount' });
+    }
+
+    await client.query('BEGIN');
+
+    // Lock card row
+    const cardResult = await client.query(
+      `SELECT c.*, DATE(c.updated_at) as last_reset_date
+       FROM cards c
+       WHERE c.id = $1 AND c.user_id = $2 FOR UPDATE`,
+      [cardId, req.user!.userId]
+    );
+    const card = cardResult.rows[0];
+    if (!card) { await client.query('ROLLBACK'); return res.status(404).json({ error: 'Card not found' }); }
+    if (card.status !== 'ACTIVE') { await client.query('ROLLBACK'); return res.status(400).json({ error: 'Card is frozen. Unfreeze before spending.' }); }
+
+    // Daily reset: if card was last updated on a previous day, reset amount_spent_today
+    const today = new Date().toISOString().slice(0, 10);
+    const lastReset = card.last_reset_date ? new Date(card.last_reset_date).toISOString().slice(0, 10) : null;
+    let spentToday = Number(card.amount_spent_today || 0);
+    if (lastReset !== today) {
+      spentToday = 0;
+      await client.query('UPDATE cards SET amount_spent_today = 0 WHERE id = $1', [cardId]);
+    }
+
+    // Enforce daily limit (limits stored as USD-equivalent but card is NGN — treat as plain number limit)
+    const dailyLimit = Number(card.daily_limit);
+    if (spentToday + spendAmount > dailyLimit) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({
+        error: `Daily limit exceeded. Remaining: ₦${(dailyLimit - spentToday).toLocaleString('en-NG')}`
+      });
+    }
+
+    // Lock NGN wallet
+    const walletResult = await client.query(
+      'SELECT * FROM wallets WHERE user_id = $1 AND currency = $2 FOR UPDATE',
+      [req.user!.userId, 'NGN']
+    );
+    const wallet = walletResult.rows[0];
+    if (!wallet) { await client.query('ROLLBACK'); return res.status(404).json({ error: 'NGN wallet not found' }); }
+    if (Number(wallet.balance) < spendAmount) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: `Insufficient NGN balance. Available: ₦${Number(wallet.balance).toLocaleString('en-NG')}` });
+    }
+
+    // Debit wallet
+    await client.query(
+      'UPDATE wallets SET balance = balance - $1, updated_at = NOW() WHERE id = $2',
+      [spendAmount, wallet.id]
+    );
+
+    // Update card spend tracker
+    await client.query(
+      'UPDATE cards SET amount_spent_today = $1, updated_at = NOW() WHERE id = $2',
+      [spentToday + spendAmount, cardId]
+    );
+
+    // Double-entry ledger: debit_wallet_id = user NGN wallet, credit_wallet_id = NULL (merchant/external)
+    const ref = `SPEND-${uuidv4()}`;
+    await client.query(
+      `INSERT INTO ledger_entries
+         (transaction_reference, debit_wallet_id, amount, purpose, metadata)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [ref, wallet.id, spendAmount, 'CARD_SPEND', JSON.stringify({
+        card_id: cardId,
+        mask_pan: card.mask_pan,
+        card_tier: card.card_tier,
+        merchant,
+        currency: 'NGN'
+      })]
+    );
+
+    await client.query('COMMIT');
+    res.json({
+      success: true,
+      message: `₦${spendAmount.toLocaleString('en-NG')} debited for "${merchant}"`,
+      spent_today: spentToday + spendAmount,
+      daily_limit: dailyLimit,
+      wallet_balance: Number(wallet.balance) - spendAmount
+    });
+  } catch (err) {
+    await client.query('ROLLBACK');
+    console.error('Card spend error:', err);
+    res.status(500).json({ error: 'Transaction failed' });
+  } finally {
+    client.release();
+  }
+});
+
 router.patch('/:cardId/status', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
     const { cardId } = req.params;

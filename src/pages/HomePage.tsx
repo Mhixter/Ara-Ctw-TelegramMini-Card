@@ -49,14 +49,20 @@ export default function HomePage({ user }: Props) {
 
   function purposeLabel(p: string) {
     const map: Record<string, string> = {
-      WALLET_FUNDING: 'Wallet Funded', CARD_ISSUANCE: 'Card Issued',
-      CARD_FUNDING: 'Card Funded', MERCHANT_PURCHASE: 'Purchase', FEE_CHARGE: 'Fee'
+      WALLET_FUNDING: 'Wallet Funded',
+      CARD_ISSUANCE: 'Card Issued',
+      CARD_SPEND: 'Card Purchase',
+      CARD_FUNDING: 'Card Funded',
+      MERCHANT_PURCHASE: 'Purchase',
+      FEE_CHARGE: 'Fee'
     };
     return map[p] || p;
   }
 
   function purposeColor(p: string) {
     if (p === 'WALLET_FUNDING' || p === 'CARD_FUNDING') return 'var(--success)';
+    if (p === 'CARD_ISSUANCE') return 'var(--gold)';
+    if (p === 'CARD_SPEND') return 'var(--accent)';
     if (p === 'FEE_CHARGE') return 'var(--danger)';
     return 'var(--warning)';
   }

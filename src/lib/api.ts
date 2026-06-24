@@ -53,7 +53,9 @@ export const cardsApi = {
   updateStatus: (cardId: string, status: string) =>
     api.patch(`/cards/${cardId}/status`, { status }).then(r => r.data),
   updateLimits: (cardId: string, dailyLimit: number, monthlyLimit: number) =>
-    api.patch(`/cards/${cardId}/limits`, { dailyLimit, monthlyLimit }).then(r => r.data)
+    api.patch(`/cards/${cardId}/limits`, { dailyLimit, monthlyLimit }).then(r => r.data),
+  spend: (cardId: string, amount: number, merchant: string) =>
+    api.post(`/cards/${cardId}/spend`, { amount, merchant }).then(r => r.data)
 };
 
 export const adminApi = {
