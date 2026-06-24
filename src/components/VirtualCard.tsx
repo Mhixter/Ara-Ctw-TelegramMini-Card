@@ -101,7 +101,7 @@ export default function VirtualCard({ card, onFreeze, onUnfreeze }: Props) {
               fontSize: '13px', fontWeight: 700, letterSpacing: '1px',
               color: isGold ? '#fff8e0' : 'rgba(255,255,255,0.9)'
             }}>
-              {card.card_tier} · {card.card_currency}
+              {card.card_tier} · ₦NGN
             </p>
           </div>
           <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>

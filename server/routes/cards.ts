@@ -20,7 +20,10 @@ router.get('/', requireAuth, async (req: AuthRequest, res: Response) => {
 router.post('/issue', requireAuth, async (req: AuthRequest, res: Response) => {
   const client = await pool.connect();
   try {
-    const { currency = 'USD', brand = 'VISA' } = req.body;
+    const { currency = 'NGN', brand = 'VISA' } = req.body;
+    if (!['VISA', 'MASTERCARD'].includes(brand)) {
+      return res.status(400).json({ error: 'Only VISA and MASTERCARD are supported' });
+    }
 
     const userResult = await pool.query('SELECT kyc_status FROM users WHERE id = $1', [req.user!.userId]);
     const user = userResult.rows[0];
@@ -35,14 +38,14 @@ router.post('/issue', requireAuth, async (req: AuthRequest, res: Response) => {
 
     const walletResult = await client.query(
       'SELECT * FROM wallets WHERE user_id = $1 AND currency = $2 FOR UPDATE',
-      [req.user!.userId, currency]
+      [req.user!.userId, 'NGN']
     );
     const wallet = walletResult.rows[0];
-    if (!wallet) return res.status(404).json({ error: 'Wallet not found' });
+    if (!wallet) return res.status(404).json({ error: 'NGN wallet not found' });
 
-    const issuanceFee = 10;
+    const issuanceFee = 5000;
     if (Number(wallet.balance) < issuanceFee) {
-      return res.status(400).json({ error: `Insufficient balance. Card issuance fee: $${issuanceFee}` });
+      return res.status(400).json({ error: `Insufficient NGN balance. Card issuance fee: ₦${issuanceFee.toLocaleString()}` });
     }
 
     await client.query('BEGIN');
@@ -63,7 +66,7 @@ router.post('/issue', requireAuth, async (req: AuthRequest, res: Response) => {
     const cardResult = await client.query(
       `INSERT INTO cards (user_id, provider_card_id, card_token, mask_pan, card_tier, card_brand, card_currency, daily_limit, monthly_limit, status)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'ACTIVE') RETURNING id, mask_pan, card_tier, card_brand, card_currency, daily_limit, monthly_limit, status, created_at`,
-      [req.user!.userId, providerCardId, cardToken, maskPan, tier, brand, currency, dailyLimit, monthlyLimit]
+      [req.user!.userId, providerCardId, cardToken, maskPan, tier, brand, 'NGN', dailyLimit, monthlyLimit]
     );
 
     await client.query('COMMIT');

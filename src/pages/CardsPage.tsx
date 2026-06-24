@@ -13,7 +13,7 @@ export default function CardsPage({ user }: Props) {
   const { haptic } = useTelegram();
   const [issueModal, setIssueModal] = useState(false);
   const [limitModal, setLimitModal] = useState<string | null>(null);
-  const [issueCurrency, setIssueCurrency] = useState<'USD' | 'NGN'>('USD');
+  const [issueCurrency] = useState<'NGN'>('NGN');
   const [issueBrand, setIssueBrand] = useState<'VISA' | 'MASTERCARD'>('VISA');
   const [dailyLimit, setDailyLimit] = useState('');
   const [monthlyLimit, setMonthlyLimit] = useState('');
@@ -156,20 +156,8 @@ export default function CardsPage({ user }: Props) {
           <div className="glass-strong" style={{ width: '100%', maxWidth: '480px', padding: '28px 24px 36px', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
             <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '6px' }}>Issue Virtual Card</h3>
             <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)', marginBottom: '20px' }}>
-              Card issuance fee: $10. Tier: <strong style={{ color: maxTier === 'PLATINUM' ? 'var(--platinum)' : 'var(--gold)' }}>{maxTier}</strong>
+              NGN card · Issuance fee: ₦5,000. Tier: <strong style={{ color: maxTier === 'PLATINUM' ? 'var(--platinum)' : 'var(--gold)' }}>{maxTier}</strong>
             </p>
-
-            <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', marginBottom: '8px' }}>Currency</p>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-              {(['USD', 'NGN'] as const).map(c => (
-                <button key={c} onClick={() => setIssueCurrency(c)} style={{
-                  flex: 1, padding: '10px', borderRadius: '10px', border: '1px solid',
-                  borderColor: issueCurrency === c ? 'var(--gold)' : 'var(--glass-border)',
-                  background: issueCurrency === c ? 'rgba(245,185,66,0.1)' : 'transparent',
-                  color: 'white', fontSize: '13px', fontWeight: 600, cursor: 'pointer'
-                }}>{c}</button>
-              ))}
-            </div>
 
             <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', marginBottom: '8px' }}>Network</p>
             <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
