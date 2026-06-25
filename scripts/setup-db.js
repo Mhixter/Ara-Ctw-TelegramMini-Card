@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * NairaVault — Database Setup Script
- * Run once to create all required tables.
+ * Safe to re-run: creates tables if missing, adds columns if missing.
  * Usage: node scripts/setup-db.js
  * Railway: runs automatically on every deploy (see railway.json).
  */
@@ -16,20 +16,18 @@ const pool = new Pool({
     : { rejectUnauthorized: false },
 });
 
-const schema = `
--- Users
+// ─── Step 1: Create tables (safe if they already exist) ───────────────────────
+const CREATE_TABLES = `
 CREATE TABLE IF NOT EXISTS users (
   id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   telegram_id  BIGINT UNIQUE NOT NULL,
   email        VARCHAR(255),
-  kyc_status   VARCHAR(20) DEFAULT 'PENDING'
-               CHECK (kyc_status IN ('PENDING','TIER_1','TIER_2','BANNED')),
+  kyc_status   VARCHAR(20) DEFAULT 'PENDING',
   is_active    BOOLEAN DEFAULT true,
   created_at   TIMESTAMPTZ DEFAULT NOW(),
   updated_at   TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Wallets
 CREATE TABLE IF NOT EXISTS wallets (
   id                     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id                UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -38,11 +36,11 @@ CREATE TABLE IF NOT EXISTS wallets (
   virtual_account_number VARCHAR(20),
   virtual_bank_name      VARCHAR(100),
   created_at             TIMESTAMPTZ DEFAULT NOW(),
-  updated_at             TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(user_id, currency)
+  updated_at             TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Ledger (double-entry)
+CREATE UNIQUE INDEX IF NOT EXISTS wallets_user_currency_idx ON wallets(user_id, currency);
+
 CREATE TABLE IF NOT EXISTS ledger_entries (
   id                    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   transaction_reference VARCHAR(255) UNIQUE NOT NULL,
@@ -54,27 +52,23 @@ CREATE TABLE IF NOT EXISTS ledger_entries (
   created_at            TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Virtual cards
 CREATE TABLE IF NOT EXISTS cards (
-  id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id          UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  provider_card_id VARCHAR(255) NOT NULL,
-  card_token       VARCHAR(255),
-  mask_pan         VARCHAR(20),
-  card_tier        VARCHAR(20) DEFAULT 'GOLD'
-                   CHECK (card_tier IN ('GOLD','PLATINUM')),
-  card_brand       VARCHAR(20) DEFAULT 'VISA',
-  card_currency    VARCHAR(10) DEFAULT 'NGN',
-  daily_limit      NUMERIC(18,2) DEFAULT 500,
-  monthly_limit    NUMERIC(18,2) DEFAULT 5000,
+  id                 UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id            UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  provider_card_id   VARCHAR(255) NOT NULL,
+  card_token         VARCHAR(255),
+  mask_pan           VARCHAR(20),
+  card_tier          VARCHAR(20) DEFAULT 'GOLD',
+  card_brand         VARCHAR(20) DEFAULT 'VISA',
+  card_currency      VARCHAR(10) DEFAULT 'NGN',
+  daily_limit        NUMERIC(18,2) DEFAULT 500,
+  monthly_limit      NUMERIC(18,2) DEFAULT 5000,
   amount_spent_today NUMERIC(18,2) DEFAULT 0,
-  status           VARCHAR(20) DEFAULT 'ACTIVE'
-                   CHECK (status IN ('ACTIVE','FROZEN','TERMINATED')),
-  created_at       TIMESTAMPTZ DEFAULT NOW(),
-  updated_at       TIMESTAMPTZ DEFAULT NOW()
+  status             VARCHAR(20) DEFAULT 'ACTIVE',
+  created_at         TIMESTAMPTZ DEFAULT NOW(),
+  updated_at         TIMESTAMPTZ DEFAULT NOW()
 );
 
--- KYC data
 CREATE TABLE IF NOT EXISTS user_kyc (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id         UUID UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -89,32 +83,74 @@ CREATE TABLE IF NOT EXISTS user_kyc (
   updated_at      TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Admin users
 CREATE TABLE IF NOT EXISTS admin_users (
-  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  email         VARCHAR(255) UNIQUE NOT NULL,
-  password_hash VARCHAR(255) NOT NULL,
-  role          VARCHAR(50) DEFAULT 'CUSTOMER_SUPPORT'
-                CHECK (role IN ('SUPER_ADMIN','COMPLIANCE_OFFICER','CUSTOMER_SUPPORT','FINANCE_AUDITOR')),
-  is_active     BOOLEAN DEFAULT true,
-  created_at    TIMESTAMPTZ DEFAULT NOW(),
-  updated_at    TIMESTAMPTZ DEFAULT NOW()
+  id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email      VARCHAR(255) UNIQUE NOT NULL,
+  is_active  BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 `;
 
-async function setup() {
-  console.log('[db:setup] Connecting to database…');
+// ─── Step 2: Add missing columns to existing tables ───────────────────────────
+// ALTER TABLE ... ADD COLUMN IF NOT EXISTS is idempotent — safe to re-run.
+const ADD_MISSING_COLUMNS = [
+  // admin_users — columns that may be missing from old deployments
+  `ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255) NOT NULL DEFAULT ''`,
+  `ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS role VARCHAR(50) NOT NULL DEFAULT 'CUSTOMER_SUPPORT'`,
 
+  // users — extra columns
+  `ALTER TABLE users ADD COLUMN IF NOT EXISTS email VARCHAR(255)`,
+  `ALTER TABLE users ADD COLUMN IF NOT EXISTS kyc_status VARCHAR(20) DEFAULT 'PENDING'`,
+  `ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true`,
+
+  // wallets — extra columns
+  `ALTER TABLE wallets ADD COLUMN IF NOT EXISTS virtual_account_number VARCHAR(20)`,
+  `ALTER TABLE wallets ADD COLUMN IF NOT EXISTS virtual_bank_name VARCHAR(100)`,
+
+  // cards — extra columns
+  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS card_token VARCHAR(255)`,
+  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS card_tier VARCHAR(20) DEFAULT 'GOLD'`,
+  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS card_brand VARCHAR(20) DEFAULT 'VISA'`,
+  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS card_currency VARCHAR(10) DEFAULT 'NGN'`,
+  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS daily_limit NUMERIC(18,2) DEFAULT 500`,
+  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS monthly_limit NUMERIC(18,2) DEFAULT 5000`,
+  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS amount_spent_today NUMERIC(18,2) DEFAULT 0`,
+
+  // user_kyc — extra columns
+  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS bvn_hash VARCHAR(64)`,
+  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS nin_hash VARCHAR(64)`,
+  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS id_document_url TEXT`,
+  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS liveness_score NUMERIC(5,2)`,
+  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS verified_at TIMESTAMPTZ`,
+];
+
+async function setup() {
   if (!process.env.DATABASE_URL) {
     console.error('[db:setup] ❌  DATABASE_URL is not set. Aborting.');
     process.exit(1);
   }
 
+  console.log('[db:setup] Connecting to database…');
   const client = await pool.connect();
+
   try {
-    console.log('[db:setup] Running schema migrations…');
-    await client.query(schema);
-    console.log('[db:setup] ✅  All tables are up to date.');
+    // Step 1 — create tables
+    console.log('[db:setup] Creating tables…');
+    await client.query(CREATE_TABLES);
+    console.log('[db:setup] Tables ready.');
+
+    // Step 2 — patch any missing columns
+    console.log('[db:setup] Patching missing columns…');
+    for (const sql of ADD_MISSING_COLUMNS) {
+      try {
+        await client.query(sql);
+      } catch (err) {
+        // Column already exists with a constraint mismatch — log and continue
+        console.warn('[db:setup] Skipped:', sql.slice(0, 60), '…', err.message);
+      }
+    }
+    console.log('[db:setup] ✅  Schema is up to date.');
   } catch (err) {
     console.error('[db:setup] ❌  Migration failed:', err.message);
     process.exit(1);

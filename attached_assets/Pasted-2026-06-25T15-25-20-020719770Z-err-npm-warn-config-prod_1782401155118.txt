@@ -1,0 +1,30 @@
+2026-06-25T15:25:20.020719770Z [err]  npm warn config production Use `--omit=dev` instead.
+2026-06-25T15:25:20.020723780Z [inf]  
+2026-06-25T15:25:20.020727450Z [inf]  > nairavault@1.0.0 start
+2026-06-25T15:25:20.020730620Z [inf]  > node server-dist/index.js
+2026-06-25T15:25:20.020733790Z [inf]  
+2026-06-25T15:25:20.020737110Z [inf]  Server running on port 8080
+2026-06-25T15:25:20.108253569Z [inf]  Starting Container
+2026-06-25T15:25:20.835616533Z [err]    file: 'parse_relation.c',
+2026-06-25T15:25:20.835623323Z [err]    line: '3822',
+2026-06-25T15:25:20.835628573Z [err]    routine: 'errorMissingColumn'
+2026-06-25T15:25:20.835633093Z [err]  }
+2026-06-25T15:25:20.835640983Z [err]    position: '12',
+2026-06-25T15:25:20.835641013Z [err]  [admin-seed] Failed to upsert super admin: error: column "password_hash" does not exist
+2026-06-25T15:25:20.835652272Z [err]    internalPosition: undefined,
+2026-06-25T15:25:20.835655002Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2026-06-25T15:25:20.835658232Z [err]    internalQuery: undefined,
+2026-06-25T15:25:20.835661852Z [err]    where: undefined,
+2026-06-25T15:25:20.835663722Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+2026-06-25T15:25:20.835666632Z [err]    schema: undefined,
+2026-06-25T15:25:20.835669152Z [err]      at async ensureSuperAdmin (/app/server-dist/index.js:41:26)
+2026-06-25T15:25:20.835671682Z [err]    table: undefined,
+2026-06-25T15:25:20.835674602Z [err]      at async Server.<anonymous> (/app/server-dist/index.js:60:5) {
+2026-06-25T15:25:20.835675822Z [err]    column: undefined,
+2026-06-25T15:25:20.835679572Z [err]    dataType: undefined,
+2026-06-25T15:25:20.835680462Z [err]    length: 113,
+2026-06-25T15:25:20.835683712Z [err]    constraint: undefined,
+2026-06-25T15:25:20.835686132Z [err]    severity: 'ERROR',
+2026-06-25T15:25:20.835690462Z [err]    code: '42703',
+2026-06-25T15:25:20.835694382Z [err]    detail: undefined,
+2026-06-25T15:25:20.835700792Z [err]    hint: undefined,
