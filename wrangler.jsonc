@@ -1,0 +1,7 @@
+{
+  "name": "payonline",
+  "compatibility_date": "2026-06-25",
+  "assets": {
+    "directory": "./dist"
+  }
+}
