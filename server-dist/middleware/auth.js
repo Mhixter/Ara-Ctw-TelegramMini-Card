@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BOT_TOKEN = void 0;
 exports.verifyTelegramInitData = verifyTelegramInitData;
 exports.generateJWT = generateJWT;
 exports.verifyJWT = verifyJWT;
@@ -12,22 +13,46 @@ exports.requireRole = requireRole;
 const crypto_1 = __importDefault(require("crypto"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const JWT_SECRET = process.env.JWT_SECRET || 'fintech-secret-key-dev-2024';
-const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
+exports.BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
+const INIT_DATA_MAX_AGE_SECONDS = 24 * 60 * 60; // 24 hours
+/**
+ * Verifies Telegram WebApp initData using HMAC-SHA256.
+ * Also rejects data older than INIT_DATA_MAX_AGE_SECONDS to prevent replay attacks.
+ */
 function verifyTelegramInitData(initData) {
     try {
+        if (!exports.BOT_TOKEN)
+            return null;
         const urlParams = new URLSearchParams(initData);
         const hash = urlParams.get('hash');
         if (!hash)
             return null;
+        // Replay-attack guard: reject stale initData
+        const authDate = urlParams.get('auth_date');
+        if (authDate) {
+            const age = Math.floor(Date.now() / 1000) - Number(authDate);
+            if (age > INIT_DATA_MAX_AGE_SECONDS) {
+                console.warn('[auth] initData expired (age=%ds)', age);
+                return null;
+            }
+        }
         urlParams.delete('hash');
         const dataCheckArr = Array.from(urlParams.entries())
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([key, val]) => `${key}=${val}`)
             .join('\n');
-        const secretKey = crypto_1.default.createHmac('sha256', 'WebAppData').update(BOT_TOKEN).digest();
-        const computedHash = crypto_1.default.createHmac('sha256', secretKey).update(dataCheckArr).digest('hex');
-        if (computedHash !== hash)
+        const secretKey = crypto_1.default
+            .createHmac('sha256', 'WebAppData')
+            .update(exports.BOT_TOKEN)
+            .digest();
+        const computedHash = crypto_1.default
+            .createHmac('sha256', secretKey)
+            .update(dataCheckArr)
+            .digest('hex');
+        if (computedHash !== hash) {
+            console.warn('[auth] initData HMAC mismatch — possible forgery attempt');
             return null;
+        }
         const userStr = urlParams.get('user');
         if (!userStr)
             return null;

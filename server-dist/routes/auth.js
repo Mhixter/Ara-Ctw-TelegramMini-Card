@@ -8,38 +8,66 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const db_1 = __importDefault(require("../db"));
 const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
+const IS_PRODUCTION = !!auth_1.BOT_TOKEN;
 router.post('/telegram', async (req, res) => {
     try {
         const { initData } = req.body;
         let telegramUser = null;
-        if (process.env.TELEGRAM_BOT_TOKEN && initData) {
+        if (IS_PRODUCTION) {
+            // ── Strict mode (TELEGRAM_BOT_TOKEN is set) ──────────────────────────────
+            // initData MUST be present and pass HMAC verification.
+            // No fallback — reject anything that can't be cryptographically verified.
+            if (!initData) {
+                console.warn('[auth] Request rejected: initData missing in production mode');
+                return res.status(401).json({ error: 'Telegram initData is required' });
+            }
             telegramUser = (0, auth_1.verifyTelegramInitData)(initData);
+            if (!telegramUser) {
+                console.warn('[auth] Request rejected: initData failed HMAC verification');
+                return res.status(401).json({ error: 'Invalid or expired Telegram session. Please reopen the app.' });
+            }
         }
         else {
-            const { telegramId, username, firstName } = req.body;
-            if (telegramId) {
-                telegramUser = { telegramId: Number(telegramId), username, firstName };
+            // ── Dev / sandbox mode (no bot token set) ────────────────────────────────
+            // Accept raw telegramId for local testing only.
+            console.warn('[auth] Running in DEV mode — Telegram identity is NOT verified');
+            if (initData && initData.length > 20) {
+                telegramUser = (0, auth_1.verifyTelegramInitData)(initData);
+            }
+            if (!telegramUser) {
+                const { telegramId, username, firstName } = req.body;
+                if (telegramId) {
+                    telegramUser = { telegramId: Number(telegramId), username, firstName };
+                }
             }
         }
         if (!telegramUser) {
             return res.status(401).json({ error: 'Invalid Telegram data' });
         }
         const { telegramId, username, firstName } = telegramUser;
-        // Upsert user — ON CONFLICT prevents race-condition duplicate-key errors
         const upsertResult = await db_1.default.query(`INSERT INTO users (telegram_id, kyc_status, is_active)
        VALUES ($1, 'PENDING', true)
        ON CONFLICT (telegram_id) DO UPDATE SET telegram_id = EXCLUDED.telegram_id
        RETURNING *`, [telegramId]);
         const user = upsertResult.rows[0];
-        // Create NGN wallet if it doesn't exist yet (idempotent)
         await db_1.default.query(`INSERT INTO wallets (user_id, currency, balance)
        VALUES ($1, 'NGN', 0)
        ON CONFLICT (user_id, currency) DO NOTHING`, [user.id]);
         const token = (0, auth_1.generateJWT)(telegramId, user.id);
-        res.json({ token, user: { id: user.id, telegramId, username, firstName, kycStatus: user.kyc_status, isActive: user.is_active } });
+        res.json({
+            token,
+            user: {
+                id: user.id,
+                telegramId,
+                username,
+                firstName,
+                kycStatus: user.kyc_status,
+                isActive: user.is_active,
+            },
+        });
     }
     catch (err) {
-        console.error('Auth error:', err);
+        console.error('[auth] Auth error:', err);
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -57,7 +85,7 @@ router.post('/admin/login', async (req, res) => {
         res.json({ token, admin: { id: admin.id, email: admin.email, role: admin.role } });
     }
     catch (err) {
-        console.error('Admin login error:', err);
+        console.error('[auth] Admin login error:', err);
         res.status(500).json({ error: 'Server error' });
     }
 });

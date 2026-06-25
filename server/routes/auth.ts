@@ -1,10 +1,11 @@
 import { Router, Request, Response } from 'express';
-import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import pool from '../db';
-import { verifyTelegramInitData, generateJWT, requireAdmin, AuthRequest } from '../middleware/auth';
+import { BOT_TOKEN, verifyTelegramInitData, generateJWT, requireAdmin, AuthRequest } from '../middleware/auth';
 
 const router = Router();
+
+const IS_PRODUCTION = !!BOT_TOKEN;
 
 router.post('/telegram', async (req: Request, res: Response) => {
   try {
@@ -12,12 +13,33 @@ router.post('/telegram', async (req: Request, res: Response) => {
 
     let telegramUser: { telegramId: number; username?: string; firstName?: string } | null = null;
 
-    if (process.env.TELEGRAM_BOT_TOKEN && initData) {
+    if (IS_PRODUCTION) {
+      // ── Strict mode (TELEGRAM_BOT_TOKEN is set) ──────────────────────────────
+      // initData MUST be present and pass HMAC verification.
+      // No fallback — reject anything that can't be cryptographically verified.
+      if (!initData) {
+        console.warn('[auth] Request rejected: initData missing in production mode');
+        return res.status(401).json({ error: 'Telegram initData is required' });
+      }
+
       telegramUser = verifyTelegramInitData(initData);
+
+      if (!telegramUser) {
+        console.warn('[auth] Request rejected: initData failed HMAC verification');
+        return res.status(401).json({ error: 'Invalid or expired Telegram session. Please reopen the app.' });
+      }
     } else {
-      const { telegramId, username, firstName } = req.body;
-      if (telegramId) {
-        telegramUser = { telegramId: Number(telegramId), username, firstName };
+      // ── Dev / sandbox mode (no bot token set) ────────────────────────────────
+      // Accept raw telegramId for local testing only.
+      console.warn('[auth] Running in DEV mode — Telegram identity is NOT verified');
+      if (initData && initData.length > 20) {
+        telegramUser = verifyTelegramInitData(initData);
+      }
+      if (!telegramUser) {
+        const { telegramId, username, firstName } = req.body;
+        if (telegramId) {
+          telegramUser = { telegramId: Number(telegramId), username, firstName };
+        }
       }
     }
 
@@ -27,7 +49,6 @@ router.post('/telegram', async (req: Request, res: Response) => {
 
     const { telegramId, username, firstName } = telegramUser;
 
-    // Upsert user — ON CONFLICT prevents race-condition duplicate-key errors
     const upsertResult = await pool.query(
       `INSERT INTO users (telegram_id, kyc_status, is_active)
        VALUES ($1, 'PENDING', true)
@@ -37,7 +58,6 @@ router.post('/telegram', async (req: Request, res: Response) => {
     );
     const user = upsertResult.rows[0];
 
-    // Create NGN wallet if it doesn't exist yet (idempotent)
     await pool.query(
       `INSERT INTO wallets (user_id, currency, balance)
        VALUES ($1, 'NGN', 0)
@@ -46,9 +66,19 @@ router.post('/telegram', async (req: Request, res: Response) => {
     );
 
     const token = generateJWT(telegramId, user.id);
-    res.json({ token, user: { id: user.id, telegramId, username, firstName, kycStatus: user.kyc_status, isActive: user.is_active } });
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        telegramId,
+        username,
+        firstName,
+        kycStatus: user.kyc_status,
+        isActive: user.is_active,
+      },
+    });
   } catch (err) {
-    console.error('Auth error:', err);
+    console.error('[auth] Auth error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -56,7 +86,10 @@ router.post('/telegram', async (req: Request, res: Response) => {
 router.post('/admin/login', async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    const result = await pool.query('SELECT * FROM admin_users WHERE email = $1 AND is_active = true', [email]);
+    const result = await pool.query(
+      'SELECT * FROM admin_users WHERE email = $1 AND is_active = true',
+      [email]
+    );
     const admin = result.rows[0];
     if (!admin) return res.status(401).json({ error: 'Invalid credentials' });
 
@@ -66,7 +99,7 @@ router.post('/admin/login', async (req: Request, res: Response) => {
     const token = generateJWT(0, admin.id, admin.role);
     res.json({ token, admin: { id: admin.id, email: admin.email, role: admin.role } });
   } catch (err) {
-    console.error('Admin login error:', err);
+    console.error('[auth] Admin login error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });
