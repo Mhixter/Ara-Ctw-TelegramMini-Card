@@ -32,6 +32,7 @@ export const authApi = {
 export const walletApi = {
   list: () => api.get('/wallet').then(r => r.data),
   transactions: () => api.get('/wallet/transactions').then(r => r.data),
+  transaction: (id: string) => api.get(`/wallet/transactions/${id}`).then(r => r.data),
   fund: (amount: number, currency: string) => {
     const reference = `FUND-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     return api.post('/wallet/fund', { amount, currency, reference }).then(r => r.data);
@@ -50,6 +51,8 @@ export const cardsApi = {
   list: () => api.get('/cards').then(r => r.data),
   issue: (currency?: string, brand?: string) =>
     api.post('/cards/issue', { currency, brand }).then(r => r.data),
+  details: (cardId: string) =>
+    api.get(`/cards/${cardId}/details`).then(r => r.data),
   updateStatus: (cardId: string, status: string) =>
     api.patch(`/cards/${cardId}/status`, { status }).then(r => r.data),
   updateLimits: (cardId: string, dailyLimit: number, monthlyLimit: number) =>

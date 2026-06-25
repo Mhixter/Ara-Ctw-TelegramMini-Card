@@ -85,6 +85,42 @@ router.get('/', requireAuth, async (req: AuthRequest, res: Response) => {
 });
 
 /**
+ * GET /api/wallet/transactions/:id
+ * Returns full details for a single ledger entry (owned by the requesting user).
+ */
+router.get('/transactions/:id', requireAuth, async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user!.userId;
+    const { id } = req.params;
+
+    const wallets = await pool.query('SELECT id FROM wallets WHERE user_id = $1', [userId]);
+    const walletIds = wallets.rows.map((w: any) => w.id);
+    if (!walletIds.length) return res.status(404).json({ error: 'Transaction not found' });
+
+    const result = await pool.query(
+      `SELECT le.*,
+         dw.currency as debit_currency,
+         cw.currency as credit_currency,
+         dw.virtual_account_number as debit_account,
+         cw.virtual_account_number as credit_account,
+         dw.virtual_bank_name as debit_bank,
+         cw.virtual_bank_name as credit_bank
+       FROM ledger_entries le
+       LEFT JOIN wallets dw ON le.debit_wallet_id  = dw.id
+       LEFT JOIN wallets cw ON le.credit_wallet_id = cw.id
+       WHERE le.id = $1
+         AND (le.debit_wallet_id = ANY($2) OR le.credit_wallet_id = ANY($2))`,
+      [id, walletIds]
+    );
+    if (!result.rows.length) return res.status(404).json({ error: 'Transaction not found' });
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Transaction detail error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+/**
  * GET /api/wallet/transactions
  * Returns the last 50 ledger entries for all user wallets.
  */

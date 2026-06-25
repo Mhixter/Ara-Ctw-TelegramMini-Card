@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Snowflake, Zap, SlidersHorizontal, AlertCircle, ShoppingBag } from 'lucide-react';
+import { Plus, Snowflake, Zap, SlidersHorizontal, AlertCircle, ShoppingBag, Eye, EyeOff, Copy, CheckCircle2 } from 'lucide-react';
 import { cardsApi } from '../lib/api';
 import { User } from '../hooks/useAuth';
 import { useTelegram } from '../hooks/useTelegram';
@@ -19,11 +19,13 @@ export default function CardsPage({ user }: Props) {
   const [issueModal, setIssueModal] = useState(false);
   const [limitModal, setLimitModal] = useState<string | null>(null);
   const [spendModal, setSpendModal] = useState<any | null>(null);
+  const [detailsCardId, setDetailsCardId] = useState<string | null>(null);
   const [issueBrand, setIssueBrand] = useState<'VISA' | 'MASTERCARD'>('VISA');
   const [dailyLimit, setDailyLimit] = useState('');
   const [monthlyLimit, setMonthlyLimit] = useState('');
   const [spendAmount, setSpendAmount] = useState('');
   const [spendMerchant, setSpendMerchant] = useState(SAMPLE_MERCHANTS[0]);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
 
   const { data: cards = [], isLoading } = useQuery({
     queryKey: ['cards'],
@@ -65,6 +67,21 @@ export default function CardsPage({ user }: Props) {
 
   const canIssue = user.kycStatus !== 'PENDING' && user.kycStatus !== 'BANNED';
   const maxTier = user.kycStatus === 'TIER_2' ? 'PLATINUM' : user.kycStatus === 'TIER_1' ? 'GOLD' : null;
+
+  const { data: cardDetails, isLoading: detailsLoading, error: detailsError } = useQuery({
+    queryKey: ['card-details', detailsCardId],
+    queryFn: () => cardsApi.details(detailsCardId!),
+    enabled: !!detailsCardId,
+    staleTime: 0,
+    retry: false,
+  });
+
+  function copyField(value: string, field: string) {
+    navigator.clipboard.writeText(value).then(() => {
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 1800);
+    });
+  }
 
   function fmtNGN(n: number) {
     return `₦${Number(n).toLocaleString('en-NG', { minimumFractionDigits: 0 })}`;
@@ -160,10 +177,10 @@ export default function CardsPage({ user }: Props) {
                   </div>
 
                   {/* Card Actions */}
-                  <div style={{ display: 'flex', gap: '8px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '8px' }}>
                     <button
                       className="btn-ghost"
-                      style={{ flex: 1, padding: '10px', fontSize: '12px', gap: '6px' }}
+                      style={{ padding: '10px', fontSize: '12px', gap: '6px' }}
                       onClick={() => statusMutation.mutate({ id: card.id, status: card.status === 'ACTIVE' ? 'FROZEN' : 'ACTIVE' })}
                       disabled={statusMutation.isPending}
                     >
@@ -171,18 +188,27 @@ export default function CardsPage({ user }: Props) {
                     </button>
                     <button
                       className="btn-ghost"
-                      style={{ flex: 1, padding: '10px', fontSize: '12px', gap: '6px' }}
+                      style={{ padding: '10px', fontSize: '12px', gap: '6px' }}
                       onClick={() => { setLimitModal(card.id); setDailyLimit(String(card.daily_limit)); setMonthlyLimit(String(card.monthly_limit)); }}
                     >
                       <SlidersHorizontal size={14} /> Limits
                     </button>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                     <button
                       className="btn-ghost"
-                      style={{ flex: 1, padding: '10px', fontSize: '12px', gap: '6px', borderColor: card.status === 'ACTIVE' ? 'rgba(108,99,255,0.4)' : undefined, opacity: card.status !== 'ACTIVE' ? 0.4 : 1 }}
+                      style={{ padding: '10px', fontSize: '12px', gap: '6px', borderColor: 'rgba(108,99,255,0.35)', opacity: card.status !== 'ACTIVE' ? 0.4 : 1 }}
                       onClick={() => { setSpendModal(card); setSpendAmount(''); setSpendMerchant(SAMPLE_MERCHANTS[0]); }}
                       disabled={card.status !== 'ACTIVE'}
                     >
                       <ShoppingBag size={14} /> Spend
+                    </button>
+                    <button
+                      className="btn-ghost"
+                      style={{ padding: '10px', fontSize: '12px', gap: '6px', borderColor: 'rgba(245,185,66,0.35)' }}
+                      onClick={() => setDetailsCardId(card.id)}
+                    >
+                      <Eye size={14} /> View Details
                     </button>
                   </div>
                 </div>
@@ -197,6 +223,65 @@ export default function CardsPage({ user }: Props) {
         <button className="btn-gold" style={{ marginTop: '24px' }} onClick={() => setIssueModal(true)}>
           <Plus size={18} /> Issue New Card
         </button>
+      )}
+
+      {/* ── Card Details Modal ── */}
+      {detailsCardId && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.82)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', zIndex: 300 }}
+          onClick={() => setDetailsCardId(null)}>
+          <div className="glass-strong" style={{ width: '100%', maxWidth: '480px', padding: '28px 24px 40px', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}
+            onClick={e => e.stopPropagation()}>
+            {/* Drag handle */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 18 }}>
+              <div style={{ width: 40, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.15)' }} />
+            </div>
+            <h3 style={{ fontSize: '17px', fontWeight: 700, marginBottom: 4 }}>Card Details</h3>
+            <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', marginBottom: 20 }}>
+              Sensitive — do not share with anyone
+            </p>
+
+            {detailsLoading && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {[...Array(4)].map((_, i) => <div key={i} className="skeleton" style={{ height: 44, borderRadius: 10 }} />)}
+              </div>
+            )}
+            {detailsError && (
+              <div className="glass" style={{ padding: '14px 16px', borderColor: 'rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.05)' }}>
+                <p style={{ fontSize: 13, color: 'var(--danger)' }}>
+                  {(detailsError as any)?.response?.data?.error || 'Failed to load card details.'}
+                </p>
+              </div>
+            )}
+            {cardDetails && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {[
+                  { label: 'Card Number', field: 'pan', value: cardDetails.maskPan },
+                  { label: 'CVV', field: 'cvv', value: cardDetails.cvv || '***' },
+                  { label: 'Expiry', field: 'expiry', value: cardDetails.expiry },
+                  { label: 'Network', field: 'brand', value: cardDetails.brand },
+                  { label: 'Tier', field: 'tier', value: cardDetails.tier },
+                  ...(cardDetails.billingAddress ? [{ label: 'Billing Address', field: 'billing', value: cardDetails.billingAddress }] : []),
+                ].map(({ label, field, value }) => (
+                  <div key={field} className="glass" style={{ padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 12, color: 'var(--tg-theme-hint-color)' }}>{label}</span>
+                    <button
+                      onClick={() => copyField(value, field)}
+                      style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: copiedField === field ? 'var(--success)' : 'white', fontSize: 13, fontWeight: 600, padding: 0 }}
+                    >
+                      <span style={{ fontFamily: field === 'pan' || field === 'cvv' ? 'monospace' : 'inherit', letterSpacing: field === 'pan' ? '1px' : 'normal' }}>{value}</span>
+                      {copiedField === field ? <CheckCircle2 size={13} color="var(--success)" /> : <Copy size={12} color="var(--tg-theme-hint-color)" />}
+                    </button>
+                  </div>
+                ))}
+
+                <div style={{ marginTop: 6, padding: '10px 14px', borderRadius: 10, background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)' }}>
+                  <p style={{ fontSize: 11, color: 'var(--warning)' }}>⚠️ CVV is shown once and never stored. Screenshot this page if needed.</p>
+                </div>
+              </div>
+            )}
+            <button className="btn-ghost" style={{ marginTop: 20 }} onClick={() => setDetailsCardId(null)}>Close</button>
+          </div>
+        </div>
       )}
 
       {/* ── Issue Modal ── */}

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowDownCircle, ArrowUpCircle, RefreshCw, Send, Plus, AlertCircle, Wallet } from 'lucide-react';
+import { ArrowDownCircle, ArrowUpCircle, RefreshCw, Send, Plus, AlertCircle, Wallet, ChevronRight } from 'lucide-react';
 import { walletApi } from '../lib/api';
 import { User } from '../hooks/useAuth';
 import { useTelegram } from '../hooks/useTelegram';
+import TransactionReceipt from '../components/TransactionReceipt';
 
 interface Props { user: User; }
 
@@ -12,6 +13,7 @@ export default function HomePage({ user }: Props) {
   const { haptic } = useTelegram();
   const [fundModal, setFundModal] = useState(false);
   const [fundAmount, setFundAmount] = useState('');
+  const [receiptTx, setReceiptTx] = useState<any | null>(null);
 
   const { data: wallets = [], isLoading: walletsLoading } = useQuery({
     queryKey: ['wallets'],
@@ -162,7 +164,15 @@ export default function HomePage({ user }: Props) {
             const isCredit = !!tx.credit_wallet_id;
             const meta = (() => { try { return JSON.parse(tx.metadata || '{}'); } catch { return {}; } })();
             return (
-              <div key={tx.id} className="glass" style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div
+                key={tx.id}
+                className="glass"
+                onClick={() => setReceiptTx(tx)}
+                style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', transition: 'opacity 0.15s' }}
+                onPointerDown={e => (e.currentTarget.style.opacity = '0.7')}
+                onPointerUp={e => (e.currentTarget.style.opacity = '1')}
+                onPointerLeave={e => (e.currentTarget.style.opacity = '1')}
+              >
                 <div style={{
                   width: '38px', height: '38px', borderRadius: '50%', flexShrink: 0,
                   background: `${purposeColor(tx.purpose)}18`,
@@ -177,24 +187,25 @@ export default function HomePage({ user }: Props) {
                   <p style={{ fontSize: '13px', fontWeight: 600, marginBottom: '2px' }}>{purposeLabel(tx.purpose)}</p>
                   <p style={{ fontSize: '11px', color: 'var(--tg-theme-hint-color)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {meta.merchant
-                      ? `${meta.merchant} · ${meta.mask_pan || ''}`
+                      ? `${meta.merchant}${meta.mask_pan ? ` · ${meta.mask_pan}` : ''}`
                       : new Date(tx.created_at).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
                     }
                   </p>
-                  {meta.merchant && (
-                    <p style={{ fontSize: '10px', color: 'var(--tg-theme-hint-color)' }}>
-                      {new Date(tx.created_at).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  )}
                 </div>
-                <p style={{ fontSize: '14px', fontWeight: 700, color: isCredit ? 'var(--success)' : 'var(--danger)', flexShrink: 0 }}>
-                  {isCredit ? '+' : '-'}₦{Number(tx.amount).toLocaleString('en-NG')}
-                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                  <p style={{ fontSize: '14px', fontWeight: 700, color: isCredit ? 'var(--success)' : 'var(--danger)' }}>
+                    {isCredit ? '+' : '-'}₦{Number(tx.amount).toLocaleString('en-NG')}
+                  </p>
+                  <ChevronRight size={14} color="var(--tg-theme-hint-color)" />
+                </div>
               </div>
             );
           })}
         </div>
       )}
+
+      {/* Transaction Receipt Modal */}
+      {receiptTx && <TransactionReceipt tx={receiptTx} onClose={() => setReceiptTx(null)} />}
 
       {/* Fund Modal */}
       {fundModal && (

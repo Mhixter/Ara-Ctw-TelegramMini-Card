@@ -1,14 +1,18 @@
-import { Router, Response } from 'express';
+import { Router, Response, Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import pool from '../db';
 import { requireAuth, AuthRequest } from '../middleware/auth';
+import { issueCard, getCardDetails, updateCardStatus, verifyWebhookSignature } from '../services/sudoAfrica';
 
 const router = Router();
 
+// ── List user's cards ─────────────────────────────────────────────────────────
 router.get('/', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
     const cards = await pool.query(
-      'SELECT id, mask_pan, card_tier, card_brand, card_currency, daily_limit, monthly_limit, amount_spent_today, status, created_at FROM cards WHERE user_id = $1',
+      `SELECT id, provider_card_id, mask_pan, card_tier, card_brand, card_currency,
+              daily_limit, monthly_limit, amount_spent_today, status, created_at
+       FROM cards WHERE user_id = $1 ORDER BY created_at DESC`,
       [req.user!.userId]
     );
     res.json(cards.rows);
@@ -17,6 +21,36 @@ router.get('/', requireAuth, async (req: AuthRequest, res: Response) => {
   }
 });
 
+// ── Get card details (PAN + one-time CVV from Sudo) ──────────────────────────
+router.get('/:cardId/details', requireAuth, async (req: AuthRequest, res: Response) => {
+  try {
+    const { cardId } = req.params;
+    const cardResult = await pool.query(
+      'SELECT id, provider_card_id, mask_pan, card_brand, card_tier, status FROM cards WHERE id = $1 AND user_id = $2',
+      [cardId, req.user!.userId]
+    );
+    const card = cardResult.rows[0];
+    if (!card) return res.status(404).json({ error: 'Card not found' });
+    if (card.status === 'TERMINATED') return res.status(400).json({ error: 'Card is terminated' });
+
+    const details = await getCardDetails(card.provider_card_id);
+    res.json({
+      id: card.id,
+      maskPan: details.maskPan,
+      cvv: details.cvv,
+      expiry: details.expiry,
+      billingAddress: details.billingAddress,
+      brand: card.card_brand,
+      tier: card.card_tier,
+      status: card.status,
+    });
+  } catch (err: any) {
+    console.error('Card details error:', err);
+    res.status(500).json({ error: err.message || 'Failed to fetch card details' });
+  }
+});
+
+// ── Issue a new card ──────────────────────────────────────────────────────────
 router.post('/issue', requireAuth, async (req: AuthRequest, res: Response) => {
   const client = await pool.connect();
   try {
@@ -36,50 +70,73 @@ router.post('/issue', requireAuth, async (req: AuthRequest, res: Response) => {
     const dailyLimit = tier === 'PLATINUM' ? 5000 : 500;
     const monthlyLimit = tier === 'PLATINUM' ? 50000 : 5000;
 
+    await client.query('BEGIN');
+
     const walletResult = await client.query(
       'SELECT * FROM wallets WHERE user_id = $1 AND currency = $2 FOR UPDATE',
       [req.user!.userId, 'NGN']
     );
     const wallet = walletResult.rows[0];
-    if (!wallet) return res.status(404).json({ error: 'NGN wallet not found' });
+    if (!wallet) { await client.query('ROLLBACK'); return res.status(404).json({ error: 'NGN wallet not found' }); }
 
     const issuanceFee = 5000;
     if (Number(wallet.balance) < issuanceFee) {
+      await client.query('ROLLBACK');
       return res.status(400).json({ error: `Insufficient NGN balance. Card issuance fee: ₦${issuanceFee.toLocaleString()}` });
     }
 
-    await client.query('BEGIN');
-
-    await client.query('UPDATE wallets SET balance = balance - $1, updated_at = NOW() WHERE id = $2', [issuanceFee, wallet.id]);
-
-    const ref = `CARD-ISSUE-${uuidv4()}`;
+    // Debit issuance fee before calling Sudo (prevents partial state)
     await client.query(
-      'INSERT INTO ledger_entries (transaction_reference, debit_wallet_id, amount, purpose, metadata) VALUES ($1, $2, $3, $4, $5)',
-      [ref, wallet.id, issuanceFee, 'CARD_ISSUANCE', JSON.stringify({ tier, brand, currency })]
+      'UPDATE wallets SET balance = balance - $1, updated_at = NOW() WHERE id = $2',
+      [issuanceFee, wallet.id]
+    );
+    const feeRef = `CARD-ISSUE-${uuidv4()}`;
+    await client.query(
+      `INSERT INTO ledger_entries (transaction_reference, debit_wallet_id, amount, purpose, metadata)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [feeRef, wallet.id, issuanceFee, 'CARD_ISSUANCE', JSON.stringify({ tier, brand, currency })]
     );
 
-    const pan = `4111${Math.random().toString().slice(2, 8).padStart(6, '0')}${Math.floor(1000 + Math.random() * 9000)}`;
-    const maskPan = `${pan.slice(0, 6)}XXXXXX${pan.slice(-4)}`;
-    const providerCardId = uuidv4();
-    const cardToken = `tok_${uuidv4().replace(/-/g, '')}`;
+    // Call Sudo Africa (or sandbox fallback)
+    const sudoCard = await issueCard({
+      brand: brand as 'VISA' | 'MASTERCARD',
+      currency,
+      tier: tier as 'GOLD' | 'PLATINUM',
+      dailyLimit,
+      monthlyLimit,
+      userId: String(req.user!.userId),
+    });
 
     const cardResult = await client.query(
-      `INSERT INTO cards (user_id, provider_card_id, card_token, mask_pan, card_tier, card_brand, card_currency, daily_limit, monthly_limit, status)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'ACTIVE') RETURNING id, mask_pan, card_tier, card_brand, card_currency, daily_limit, monthly_limit, status, created_at`,
-      [req.user!.userId, providerCardId, cardToken, maskPan, tier, brand, 'NGN', dailyLimit, monthlyLimit]
+      `INSERT INTO cards
+         (user_id, provider_card_id, card_token, mask_pan, card_tier, card_brand, card_currency, daily_limit, monthly_limit, status)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'ACTIVE')
+       RETURNING id, mask_pan, card_tier, card_brand, card_currency, daily_limit, monthly_limit, status, created_at`,
+      [
+        req.user!.userId,
+        sudoCard.providerCardId,
+        sudoCard.cardToken,
+        sudoCard.maskPan,
+        tier,
+        brand,
+        'NGN',
+        dailyLimit,
+        monthlyLimit,
+      ]
     );
 
     await client.query('COMMIT');
     res.json({ success: true, card: cardResult.rows[0], message: `${tier} card issued successfully!` });
-  } catch (err) {
+  } catch (err: any) {
     await client.query('ROLLBACK');
     console.error('Card issue error:', err);
-    res.status(500).json({ error: 'Card issuance failed' });
+    res.status(500).json({ error: err.message || 'Card issuance failed' });
   } finally {
     client.release();
   }
 });
 
+// ── Simulate a card spend (sandbox / test) ────────────────────────────────────
 router.post('/:cardId/spend', requireAuth, async (req: AuthRequest, res: Response) => {
   const client = await pool.connect();
   try {
@@ -92,18 +149,16 @@ router.post('/:cardId/spend', requireAuth, async (req: AuthRequest, res: Respons
 
     await client.query('BEGIN');
 
-    // Lock card row
     const cardResult = await client.query(
       `SELECT c.*, DATE(c.updated_at) as last_reset_date
-       FROM cards c
-       WHERE c.id = $1 AND c.user_id = $2 FOR UPDATE`,
+       FROM cards c WHERE c.id = $1 AND c.user_id = $2 FOR UPDATE`,
       [cardId, req.user!.userId]
     );
     const card = cardResult.rows[0];
     if (!card) { await client.query('ROLLBACK'); return res.status(404).json({ error: 'Card not found' }); }
     if (card.status !== 'ACTIVE') { await client.query('ROLLBACK'); return res.status(400).json({ error: 'Card is frozen. Unfreeze before spending.' }); }
 
-    // Daily reset: if card was last updated on a previous day, reset amount_spent_today
+    // Daily reset
     const today = new Date().toISOString().slice(0, 10);
     const lastReset = card.last_reset_date ? new Date(card.last_reset_date).toISOString().slice(0, 10) : null;
     let spentToday = Number(card.amount_spent_today || 0);
@@ -112,7 +167,6 @@ router.post('/:cardId/spend', requireAuth, async (req: AuthRequest, res: Respons
       await client.query('UPDATE cards SET amount_spent_today = 0 WHERE id = $1', [cardId]);
     }
 
-    // Enforce daily limit (limits stored as USD-equivalent but card is NGN — treat as plain number limit)
     const dailyLimit = Number(card.daily_limit);
     if (spentToday + spendAmount > dailyLimit) {
       await client.query('ROLLBACK');
@@ -121,7 +175,6 @@ router.post('/:cardId/spend', requireAuth, async (req: AuthRequest, res: Respons
       });
     }
 
-    // Lock NGN wallet
     const walletResult = await client.query(
       'SELECT * FROM wallets WHERE user_id = $1 AND currency = $2 FOR UPDATE',
       [req.user!.userId, 'NGN']
@@ -130,33 +183,19 @@ router.post('/:cardId/spend', requireAuth, async (req: AuthRequest, res: Respons
     if (!wallet) { await client.query('ROLLBACK'); return res.status(404).json({ error: 'NGN wallet not found' }); }
     if (Number(wallet.balance) < spendAmount) {
       await client.query('ROLLBACK');
-      return res.status(400).json({ error: `Insufficient NGN balance. Available: ₦${Number(wallet.balance).toLocaleString('en-NG')}` });
+      return res.status(400).json({ error: `Insufficient balance. Available: ₦${Number(wallet.balance).toLocaleString('en-NG')}` });
     }
 
-    // Debit wallet
-    await client.query(
-      'UPDATE wallets SET balance = balance - $1, updated_at = NOW() WHERE id = $2',
-      [spendAmount, wallet.id]
-    );
+    await client.query('UPDATE wallets SET balance = balance - $1, updated_at = NOW() WHERE id = $2', [spendAmount, wallet.id]);
+    await client.query('UPDATE cards SET amount_spent_today = $1, updated_at = NOW() WHERE id = $2', [spentToday + spendAmount, cardId]);
 
-    // Update card spend tracker
-    await client.query(
-      'UPDATE cards SET amount_spent_today = $1, updated_at = NOW() WHERE id = $2',
-      [spentToday + spendAmount, cardId]
-    );
-
-    // Double-entry ledger: debit_wallet_id = user NGN wallet, credit_wallet_id = NULL (merchant/external)
     const ref = `SPEND-${uuidv4()}`;
     await client.query(
-      `INSERT INTO ledger_entries
-         (transaction_reference, debit_wallet_id, amount, purpose, metadata)
+      `INSERT INTO ledger_entries (transaction_reference, debit_wallet_id, amount, purpose, metadata)
        VALUES ($1, $2, $3, $4, $5)`,
       [ref, wallet.id, spendAmount, 'CARD_SPEND', JSON.stringify({
-        card_id: cardId,
-        mask_pan: card.mask_pan,
-        card_tier: card.card_tier,
-        merchant,
-        currency: 'NGN'
+        card_id: cardId, mask_pan: card.mask_pan, card_tier: card.card_tier,
+        merchant, currency: 'NGN', source: 'sandbox_simulation'
       })]
     );
 
@@ -166,7 +205,8 @@ router.post('/:cardId/spend', requireAuth, async (req: AuthRequest, res: Respons
       message: `₦${spendAmount.toLocaleString('en-NG')} debited for "${merchant}"`,
       spent_today: spentToday + spendAmount,
       daily_limit: dailyLimit,
-      wallet_balance: Number(wallet.balance) - spendAmount
+      wallet_balance: Number(wallet.balance) - spendAmount,
+      reference: ref,
     });
   } catch (err) {
     await client.query('ROLLBACK');
@@ -177,6 +217,110 @@ router.post('/:cardId/spend', requireAuth, async (req: AuthRequest, res: Respons
   }
 });
 
+// ── Sudo Africa spend webhook ─────────────────────────────────────────────────
+// Sudo POSTs card transaction events to this endpoint.
+router.post('/webhook/spend', async (req: Request, res: Response) => {
+  const rawBody = JSON.stringify(req.body);
+  const sig = req.headers['x-sudo-signature'] as string | undefined;
+
+  if (!verifyWebhookSignature(rawBody, sig)) {
+    console.warn('[cards-webhook] Invalid Sudo signature — rejected');
+    return res.status(401).json({ error: 'Invalid signature' });
+  }
+
+  const client = await pool.connect();
+  try {
+    const event = req.body;
+    const eventType: string = event?.type || event?.event || '';
+
+    // Only handle authorization/debit events
+    if (!['card.transaction', 'CARD_DEBIT', 'transaction.created'].includes(eventType)) {
+      return res.status(200).json({ ignored: true, type: eventType });
+    }
+
+    const txData = event?.data || event;
+    const reference: string = txData?.reference || txData?.transactionReference || '';
+    const rawAmount: number = txData?.amount ?? txData?.localAmount ?? 0;
+    const amount = Number(rawAmount) / 100; // Sudo sends kobo
+    const providerCardId: string = txData?.card?._id || txData?.cardId || txData?.card_id || '';
+    const merchant: string = txData?.merchant?.name || txData?.narration || 'Card Purchase';
+    const currency: string = txData?.currency || 'NGN';
+
+    if (!reference || !amount || !providerCardId) {
+      return res.status(400).json({ error: 'Missing required webhook fields' });
+    }
+
+    // Idempotency
+    const existingRef = await pool.query(
+      'SELECT id FROM ledger_entries WHERE transaction_reference = $1',
+      [reference]
+    );
+    if (existingRef.rows.length > 0) {
+      return res.status(200).json({ message: 'Already processed', idempotent: true });
+    }
+
+    // Lookup card by providerCardId
+    const cardResult = await client.query(
+      `SELECT c.*, w.id as wallet_id, w.balance as wallet_balance
+       FROM cards c
+       JOIN wallets w ON w.user_id = c.user_id AND w.currency = 'NGN'
+       WHERE c.provider_card_id = $1 FOR UPDATE`,
+      [providerCardId]
+    );
+    const card = cardResult.rows[0];
+    if (!card) {
+      console.warn(`[cards-webhook] No card for providerCardId ${providerCardId}`);
+      return res.status(404).json({ error: 'Card not found' });
+    }
+
+    await client.query('BEGIN');
+
+    // Debit wallet
+    await client.query(
+      'UPDATE wallets SET balance = balance - $1, updated_at = NOW() WHERE id = $2',
+      [amount, card.wallet_id]
+    );
+
+    // Update card spend tracker (daily)
+    await client.query(
+      'UPDATE cards SET amount_spent_today = amount_spent_today + $1, updated_at = NOW() WHERE id = $2',
+      [amount, card.id]
+    );
+
+    // Write ledger entry
+    await client.query(
+      `INSERT INTO ledger_entries (transaction_reference, debit_wallet_id, amount, purpose, metadata)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [
+        reference,
+        card.wallet_id,
+        amount,
+        'CARD_SPEND',
+        JSON.stringify({
+          card_id: card.id,
+          provider_card_id: providerCardId,
+          mask_pan: card.mask_pan,
+          card_tier: card.card_tier,
+          merchant,
+          currency,
+          source: 'sudo_webhook',
+        }),
+      ]
+    );
+
+    await client.query('COMMIT');
+    console.log(`[cards-webhook] ₦${amount} debited from card ${card.mask_pan} at "${merchant}" (ref: ${reference})`);
+    res.json({ success: true });
+  } catch (err) {
+    await client.query('ROLLBACK');
+    console.error('[cards-webhook] Error:', err);
+    res.status(500).json({ error: 'Processing failed' });
+  } finally {
+    client.release();
+  }
+});
+
+// ── Freeze / Unfreeze ─────────────────────────────────────────────────────────
 router.patch('/:cardId/status', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
     const { cardId } = req.params;
@@ -186,16 +330,26 @@ router.patch('/:cardId/status', requireAuth, async (req: AuthRequest, res: Respo
     }
 
     const result = await pool.query(
-      'UPDATE cards SET status = $1 WHERE id = $2 AND user_id = $3 RETURNING id, status',
+      'UPDATE cards SET status = $1 WHERE id = $2 AND user_id = $3 RETURNING id, provider_card_id, status',
       [status, cardId, req.user!.userId]
     );
     if (!result.rows.length) return res.status(404).json({ error: 'Card not found' });
+
+    // Mirror status to Sudo Africa (fire-and-forget, non-blocking)
+    const providerCardId = result.rows[0].provider_card_id;
+    if (providerCardId && !providerCardId.startsWith('sandbox_')) {
+      updateCardStatus(providerCardId, status === 'ACTIVE' ? 'ACTIVE' : 'INACTIVE').catch(err =>
+        console.error('[cards] Sudo status sync failed:', err)
+      );
+    }
+
     res.json({ success: true, card: result.rows[0] });
   } catch {
     res.status(500).json({ error: 'Server error' });
   }
 });
 
+// ── Update spending limits ────────────────────────────────────────────────────
 router.patch('/:cardId/limits', requireAuth, async (req: AuthRequest, res: Response) => {
   try {
     const { cardId } = req.params;
@@ -212,7 +366,7 @@ router.patch('/:cardId/limits', requireAuth, async (req: AuthRequest, res: Respo
     const maxMonthly = card.card_tier === 'PLATINUM' ? 50000 : 5000;
 
     if (dailyLimit > maxDaily || monthlyLimit > maxMonthly) {
-      return res.status(400).json({ error: `Limits exceed tier maximum (Daily: $${maxDaily}, Monthly: $${maxMonthly})` });
+      return res.status(400).json({ error: `Limits exceed tier maximum (Daily: ₦${maxDaily.toLocaleString()}, Monthly: ₦${maxMonthly.toLocaleString()})` });
     }
 
     const result = await pool.query(

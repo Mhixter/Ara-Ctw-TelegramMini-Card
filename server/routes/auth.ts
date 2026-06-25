@@ -27,21 +27,23 @@ router.post('/telegram', async (req: Request, res: Response) => {
 
     const { telegramId, username, firstName } = telegramUser;
 
-    let userResult = await pool.query('SELECT * FROM users WHERE telegram_id = $1', [telegramId]);
-    let user = userResult.rows[0];
+    // Upsert user — ON CONFLICT prevents race-condition duplicate-key errors
+    const upsertResult = await pool.query(
+      `INSERT INTO users (telegram_id, kyc_status, is_active)
+       VALUES ($1, 'PENDING', true)
+       ON CONFLICT (telegram_id) DO UPDATE SET telegram_id = EXCLUDED.telegram_id
+       RETURNING *`,
+      [telegramId]
+    );
+    const user = upsertResult.rows[0];
 
-    if (!user) {
-      const insertResult = await pool.query(
-        'INSERT INTO users (telegram_id, kyc_status, is_active) VALUES ($1, $2, $3) RETURNING *',
-        [telegramId, 'PENDING', true]
-      );
-      user = insertResult.rows[0];
-
-      await pool.query(
-        'INSERT INTO wallets (user_id, currency, balance) VALUES ($1, $2, 0)',
-        [user.id, 'NGN']
-      );
-    }
+    // Create NGN wallet if it doesn't exist yet (idempotent)
+    await pool.query(
+      `INSERT INTO wallets (user_id, currency, balance)
+       VALUES ($1, 'NGN', 0)
+       ON CONFLICT (user_id, currency) DO NOTHING`,
+      [user.id]
+    );
 
     const token = generateJWT(telegramId, user.id);
     res.json({ token, user: { id: user.id, telegramId, username, firstName, kycStatus: user.kyc_status, isActive: user.is_active } });
