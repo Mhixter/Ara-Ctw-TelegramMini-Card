@@ -205,7 +205,7 @@ router.post('/:cardId/spend', requireAuth, async (req: AuthRequest, res: Respons
        VALUES ($1, $2, $3, $4, $5)`,
       [ref, wallet.id, spendAmount, 'CARD_SPEND', JSON.stringify({
         card_id: cardId, mask_pan: card.mask_pan, card_tier: card.card_tier,
-        merchant, currency: 'NGN', source: 'sandbox_simulation'
+        merchant, currency: 'NGN', source: 'user_initiated'
       })]
     );
 
