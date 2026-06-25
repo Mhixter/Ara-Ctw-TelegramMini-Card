@@ -1,0 +1,236 @@
+ [0.010] [SW] init
+ [0.012] [SW] got 0 windows from the start
+ [0.362] [SW] [windowConnected] new e402ca9e-f197-4d12-a28a-f33b03eaa702 from hello before 0
+ [0.362] [SW] [windowConnected] before Array(0)
+ [0.363] [SW] sending message port for mtproto
+ [0.363] [SW] [windowConnected] after Array(1)
+ Supported image mime types Set(5)
+ Elapsed time since unlocked: 110.043212890625 ms allStates loaded
+ Elapsed time since unlocked: 111.149169921875 ms singleInstance started
+ Elapsed time since unlocked: 144.566162109375 ms sent all states (1)
+ Elapsed time since unlocked: 155.819091796875 ms await I18n.getCacheLangPack()
+ Elapsed time since unlocked: 1012.801025390625 ms sent all states (2)
+ got state, time: 1359.5999999977648
+ Elapsed time since unlocked: 1015.93212890625 ms IMAGE_MIME_TYPES_SUPPORTED_PROMISE
+ Will mount IM page: 1782391232.075
+k/:1 Uncaught (in promise) Object
+ Unrecognized feature: 'device-orientation'.
+webappinternal.telegram.org/botfather#tgWebAppData=query_id%3DAAGIE4IsAgAAAIgTgiwHUUVc%26user%3D%257B%2522id%2522%253A5041689480%252C%2522first_name%2522%253A%2522ARA%2522%252C%2522last_name%2522%253A%2522%2522%252C%2522username%2522%253A%2522kycfather%2522%252C%2522language_code%2522%253A%2522en%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FY9r7W-nJb6y82edw1X-dsihohbzg6Kt93UxBBDXbiVg4j9QXIIAOnXBQs7vEHwz0.svg%2522%257D%26auth_date%3D1782391590%26signature%3D1RB7ovTPlMkZ1k8It0s0L-F1f0XZkS5BVb39IveFKhPhL6tgPAwyQbe7j9vmsRnEwFpn3Ne53HEsY7iQ4Ds2BA%26hash%3Dcfd76c5428f7815f60383244c3541d5d1dc230c46f70b19c065dc75d33242f33&tgWebAppVersion=9.6&tgWebAppPlatform=web&tgWebAppThemeParams=%7B%22bg_color%22%3A%22%23ffffff%22%2C%22button_color%22%3A%22%233390ec%22%2C%22button_text_color%22%3A%22%23ffffff%22%2C%22hint_color%22%3A%22%23707579%22%2C%22link_color%22%3A%22%2300488f%22%2C%22secondary_bg_color%22%3A%22%23f4f4f5%22%2C%22text_color%22%3A%22%23000000%22%2C%22header_bg_color%22%3A%22%23ffffff%22%2C%22accent_text_color%22%3A%22%233390ec%22%2C%22section_bg_color%22%3A%22%23ffffff%22%2C%22section_header_text_color%22%3A%22%233390ec%22%2C%22subtitle_text_color%22%3A%22%23707579%22%2C%22destructive_text_color%22%3A%22%23df3f40%22%7D&tgWebAppDefaultColors=%7B%22bg_color%22%3A%22%231a2026%22%2C%22bg_dark_color%22%3A%22%231a2026%22%2C%22header_color%22%3A%22%23212a33%22%2C%22header_dark_color%22%3A%22%23212a33%22%7D:1  Failed to load resource: the server responded with a status of 400 ()
+ [Telegram.WebView] > postEvent web_app_set_header_color [object Object]
+ [Telegram.WebView] > postEvent web_app_set_background_color [object Object]
+ [Telegram.WebView] > postEvent web_app_set_bottom_bar_color [object Object]
+ [Telegram.WebView] > postEvent web_app_request_theme 
+ [Telegram.WebView] > postEvent web_app_request_viewport 
+ [Telegram.WebView] > postEvent web_app_request_safe_area 
+ [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+ history init curState = [object Object]
+ [Telegram.WebView] > postEvent web_app_ready 
+ [Telegram.WebView] > postEvent web_app_set_bottom_bar_color [object Object]
+ [Telegram.WebView] > postEvent web_app_setup_secondary_button [object Object]
+ [Telegram.WebView] > postEvent web_app_setup_main_button [object Object]
+ [Telegram.WebView] > postEvent web_app_setup_swipe_behavior [object Object]
+ [Telegram.WebView] > postEvent web_app_setup_back_button [object Object]
+ [Telegram.WebView] < receiveEvent theme_changed [object Object]
+ added to onUnload
+ [Telegram.WebView] > postEvent web_app_set_header_color [object Object]
+ [Telegram.WebView] > postEvent web_app_set_background_color [object Object]
+ [Telegram.WebView] > postEvent web_app_set_bottom_bar_color [object Object]
+ [Telegram.WebView] > postEvent web_app_request_theme 
+ [Telegram.WebView] > postEvent web_app_request_viewport 
+ [Telegram.WebView] > postEvent web_app_request_safe_area 
+ [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+ history init curState = [object Object]
+ [Telegram.WebView] > postEvent web_app_ready 
+ [Telegram.WebView] > postEvent web_app_set_bottom_bar_color [object Object]
+ [Telegram.WebView] > postEvent web_app_setup_secondary_button [object Object]
+ [Telegram.WebView] > postEvent web_app_setup_main_button [object Object]
+ [Telegram.WebView] > postEvent web_app_setup_swipe_behavior [object Object]
+ [Telegram.WebView] > postEvent web_app_setup_back_button [object Object]
+ added to onUnload
+ [Telegram.WebView] < receiveEvent theme_changed [object Object]
+ onUnload 0
+ history push oldState = [object Object] newState = [object Object]
+ [Telegram.WebView] > postEvent web_app_setup_back_button [object Object]
+ added to onLoad
+ added to onUnload
+ onLoad 0
+ 300
+ added to onUnload
+ onUnload 0
+ onUnload 1
+ history push oldState = [object Object] newState = [object Object]
+ added to onUnload
+ [Telegram.WebView] < receiveEvent back_button_pressed undefined
+ onUnload 0
+ history push oldState = [object Object] newState = [object Object]
+ added to onLoad
+ added to onUnload
+ onLoad 0
+ 300
+ added to onUnload
+ onUnload 0
+ onUnload 1
+ history push oldState = [object Object] newState = [object Object]
+ [Telegram.WebView] > postEvent web_app_setup_main_button [object Object]
+ added to onUnload
+ added to onUnload
+ [Telegram.WebView] < receiveEvent back_button_pressed undefined
+ onUnload 0
+ [Telegram.WebView] > postEvent web_app_setup_main_button [object Object]
+ onUnload 1
+ history push oldState = [object Object] newState = [object Object]
+ added to onLoad
+ added to onUnload
+ onLoad 0
+ 300
+ added to onUnload
+ onUnload 0
+ onUnload 1
+ history push oldState = [object Object] newState = [object Object]
+ added to onUnload
+ [Telegram.WebView] < receiveEvent back_button_pressed undefined
+ onUnload 0
+ history push oldState = [object Object] newState = [object Object]
+ added to onLoad
+ added to onUnload
+ onLoad 0
+ 300
+ added to onUnload
+ onUnload 0
+ onUnload 1
+ history push oldState = [object Object] newState = [object Object]
+ 300
+ added to onUnload
+ [Telegram.WebView] < receiveEvent back_button_pressed undefined
+ onUnload 0
+ history push oldState = [object Object] newState = [object Object]
+ added to onLoad
+ added to onUnload
+ onLoad 0
+ 300
+ added to onUnload
+ onUnload 0
+ onUnload 1
+ history push oldState = [object Object] newState = [object Object]
+ added to onUnload
+ [Telegram.WebView] > postEvent web_app_trigger_haptic_feedback [object Object]
+ [Telegram.WebView] > postEvent web_app_open_popup [object Object]
+ [Telegram.WebView] < receiveEvent popup_closed [object Object]
+ [Telegram.WebView] > postEvent web_app_trigger_haptic_feedback [object Object]
+webappinternal.teleg…otfather.js?52:1517 Uncaught TypeError: Cannot read properties of null (reading 'remove')
+ [Telegram.WebView] > postEvent web_app_trigger_haptic_feedback [object Object]
+ [Telegram.WebView] > postEvent web_app_open_popup [object Object]
+ [Telegram.WebView] < receiveEvent popup_closed [object Object]
+ [Telegram.WebView] > postEvent web_app_trigger_haptic_feedback [object Object]
+webappinternal.teleg…otfather.js?52:1517 Uncaught TypeError: Cannot read properties of null (reading 'remove')
+ onUnload 0
+ history push oldState = [object Object] newState = [object Object]
+ [Telegram.WebView] > postEvent web_app_setup_main_button [object Object]
+ added to onUnload
+ added to onUnload
+ [Telegram.WebView] < receiveEvent main_button_pressed undefined
+ [Telegram.WebView] > postEvent web_app_setup_main_button [object Object]
+ [Telegram.WebView] > postEvent web_app_setup_main_button [object Object]
+ added to onUnload
+ onUnload 0
+ [Telegram.WebView] > postEvent web_app_setup_main_button [object Object]
+ onUnload 1
+ onUnload 2
+ [Telegram.WebView] > postEvent web_app_trigger_haptic_feedback [object Object]
+ history push oldState = [object Object] newState = [object Object]
+ added to onUnload
+ onUnload 0
+ history push oldState = [object Object] newState = [object Object]
+ [Telegram.WebView] > postEvent web_app_setup_main_button [object Object]
+ added to onUnload
+ added to onUnload
+ [Telegram.WebView] > postEvent web_app_trigger_haptic_feedback [object Object]
+ [Telegram.WebView] < receiveEvent main_button_pressed undefined
+ [Telegram.WebView] > postEvent web_app_setup_main_button [object Object]
+ [Telegram.WebView] > postEvent web_app_setup_main_button [object Object]
+ added to onUnload
+ onUnload 0
+ [Telegram.WebView] > postEvent web_app_setup_main_button [object Object]
+ onUnload 1
+ onUnload 2
+ [Telegram.WebView] > postEvent web_app_trigger_haptic_feedback [object Object]
+ history push oldState = [object Object] newState = [object Object]
+ added to onUnload
+ [Telegram.WebView] < receiveEvent back_button_pressed undefined
+ onUnload 0
+ history push oldState = [object Object] newState = [object Object]
+ added to onLoad
+ added to onUnload
+ onLoad 0
+ 300
+ added to onUnload
+ [Telegram.WebView] < receiveEvent back_button_pressed undefined
+ onUnload 0
+ onUnload 1
+ history push oldState = [object Object] newState = [object Object]
+ [Telegram.WebView] > postEvent web_app_setup_back_button [object Object]
+ added to onUnload
+payonline.saidumuhammed664.workers.dev/api/auth/telegram:1  Failed to load resource: the server responded with a status of 404 ()
+payonline.saidumuhammed664.workers.dev/api/auth/telegram:1  Failed to load resource: the server responded with a status of 404 ()
+payonline.saidumuhammed664.workers.dev/api/auth/telegram:1  Failed to load resource: the server responded with a status of 404 ()
+payonline.saidumuhammed664.workers.dev/api/auth/telegram:1  Failed to load resource: the server responded with a status of 404 ()
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color Object
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color Object
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color Object
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed Object
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button Object
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button Object
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+payonline.saidumuhammed664.workers.dev/api/auth/telegram:1  Failed to load resource: the server responded with a status of 404 ()
+payonline.saidumuhammed664.workers.dev/api/auth/telegram:1  Failed to load resource: the server responded with a status of 404 ()
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-D3DeSNbn.js:11  POST https://payonline.saidumuhammed664.workers.dev/api/auth/telegram 404 (Not Found)
+(anonymous) @ index-D3DeSNbn.js:11
+xhr @ index-D3DeSNbn.js:11
+Ta @ index-D3DeSNbn.js:13
+Promise.then
+_request @ index-D3DeSNbn.js:17
+request @ index-D3DeSNbn.js:13
+(anonymous) @ index-D3DeSNbn.js:17
+(anonymous) @ index-D3DeSNbn.js:9
+telegram @ index-D3DeSNbn.js:17
+u @ index-D3DeSNbn.js:17
+(anonymous) @ index-D3DeSNbn.js:17
+Vc @ index-D3DeSNbn.js:8
+El @ index-D3DeSNbn.js:8
+Tl @ index-D3DeSNbn.js:8
+El @ index-D3DeSNbn.js:8
+Tl @ index-D3DeSNbn.js:8
+El @ index-D3DeSNbn.js:8
+Tl @ index-D3DeSNbn.js:8
+El @ index-D3DeSNbn.js:8
+Tl @ index-D3DeSNbn.js:8
+El @ index-D3DeSNbn.js:8
+Uu @ index-D3DeSNbn.js:8
+(anonymous) @ index-D3DeSNbn.js:8
+D @ index-D3DeSNbn.js:1
+postMessage
+O @ index-D3DeSNbn.js:1
+D @ index-D3DeSNbn.js:1
+postMessage
+O @ index-D3DeSNbn.js:1
+e.unstable_scheduleCallback @ index-D3DeSNbn.js:1
+sd @ index-D3DeSNbn.js:8
+od @ index-D3DeSNbn.js:8
+(anonymous) @ index-D3DeSNbn.js:8

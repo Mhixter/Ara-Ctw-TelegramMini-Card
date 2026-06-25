@@ -1,0 +1,183 @@
+2026-06-25T01:20:26.493Z	Initializing build environment...
+2026-06-25T01:20:29.303Z	Success: Finished initializing build environment
+2026-06-25T01:20:30.196Z	Cloning repository...
+2026-06-25T01:20:31.581Z	Detected the following tools from environment: npm@10.9.2, nodejs@22.16.0
+2026-06-25T01:20:31.582Z	Restoring from dependencies cache
+2026-06-25T01:20:31.585Z	Restoring from build output cache
+2026-06-25T01:20:31.722Z	Installing project dependencies: npm clean-install --progress=false
+2026-06-25T01:20:39.342Z	
+2026-06-25T01:20:39.342Z	added 245 packages, and audited 246 packages in 7s
+2026-06-25T01:20:39.342Z	
+2026-06-25T01:20:39.343Z	60 packages are looking for funding
+2026-06-25T01:20:39.344Z	  run `npm fund` for details
+2026-06-25T01:20:39.344Z	
+2026-06-25T01:20:39.345Z	found 0 vulnerabilities
+2026-06-25T01:20:39.605Z	Executing user build command: npm run build
+2026-06-25T01:20:39.917Z	
+2026-06-25T01:20:39.917Z	> nairavault@1.0.0 build
+2026-06-25T01:20:39.917Z	> vite build --config vite.config.ts && tsc --project tsconfig.json
+2026-06-25T01:20:39.917Z	
+2026-06-25T01:20:40.263Z	vite v8.1.0 building client environment for production...
+2026-06-25T01:20:40.484Z	
+transforming...✓ 169 modules transformed.
+2026-06-25T01:20:40.575Z	rendering chunks...
+2026-06-25T01:20:40.639Z	computing gzip size...
+2026-06-25T01:20:40.647Z	dist/index.html                   0.66 kB │ gzip:   0.42 kB
+2026-06-25T01:20:40.648Z	dist/assets/index-Tu3DHMFx.css    5.53 kB │ gzip:   1.77 kB
+2026-06-25T01:20:40.648Z	dist/assets/index-D3DeSNbn.js   379.41 kB │ gzip: 112.06 kB
+2026-06-25T01:20:40.648Z	
+2026-06-25T01:20:40.649Z	✓ built in 385ms
+2026-06-25T01:20:43.152Z	Success: Build command completed
+2026-06-25T01:20:43.426Z	Executing user deploy command: npx wrangler deploy
+2026-06-25T01:20:44.794Z	npm warn exec The following package was not found and will be installed: wrangler@4.104.0
+2026-06-25T01:20:55.155Z	
+2026-06-25T01:20:55.155Z	 ⛅️ wrangler 4.104.0
+2026-06-25T01:20:55.156Z	────────────────────
+2026-06-25T01:20:55.689Z	
+2026-06-25T01:20:55.689Z	Detected Project Settings:
+2026-06-25T01:20:55.689Z	 - Worker Name: payonline
+2026-06-25T01:20:55.689Z	 - Framework: Vite
+2026-06-25T01:20:55.690Z	 - Build Command: npm run build
+2026-06-25T01:20:55.690Z	 - Output Directory: dist
+2026-06-25T01:20:55.690Z	
+2026-06-25T01:20:55.691Z	? Do you want to modify these settings?
+2026-06-25T01:20:55.691Z	🤖 Using fallback value in non-interactive context: no
+2026-06-25T01:20:55.697Z	
+2026-06-25T01:20:55.697Z	📦 Install packages:
+2026-06-25T01:20:55.698Z	 - wrangler (devDependency)
+2026-06-25T01:20:55.698Z	
+2026-06-25T01:20:55.698Z	📝 Update package.json scripts:
+2026-06-25T01:20:55.698Z	 - "deploy": "npm run build && wrangler deploy"
+2026-06-25T01:20:55.698Z	 - "preview": "npm run build && wrangler dev"
+2026-06-25T01:20:55.698Z	
+2026-06-25T01:20:55.699Z	📄 Create wrangler.jsonc:
+2026-06-25T01:20:55.701Z	  {
+2026-06-25T01:20:55.701Z	    "$schema": "node_modules/wrangler/config-schema.json",
+2026-06-25T01:20:55.701Z	    "name": "payonline",
+2026-06-25T01:20:55.701Z	    "compatibility_date": "2026-06-25",
+2026-06-25T01:20:55.705Z	    "observability": {
+2026-06-25T01:20:55.705Z	      "enabled": true
+2026-06-25T01:20:55.705Z	    },
+2026-06-25T01:20:55.706Z	    "assets": {
+2026-06-25T01:20:55.706Z	      "not_found_handling": "single-page-application"
+2026-06-25T01:20:55.706Z	    },
+2026-06-25T01:20:55.706Z	    "compatibility_flags": [
+2026-06-25T01:20:55.706Z	      "nodejs_compat"
+2026-06-25T01:20:55.707Z	    ]
+2026-06-25T01:20:55.707Z	  }
+2026-06-25T01:20:55.707Z	
+2026-06-25T01:20:55.707Z	🛠️  Configuring project for Vite
+2026-06-25T01:20:55.707Z	
+2026-06-25T01:20:55.707Z	? Proceed with setup?
+2026-06-25T01:20:55.707Z	🤖 Using fallback value in non-interactive context: yes
+2026-06-25T01:21:05.607Z	├ Adding Wrangler files to the .gitignore file
+2026-06-25T01:21:05.608Z	│ created .gitignore file
+2026-06-25T01:21:05.608Z	│
+2026-06-25T01:21:05.608Z	[build] Running: npm run build
+2026-06-25T01:21:05.818Z	[build] 
+2026-06-25T01:21:05.818Z	[build] > nairavault@1.0.0 build
+2026-06-25T01:21:05.819Z	[build] > vite build --config vite.config.ts && tsc --project tsconfig.json
+2026-06-25T01:21:05.819Z	[build] 
+2026-06-25T01:21:05.819Z	[build] 
+2026-06-25T01:21:05.991Z	[build] failed to load config from /opt/buildhome/repo/vite.config.ts
+2026-06-25T01:21:05.991Z	[build] 
+2026-06-25T01:21:05.993Z	[build] error during build:
+2026-06-25T01:21:05.993Z	[build] Error: Build failed with 1 error:
+2026-06-25T01:21:05.993Z	[build] 
+2026-06-25T01:21:05.993Z	[build] [plugin externalize-deps]
+2026-06-25T01:21:05.994Z	[build] Error: Failed to resolve "@cloudflare/vite-plugin". This package is ESM only but it was tried to load by `require`. See https://vite.dev/guide/troubleshooting.html#this-package-is-esm-only for more details.
+2026-06-25T01:21:05.994Z	[build]     at PluginContextImpl.handler (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:35581:40)
+2026-06-25T01:21:05.994Z	[build]     at plugin (file:///opt/buildhome/repo/node_modules/rolldown/dist/shared/bindingify-input-options-CzVhGygm.mjs:1420:30)
+2026-06-25T01:21:05.994Z	[build]     at plugin.<computed> (file:///opt/buildhome/repo/node_modules/rolldown/dist/shared/bindingify-input-options-CzVhGygm.mjs:1961:18)
+2026-06-25T01:21:05.995Z	[build]     at aggregateBindingErrorsIntoJsError (file:///opt/buildhome/repo/node_modules/rolldown/dist/shared/error-B68YLzl3.mjs:48:18)
+2026-06-25T01:21:05.995Z	[build]     at unwrapBindingResult (file:///opt/buildhome/repo/node_modules/rolldown/dist/shared/error-B68YLzl3.mjs:18:128)
+2026-06-25T01:21:05.995Z	[build]     at #build (file:///opt/buildhome/repo/node_modules/rolldown/dist/shared/rolldown-build-DR0wzp0V.mjs:3256:34)
+2026-06-25T01:21:05.995Z	[build]     at async bundleConfigFile (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:35621:17)
+2026-06-25T01:21:05.995Z	[build]     at async bundleAndLoadConfigFile (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:35529:18)
+2026-06-25T01:21:05.995Z	[build]     at async loadConfigFromFile (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:35490:42)
+2026-06-25T01:21:05.995Z	[build]     at async resolveConfig (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:35106:22)
+2026-06-25T01:21:05.995Z	[build]     at async createBuilder (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:32972:17)
+2026-06-25T01:21:05.999Z	[build]     at async CAC.<anonymous> (file:///opt/buildhome/repo/node_modules/vite/dist/node/cli.js:766:19) {
+2026-06-25T01:21:05.999Z	[build]   errors: [Getter/Setter]
+2026-06-25T01:21:05.999Z	[build] }
+2026-06-25T01:21:05.999Z	[build] 
+2026-06-25T01:21:06.091Z	✘ [ERROR] Error: Command failed with exit code 1: npm run build
+2026-06-25T01:21:06.091Z	
+2026-06-25T01:21:06.091Z	  failed to load config from /opt/buildhome/repo/vite.config.ts
+2026-06-25T01:21:06.092Z	  error during build:
+2026-06-25T01:21:06.092Z	  Error: Build failed with 1 error:
+2026-06-25T01:21:06.092Z	  
+2026-06-25T01:21:06.094Z	  [plugin externalize-deps]
+2026-06-25T01:21:06.094Z	  Error: Failed to resolve "@cloudflare/vite-plugin". This package is ESM only but it was tried to load by `require`. See https://vite.dev/guide/troubleshooting.html#this-package-is-esm-only for more details.
+2026-06-25T01:21:06.095Z	      at PluginContextImpl.handler (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:35581:40)
+2026-06-25T01:21:06.095Z	      at plugin (file:///opt/buildhome/repo/node_modules/rolldown/dist/shared/bindingify-input-options-CzVhGygm.mjs:1420:30)
+2026-06-25T01:21:06.095Z	      at plugin.<computed> (file:///opt/buildhome/repo/node_modules/rolldown/dist/shared/bindingify-input-options-CzVhGygm.mjs:1961:18)
+2026-06-25T01:21:06.095Z	      at aggregateBindingErrorsIntoJsError (file:///opt/buildhome/repo/node_modules/rolldown/dist/shared/error-B68YLzl3.mjs:48:18)
+2026-06-25T01:21:06.095Z	      at unwrapBindingResult (file:///opt/buildhome/repo/node_modules/rolldown/dist/shared/error-B68YLzl3.mjs:18:128)
+2026-06-25T01:21:06.095Z	      at #build (file:///opt/buildhome/repo/node_modules/rolldown/dist/shared/rolldown-build-DR0wzp0V.mjs:3256:34)
+2026-06-25T01:21:06.095Z	      at async bundleConfigFile (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:35621:17)
+2026-06-25T01:21:06.095Z	      at async bundleAndLoadConfigFile (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:35529:18)
+2026-06-25T01:21:06.095Z	      at async loadConfigFromFile (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:35490:42)
+2026-06-25T01:21:06.095Z	      at async resolveConfig (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:35106:22)
+2026-06-25T01:21:06.095Z	      at async createBuilder (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:32972:17)
+2026-06-25T01:21:06.096Z	      at async CAC.<anonymous> (file:///opt/buildhome/repo/node_modules/vite/dist/node/cli.js:766:19) {
+2026-06-25T01:21:06.096Z	    errors: [Getter/Setter]
+2026-06-25T01:21:06.096Z	  }
+2026-06-25T01:21:06.096Z	  
+2026-06-25T01:21:06.096Z	  > nairavault@1.0.0 build
+2026-06-25T01:21:06.096Z	  > vite build --config vite.config.ts && tsc --project tsconfig.json
+2026-06-25T01:21:06.096Z	  
+2026-06-25T01:21:06.096Z	      at makeError (/opt/buildhome/.npm/_npx/32026684e21afda6/node_modules/wrangler/wrangler-dist/cli.js:165383:19)
+2026-06-25T01:21:06.096Z	      at handlePromise (/opt/buildhome/.npm/_npx/32026684e21afda6/node_modules/wrangler/wrangler-dist/cli.js:165850:29)
+2026-06-25T01:21:06.096Z	      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-06-25T01:21:06.096Z	      at async runCommand (/opt/buildhome/.npm/_npx/32026684e21afda6/node_modules/wrangler/wrangler-dist/cli.js:174415:5)
+2026-06-25T01:21:06.098Z	      at async Object.runCommand (/opt/buildhome/.npm/_npx/32026684e21afda6/node_modules/wrangler/wrangler-dist/cli.js:287981:7)
+2026-06-25T01:21:06.098Z	      at async runAutoConfig (/opt/buildhome/.npm/_npx/32026684e21afda6/node_modules/wrangler/wrangler-dist/cli.js:237592:5)
+2026-06-25T01:21:06.099Z	      at async runAutoConfigLogic (/opt/buildhome/.npm/_npx/32026684e21afda6/node_modules/wrangler/wrangler-dist/cli.js:287934:21)
+2026-06-25T01:21:06.099Z	      at async maybeRunAutoConfig (/opt/buildhome/.npm/_npx/32026684e21afda6/node_modules/wrangler/wrangler-dist/cli.js:288041:35)
+2026-06-25T01:21:06.099Z	      at async Object.handler (/opt/buildhome/.npm/_npx/32026684e21afda6/node_modules/wrangler/wrangler-dist/cli.js:288408:34)
+2026-06-25T01:21:06.099Z	      at async /opt/buildhome/.npm/_npx/32026684e21afda6/node_modules/wrangler/wrangler-dist/cli.js:229642:26 {
+2026-06-25T01:21:06.099Z	    shortMessage: 'Command failed with exit code 1: npm run build',
+2026-06-25T01:21:06.099Z	    command: 'npm run build',
+2026-06-25T01:21:06.099Z	    escapedCommand: 'npm run build',
+2026-06-25T01:21:06.099Z	    exitCode: 1,
+2026-06-25T01:21:06.099Z	    signal: undefined,
+2026-06-25T01:21:06.099Z	    signalDescription: undefined,
+2026-06-25T01:21:06.099Z	    stdout: '\n' +
+2026-06-25T01:21:06.099Z	      '> nairavault@1.0.0 build\n' +
+2026-06-25T01:21:06.099Z	      '> vite build --config vite.config.ts && tsc --project tsconfig.json\n',
+2026-06-25T01:21:06.099Z	    stderr: '\x1B[31mfailed to load config from /opt/buildhome/repo/vite.config.ts\x1B[39m\n' +
+2026-06-25T01:21:06.099Z	      '\x1B[31merror during build:\n' +
+2026-06-25T01:21:06.100Z	      'Error: Build failed with 1 error:\n' +
+2026-06-25T01:21:06.100Z	      '\n' +
+2026-06-25T01:21:06.100Z	      '[plugin externalize-deps]\n' +
+2026-06-25T01:21:06.100Z	      'Error: Failed to resolve "@cloudflare/vite-plugin". This package is ESM only but it was tried to load by `require`. See https://vite.dev/guide/troubleshooting.html#this-package-is-esm-only for more details.\n' +
+2026-06-25T01:21:06.100Z	      '    at PluginContextImpl.handler (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:35581:40)\n' +
+2026-06-25T01:21:06.100Z	      '    at plugin (file:///opt/buildhome/repo/node_modules/rolldown/dist/shared/bindingify-input-options-CzVhGygm.mjs:1420:30)\n' +
+2026-06-25T01:21:06.100Z	      '    at plugin.<computed> (file:///opt/buildhome/repo/node_modules/rolldown/dist/shared/bindingify-input-options-CzVhGygm.mjs:1961:18)\n' +
+2026-06-25T01:21:06.100Z	      '    at aggregateBindingErrorsIntoJsError (file:///opt/buildhome/repo/node_modules/rolldown/dist/shared/error-B68YLzl3.mjs:48:18)\n' +
+2026-06-25T01:21:06.100Z	      '    at unwrapBindingResult (file:///opt/buildhome/repo/node_modules/rolldown/dist/shared/error-B68YLzl3.mjs:18:128)\n' +
+2026-06-25T01:21:06.100Z	      '    at #build (file:///opt/buildhome/repo/node_modules/rolldown/dist/shared/rolldown-build-DR0wzp0V.mjs:3256:34)\n' +
+2026-06-25T01:21:06.100Z	      '    at async bundleConfigFile (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:35621:17)\n' +
+2026-06-25T01:21:06.100Z	      '    at async bundleAndLoadConfigFile (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:35529:18)\n' +
+2026-06-25T01:21:06.100Z	      '    at async loadConfigFromFile (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:35490:42)\n' +
+2026-06-25T01:21:06.100Z	      '    at async resolveConfig (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:35106:22)\n' +
+2026-06-25T01:21:06.100Z	      '    at async createBuilder (file:///opt/buildhome/repo/node_modules/vite/dist/node/chunks/node.js:32972:17)\n' +
+2026-06-25T01:21:06.101Z	      '    at async CAC.<anonymous> (file:///opt/buildhome/repo/node_modules/vite/dist/node/cli.js:766:19) {\n' +
+2026-06-25T01:21:06.101Z	      '  errors: [Getter/Setter]\n' +
+2026-06-25T01:21:06.101Z	      '}\x1B[39m',
+2026-06-25T01:21:06.101Z	    failed: true,
+2026-06-25T01:21:06.101Z	    timedOut: false,
+2026-06-25T01:21:06.101Z	    isCanceled: false,
+2026-06-25T01:21:06.101Z	    killed: false
+2026-06-25T01:21:06.101Z	  }
+2026-06-25T01:21:06.101Z	
+2026-06-25T01:21:06.101Z	
+2026-06-25T01:21:06.103Z	
+2026-06-25T01:21:06.103Z	Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+2026-06-25T01:21:06.103Z	
+2026-06-25T01:21:06.103Z	✘ [ERROR] Running custom build `npm run build` failed. There are likely more logs from your build command above.
+2026-06-25T01:21:06.103Z	
+2026-06-25T01:21:06.103Z	
+2026-06-25T01:21:06.127Z	🪵  Logs were written to "/opt/buildhome/.config/.wrangler/logs/wrangler-2026-06-25_01-20-54_587.log"
+2026-06-25T01:21:06.189Z	Failed: error occurred while running deploy command
