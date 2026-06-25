@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import pool from '../db';
-import { BOT_TOKEN, verifyTelegramInitData, generateJWT, requireAdmin, AuthRequest } from '../middleware/auth';
+import { BOT_TOKEN, verifyTelegramInitData, verifyTelegramWidgetData, generateJWT, requireAdmin, AuthRequest } from '../middleware/auth';
 
 const router = Router();
 
@@ -9,37 +9,43 @@ const IS_PRODUCTION = !!BOT_TOKEN;
 
 router.post('/telegram', async (req: Request, res: Response) => {
   try {
-    const { initData } = req.body;
+    const { initData, widgetData, telegramId, username, firstName } = req.body;
 
     let telegramUser: { telegramId: number; username?: string; firstName?: string } | null = null;
 
     if (IS_PRODUCTION) {
-      // ── Strict mode (TELEGRAM_BOT_TOKEN is set) ──────────────────────────────
-      // initData MUST be present and pass HMAC verification.
-      // No fallback — reject anything that can't be cryptographically verified.
-      if (!initData) {
-        console.warn('[auth] Request rejected: initData missing in production mode');
-        return res.status(401).json({ error: 'Telegram initData is required' });
+      // ── Path 1: Telegram Mini App initData ────────────────────────────────────
+      if (initData && initData.length > 20) {
+        telegramUser = verifyTelegramInitData(initData);
+        if (!telegramUser) {
+          console.warn('[auth] initData HMAC failed');
+          return res.status(401).json({ error: 'Invalid or expired Telegram session. Please reopen the app.' });
+        }
       }
-
-      telegramUser = verifyTelegramInitData(initData);
-
-      if (!telegramUser) {
-        console.warn('[auth] Request rejected: initData failed HMAC verification');
-        return res.status(401).json({ error: 'Invalid or expired Telegram session. Please reopen the app.' });
+      // ── Path 2: Telegram Login Widget data ───────────────────────────────────
+      else if (widgetData && widgetData.hash) {
+        telegramUser = verifyTelegramWidgetData(widgetData);
+        if (!telegramUser) {
+          console.warn('[auth] Widget HMAC failed');
+          return res.status(401).json({ error: 'Invalid Telegram login. Please try again.' });
+        }
+      }
+      // ── No valid auth source ──────────────────────────────────────────────────
+      else {
+        console.warn('[auth] No valid auth source in production');
+        return res.status(401).json({ error: 'Telegram authentication required.' });
       }
     } else {
       // ── Dev / sandbox mode (no bot token set) ────────────────────────────────
-      // Accept raw telegramId for local testing only.
-      console.warn('[auth] Running in DEV mode — Telegram identity is NOT verified');
+      console.warn('[auth] DEV mode — identity not verified');
       if (initData && initData.length > 20) {
         telegramUser = verifyTelegramInitData(initData);
       }
-      if (!telegramUser) {
-        const { telegramId, username, firstName } = req.body;
-        if (telegramId) {
-          telegramUser = { telegramId: Number(telegramId), username, firstName };
-        }
+      if (!telegramUser && widgetData?.hash) {
+        telegramUser = verifyTelegramWidgetData(widgetData);
+      }
+      if (!telegramUser && telegramId) {
+        telegramUser = { telegramId: Number(telegramId), username, firstName };
       }
     }
 

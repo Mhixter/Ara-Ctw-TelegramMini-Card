@@ -15,6 +15,52 @@ export interface AuthRequest extends Request {
  * Verifies Telegram WebApp initData using HMAC-SHA256.
  * Also rejects data older than INIT_DATA_MAX_AGE_SECONDS to prevent replay attacks.
  */
+/**
+ * Verifies data from the Telegram Login Widget.
+ * Widget sends: id, first_name, last_name?, username?, photo_url?, auth_date, hash
+ * Verification: HMAC-SHA256(data-check-string, SHA256(bot_token))
+ */
+export function verifyTelegramWidgetData(
+  data: Record<string, string>
+): { telegramId: number; username?: string; firstName?: string } | null {
+  try {
+    if (!BOT_TOKEN) return null;
+    const { hash, ...fields } = data;
+    if (!hash) return null;
+
+    const authDate = Number(fields.auth_date);
+    const age = Math.floor(Date.now() / 1000) - authDate;
+    if (age > INIT_DATA_MAX_AGE_SECONDS) {
+      console.warn('[auth] Widget data expired (age=%ds)', age);
+      return null;
+    }
+
+    const dataCheckString = Object.entries(fields)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([k, v]) => `${k}=${v}`)
+      .join('\n');
+
+    const secretKey = crypto.createHash('sha256').update(BOT_TOKEN).digest();
+    const computedHash = crypto
+      .createHmac('sha256', secretKey)
+      .update(dataCheckString)
+      .digest('hex');
+
+    if (computedHash !== hash) {
+      console.warn('[auth] Widget HMAC mismatch');
+      return null;
+    }
+
+    return {
+      telegramId: Number(fields.id),
+      username: fields.username,
+      firstName: fields.first_name,
+    };
+  } catch {
+    return null;
+  }
+}
+
 export function verifyTelegramInitData(
   initData: string
 ): { telegramId: number; username?: string; firstName?: string } | null {

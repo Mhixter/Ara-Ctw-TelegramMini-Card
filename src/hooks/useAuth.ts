@@ -11,15 +11,6 @@ export interface User {
   isActive: boolean;
 }
 
-function getGuestId(): number {
-  const key = 'nv_guest_id';
-  const stored = localStorage.getItem(key);
-  if (stored) return parseInt(stored, 10);
-  const id = Math.floor(Math.random() * 9_000_000_000) + 1_000_000_000;
-  localStorage.setItem(key, String(id));
-  return id;
-}
-
 export function useAuth() {
   const { telegramId, username, firstName, initData } = useTelegram();
 
@@ -31,6 +22,7 @@ export function useAuth() {
     return !hasSession;
   });
   const [error, setError] = useState<string | null>(null);
+  const [needsWidgetLogin, setNeedsWidgetLogin] = useState(false);
 
   useEffect(() => {
     const hasSession = !!(localStorage.getItem('user') && localStorage.getItem('token'));
@@ -39,21 +31,31 @@ export function useAuth() {
     }
   }, []);
 
-  async function authenticate() {
+  async function authenticate(payload?: Record<string, any>) {
     setLoading(true);
     setError(null);
-    try {
-      // Use real Telegram initData only if it carries actual data (>20 chars)
-      const hasTgData = !!(initData && initData.length > 20);
-      const payload = hasTgData
-        ? { initData }
-        : {
-            telegramId: telegramId || getGuestId(),
-            username: username || undefined,
-            firstName: firstName || 'Guest',
-          };
+    setNeedsWidgetLogin(false);
 
-      const data = await authApi.telegram(payload);
+    try {
+      let body: Record<string, any>;
+
+      if (payload) {
+        // Called directly with widget data or override
+        body = payload;
+      } else if (initData && initData.length > 20) {
+        // Inside Telegram Mini App — use cryptographic initData
+        body = { initData };
+      } else if (telegramId) {
+        // Has some Telegram context (username/firstName from WebApp)
+        body = { telegramId, username, firstName };
+      } else {
+        // No Telegram context at all — needs widget login
+        setNeedsWidgetLogin(true);
+        setLoading(false);
+        return;
+      }
+
+      const data = await authApi.telegram(body);
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       setUser(data.user);
@@ -65,9 +67,12 @@ export function useAuth() {
       if (!e.response) {
         msg = 'Cannot reach the server. Check your internet connection.';
       } else if (status === 405) {
-        msg = 'Server configuration error (405). The API URL may not be set correctly in this deployment.';
+        msg = 'Server configuration error (405). RAILWAY_URL may not be set in Cloudflare.';
       } else if (status === 401) {
-        msg = serverMsg || 'Invalid or expired Telegram session. Please close and reopen the app.';
+        // initData rejected → fall back to widget login
+        setNeedsWidgetLogin(true);
+        setLoading(false);
+        return;
       } else if (status === 500) {
         msg = 'Server error. Please try again in a moment.';
       } else {
@@ -79,11 +84,22 @@ export function useAuth() {
     }
   }
 
+  async function loginWithWidget(widgetUser: {
+    id: number;
+    first_name: string;
+    username?: string;
+    auth_date: number;
+    hash: string;
+    [key: string]: any;
+  }) {
+    await authenticate({ widgetData: widgetUser });
+  }
+
   function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    // Keep nv_guest_id so the same guest re-authenticates to the same account
     setUser(null);
+    setNeedsWidgetLogin(false);
     authenticate();
   }
 
@@ -94,5 +110,5 @@ export function useAuth() {
     setUser(next);
   }
 
-  return { user, loading, error, authenticate, logout, refreshUser };
+  return { user, loading, error, needsWidgetLogin, authenticate, loginWithWidget, logout, refreshUser };
 }
