@@ -82,7 +82,7 @@ export default function App() {
             onKycUpdated={(status) => refreshUser({ kycStatus: status as any })}
           />
         )}
-        {activeTab === 'admin' && isAdmin && <AdminPage />}
+        {activeTab === 'admin' && isAdmin && <AdminPage adminRole={adminRole!} />}
         {activeTab === 'profile' && (
           <ProfilePage user={user} onLogout={() => { logout(); setIsAdminMode(false); setAdminRole(null); }} />
         )}

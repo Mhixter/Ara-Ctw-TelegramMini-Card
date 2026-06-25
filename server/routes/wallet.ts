@@ -160,6 +160,16 @@ router.post('/fund', requireAuth, async (req: AuthRequest, res: Response) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    // KYC enforcement — PENDING users cannot transact
+    const kycResult = await pool.query('SELECT kyc_status FROM users WHERE id = $1', [req.user!.userId]);
+    const kyc = kycResult.rows[0]?.kyc_status;
+    if (!kyc || kyc === 'PENDING') {
+      return res.status(403).json({ error: 'Complete identity verification (KYC) before making transactions.' });
+    }
+    if (kyc === 'BANNED') {
+      return res.status(403).json({ error: 'Your account has been suspended. Contact support.' });
+    }
+
     const existingRef = await pool.query(
       'SELECT id FROM ledger_entries WHERE transaction_reference = $1',
       [reference]

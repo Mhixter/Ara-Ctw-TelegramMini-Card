@@ -147,6 +147,16 @@ router.post('/:cardId/spend', requireAuth, async (req: AuthRequest, res: Respons
       return res.status(400).json({ error: 'Invalid spend amount' });
     }
 
+    // KYC enforcement
+    const kycResult = await pool.query('SELECT kyc_status FROM users WHERE id = $1', [req.user!.userId]);
+    const kyc = kycResult.rows[0]?.kyc_status;
+    if (!kyc || kyc === 'PENDING') {
+      return res.status(403).json({ error: 'Complete identity verification (KYC) before making transactions.' });
+    }
+    if (kyc === 'BANNED') {
+      return res.status(403).json({ error: 'Your account has been suspended. Contact support.' });
+    }
+
     await client.query('BEGIN');
 
     const cardResult = await client.query(

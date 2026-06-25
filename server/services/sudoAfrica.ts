@@ -1,18 +1,18 @@
 /**
- * sudoAfrica.ts
- *
- * Thin wrapper around the Sudo Africa card API.
- * All calls are no-ops (returning sandbox data) when CARD_ISSUER_API_KEY is not set.
+ * sudoAfrica.ts — Sudo Africa card API wrapper.
  *
  * Env vars:
  *   CARD_ISSUER_API_KEY   – Sudo Africa secret key
  *   SUDO_CUSTOMER_ID      – Pre-created Sudo customer / business ID
  *   SUDO_FUND_ACCOUNT_ID  – Sudo funding account ID to debit for card issuance
+ *   SUDO_SANDBOX=true     – Force sandbox mode even if API key is present
+ *
+ * Falls back to sandbox (local mock) when any required var is missing.
  */
 
 const SUDO_BASE = 'https://api.sudo.africa';
 
-function headers() {
+function authHeaders() {
   return {
     Authorization: `Bearer ${process.env.CARD_ISSUER_API_KEY}`,
     'Content-Type': 'application/json',
@@ -20,10 +20,16 @@ function headers() {
 }
 
 function isSandbox() {
-  return !process.env.CARD_ISSUER_API_KEY;
+  return !process.env.CARD_ISSUER_API_KEY || process.env.SUDO_SANDBOX === 'true';
 }
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+function canIssueRealCard() {
+  return (
+    !isSandbox() &&
+    !!process.env.SUDO_CUSTOMER_ID &&
+    !!process.env.SUDO_FUND_ACCOUNT_ID
+  );
+}
 
 export interface SudoCard {
   providerCardId: string;
@@ -37,13 +43,12 @@ export interface SudoCard {
 
 export interface SudoCardDetails {
   maskPan: string;
-  cvv: string | null;    // returned once by Sudo, never stored
+  cvv: string | null;
   expiry: string;
   billingAddress?: string;
 }
 
 // ─── Issue a card ─────────────────────────────────────────────────────────────
-
 export async function issueCard(opts: {
   brand: 'VISA' | 'MASTERCARD';
   currency: string;
@@ -52,8 +57,8 @@ export async function issueCard(opts: {
   monthlyLimit: number;
   userId: string;
 }): Promise<SudoCard> {
-  if (isSandbox()) {
-    // Local sandbox — generate plausible mock values
+  if (!canIssueRealCard()) {
+    // Sandbox fallback — generate plausible mock values
     const { v4: uuidv4 } = await import('uuid');
     const pan = `4111${Math.random().toString().slice(2, 8).padStart(6, '0')}${Math.floor(1000 + Math.random() * 9000)}`;
     return {
@@ -83,13 +88,15 @@ export async function issueCard(opts: {
 
   const res = await fetch(`${SUDO_BASE}/cards`, {
     method: 'POST',
-    headers: headers(),
+    headers: authHeaders(),
     body: JSON.stringify(body),
   });
 
   if (!res.ok) {
     const err: any = await res.json().catch(() => ({}));
-    throw new Error(`Sudo issueCard failed ${res.status}: ${err?.message || res.statusText}`);
+    throw new Error(
+      `Sudo issueCard failed ${res.status}: ${err?.message || res.statusText}`
+    );
   }
 
   const data: any = await res.json();
@@ -106,13 +113,11 @@ export async function issueCard(opts: {
 }
 
 // ─── Fetch card details (PAN + one-time CVV) ─────────────────────────────────
-
 export async function getCardDetails(providerCardId: string): Promise<SudoCardDetails> {
-  if (isSandbox() || !providerCardId.startsWith('sandbox_') === false) {
-    // sandbox — return mock details
-    const expYear = new Date().getFullYear() + 3;
+  const expYear = new Date().getFullYear() + 3;
+  if (isSandbox() || providerCardId.startsWith('sandbox_')) {
     return {
-      maskPan: '411111XXXXXX1234',
+      maskPan: providerCardId.startsWith('sandbox_') ? '411111XXXXXX1234' : '411111XXXXXX1234',
       cvv: '***',
       expiry: `12/${String(expYear).slice(-2)}`,
       billingAddress: 'No. 1 Fintech Way, Lagos, Nigeria',
@@ -120,12 +125,14 @@ export async function getCardDetails(providerCardId: string): Promise<SudoCardDe
   }
 
   const res = await fetch(`${SUDO_BASE}/cards/${providerCardId}`, {
-    headers: headers(),
+    headers: authHeaders(),
   });
 
   if (!res.ok) {
     const err: any = await res.json().catch(() => ({}));
-    throw new Error(`Sudo getCardDetails failed ${res.status}: ${err?.message || res.statusText}`);
+    throw new Error(
+      `Sudo getCardDetails failed ${res.status}: ${err?.message || res.statusText}`
+    );
   }
 
   const data: any = await res.json();
@@ -133,30 +140,40 @@ export async function getCardDetails(providerCardId: string): Promise<SudoCardDe
   return {
     maskPan: card?.maskedPan || `${card?.bin}XXXXXX${card?.last4}`,
     cvv: card?.cvv || null,
-    expiry: card?.expiry || `${card?.expiryMonth}/${card?.expiryYear?.slice(-2)}`,
+    expiry:
+      card?.expiry ||
+      `${card?.expiryMonth}/${String(card?.expiryYear || expYear).slice(-2)}`,
     billingAddress: card?.billingAddress?.line1,
   };
 }
 
-// ─── Freeze / unfreeze via Sudo API ─────────────────────────────────────────
-
-export async function updateCardStatus(providerCardId: string, status: 'ACTIVE' | 'INACTIVE'): Promise<void> {
-  if (isSandbox()) return;
+// ─── Freeze / Unfreeze via Sudo API ──────────────────────────────────────────
+export async function updateCardStatus(
+  providerCardId: string,
+  status: 'ACTIVE' | 'INACTIVE'
+): Promise<void> {
+  if (isSandbox() || providerCardId.startsWith('sandbox_')) return;
 
   await fetch(`${SUDO_BASE}/cards/${providerCardId}`, {
     method: 'PUT',
-    headers: headers(),
+    headers: authHeaders(),
     body: JSON.stringify({ status }),
   });
 }
 
-// ─── HMAC signature verification ─────────────────────────────────────────────
-
-export function verifyWebhookSignature(rawBody: string, signature: string | undefined): boolean {
+// ─── HMAC webhook signature verification ─────────────────────────────────────
+export function verifyWebhookSignature(
+  rawBody: string,
+  signature: string | undefined
+): boolean {
   const secret = process.env.WEBHOOK_SECRET;
-  if (!secret) return true; // dev / sandbox — skip
+  if (!secret) return true; // dev / no-key mode — skip
 
   const crypto = require('crypto');
-  const expected = crypto.createHmac('sha256', secret).update(rawBody).digest('hex');
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(rawBody)
+    .digest('hex');
+
   return signature === expected || signature === `sha256=${expected}`;
 }
