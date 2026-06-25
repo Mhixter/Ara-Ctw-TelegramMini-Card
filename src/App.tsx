@@ -55,13 +55,19 @@ export default function App() {
   }
 
   if (error || !user) {
+    const is405 = error?.includes('405');
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px', textAlign: 'center' }}>
         <div style={{ fontSize: '48px', marginBottom: '16px' }}>⚠️</div>
         <h2 style={{ fontWeight: 700, marginBottom: '8px' }}>Authentication Failed</h2>
-        <p style={{ color: 'var(--tg-theme-hint-color)', fontSize: '14px', marginBottom: '24px' }}>
+        <p style={{ color: 'var(--tg-theme-hint-color)', fontSize: '14px', marginBottom: '12px' }}>
           {error || 'Could not establish a secure session. Please restart the app.'}
         </p>
+        {is405 && (
+          <p style={{ color: '#f59e0b', fontSize: '12px', marginBottom: '20px', maxWidth: '280px', lineHeight: '1.5' }}>
+            This usually means VITE_API_URL is missing in your Cloudflare build settings, or your Telegram bot URL still points to the old Workers address. Set VITE_API_URL to your Railway backend URL and redeploy.
+          </p>
+        )}
         <button className="btn-primary" onClick={() => window.location.reload()} style={{ maxWidth: '200px' }}>
           Retry
         </button>

@@ -58,7 +58,21 @@ export function useAuth() {
       localStorage.setItem('user', JSON.stringify(data.user));
       setUser(data.user);
     } catch (e: any) {
-      const msg = e.response?.data?.error || e.message || 'Authentication failed';
+      const status = e.response?.status;
+      const serverMsg = e.response?.data?.error;
+
+      let msg: string;
+      if (!e.response) {
+        msg = 'Cannot reach the server. Check your internet connection.';
+      } else if (status === 405) {
+        msg = 'Server configuration error (405). The API URL may not be set correctly in this deployment.';
+      } else if (status === 401) {
+        msg = serverMsg || 'Invalid or expired Telegram session. Please close and reopen the app.';
+      } else if (status === 500) {
+        msg = 'Server error. Please try again in a moment.';
+      } else {
+        msg = serverMsg || e.message || 'Authentication failed';
+      }
       setError(msg);
     } finally {
       setLoading(false);
