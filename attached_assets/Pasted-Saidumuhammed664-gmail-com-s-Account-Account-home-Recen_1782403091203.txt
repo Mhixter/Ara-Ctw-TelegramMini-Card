@@ -1,0 +1,128 @@
+Saidumuhammed664@gmail.com's Account
+Account home
+
+Recents
+payonline
+Workers
+
+Workers & Pages
+Compute
+
+
+Domains
+Observe
+
+Investigate
+
+Analytics
+Build
+
+Compute
+Workers & Pages
+Observability
+Workers for Platforms
+Containers
+Durable Objects
+Queues
+Workflows
+Browser Run
+VPC
+
+Email Service
+Workers plans
+Flagship
+
+AI
+
+Storage & databases
+
+Media
+Protect & Connect
+
+Application security
+Zero Trust
+
+Networking
+
+Delivery & performance
+
+Manage account
+
+Workers & Pages
+payonline
+Overview
+Metrics
+Deployments
+Bindings
+Observability
+Domains
+Settings
+Variables and secrets
+Define the environment variables and secrets for your Worker used at runtime
+
+Variables cannot be added to a Worker that only has static assets.
+Learn more
+Trigger events
+Define the events that invoke your Worker
+
+Triggers cannot be added to a Worker that only has static assets.
+Learn more
+Observability
+Collect logs and traces to debug your Worker, persist in the dashboard or export to external providers
+
+Logpush cannot be added to a Worker that only has static assets.
+Learn more
+Tail Workers cannot be added to a Worker that only has static assets.
+Learn more
+Runtime
+Placement
+Default
+Compatibility date
+Jun 25, 2026
+Compatibility flags
+No flags defined
+Build
+Connect your Worker to a Git repository for automatic builds and deployments
+
+Git repository
+Mhixter/Ara-Ctw-TelegramMini-Card
+Build configuration
+Build command:npm run build
+Deploy command:npx wrangler deploy
+Version command:npx wrangler versions upload
+Root directory:/
+Branch control
+Production branch:main
+Builds for non-production branches:Enabled
+Build watch paths
+Include paths:
+*
+API token
+Name:payonline build token
+Variables and secrets
+None
+Deploy Hooks
+No deploy hooks defined
+Build cache
+Enabled (Clear Cache)
+General
+Name
+payonline
+Permanently delete all files, configurations, versions and deployments associated with this Worker.
+Variables and secrets
+Trigger events
+Observability
+Runtime
+Build
+General
+Workers configuration
+Support
+System status
+Careers
+Terms of Use
+Report Security Issues
+Privacy Policy
+A blue and white pill with a checkmark and an x, representing privacy choicesCookie Preferences
+© 2026 Cloudflare, Inc.
+Enable Agent Lee access
+Agent Lee needs a read-only API token to access your account.
