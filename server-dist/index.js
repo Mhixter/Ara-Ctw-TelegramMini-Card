@@ -17,7 +17,10 @@ const admin_1 = __importDefault(require("./routes/admin"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3001;
 app.use((0, helmet_1.default)({ contentSecurityPolicy: false }));
-app.use((0, cors_1.default)({ origin: true, credentials: true }));
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+    : true;
+app.use((0, cors_1.default)({ origin: allowedOrigins, credentials: true }));
 app.use(express_1.default.json());
 app.use('/api/auth', auth_1.default);
 app.use('/api/wallet', wallet_1.default);
