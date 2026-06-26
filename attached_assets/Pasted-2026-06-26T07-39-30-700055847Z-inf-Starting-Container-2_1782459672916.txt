@@ -1,0 +1,30 @@
+2026-06-26T07:39:30.700055847Z [inf]  Starting Container
+2026-06-26T07:39:32.643206260Z [err]    routine: 'errorMissingColumn'
+2026-06-26T07:39:32.643222413Z [err]  npm warn config production Use `--omit=dev` instead.
+2026-06-26T07:39:32.643225761Z [inf]  
+2026-06-26T07:39:32.643228827Z [inf]  > nairavault@1.0.0 start
+2026-06-26T07:39:32.643231828Z [inf]  > node server-dist/index.js
+2026-06-26T07:39:32.643235018Z [inf]  
+2026-06-26T07:39:32.643237910Z [inf]  Server running on port 8080
+2026-06-26T07:39:32.643241404Z [err]  [admin-seed] Failed to upsert super admin: error: column "password_hash" does not exist
+2026-06-26T07:39:32.643244360Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2026-06-26T07:39:32.643247132Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+2026-06-26T07:39:32.643249841Z [err]      at async ensureSuperAdmin (/app/server-dist/index.js:41:26)
+2026-06-26T07:39:32.643253010Z [err]      at async Server.<anonymous> (/app/server-dist/index.js:60:5) {
+2026-06-26T07:39:32.643255991Z [err]    length: 113,
+2026-06-26T07:39:32.643258835Z [err]    severity: 'ERROR',
+2026-06-26T07:39:32.643262180Z [err]    code: '42703',
+2026-06-26T07:39:32.643265308Z [err]    detail: undefined,
+2026-06-26T07:39:32.643268122Z [err]    hint: undefined,
+2026-06-26T07:39:32.643271209Z [err]    position: '12',
+2026-06-26T07:39:32.643273866Z [err]    internalPosition: undefined,
+2026-06-26T07:39:32.643276979Z [err]    internalQuery: undefined,
+2026-06-26T07:39:32.643283547Z [err]    where: undefined,
+2026-06-26T07:39:32.643288992Z [err]    schema: undefined,
+2026-06-26T07:39:32.643292032Z [err]    table: undefined,
+2026-06-26T07:39:32.643294726Z [err]    column: undefined,
+2026-06-26T07:39:32.643297531Z [err]    dataType: undefined,
+2026-06-26T07:39:32.643300095Z [err]    constraint: undefined,
+2026-06-26T07:39:32.643302824Z [err]    file: 'parse_relation.c',
+2026-06-26T07:39:32.643305819Z [err]    line: '3822',
+2026-06-26T07:39:32.644218359Z [err]  }
