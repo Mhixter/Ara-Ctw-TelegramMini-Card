@@ -4,9 +4,10 @@ import { useTelegram } from './useTelegram';
 
 export interface User {
   id: string;
-  telegramId: number;
+  telegramId?: number;
   username?: string;
   firstName?: string;
+  email?: string;
   kycStatus: 'PENDING' | 'TIER_1' | 'TIER_2' | 'BANNED';
   isActive: boolean;
 }
@@ -22,35 +23,60 @@ export function useAuth() {
     return !hasSession;
   });
   const [error, setError] = useState<string | null>(null);
-  const [needsWidgetLogin, setNeedsWidgetLogin] = useState(false);
+  const [needsManualLogin, setNeedsManualLogin] = useState(false);
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const authToken = urlParams.get('auth_token');
+    const authUser  = urlParams.get('auth_user');
+    const authError = urlParams.get('auth_error');
+
+    if (authError) {
+      window.history.replaceState({}, '', window.location.pathname);
+      setError(decodeURIComponent(authError));
+      setLoading(false);
+      setNeedsManualLogin(true);
+      return;
+    }
+
+    if (authToken && authUser) {
+      try {
+        const parsedUser = JSON.parse(decodeURIComponent(authUser));
+        localStorage.setItem('token', authToken);
+        localStorage.setItem('user', JSON.stringify(parsedUser));
+        setUser(parsedUser);
+        setLoading(false);
+        window.history.replaceState({}, '', window.location.pathname);
+        return;
+      } catch {
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    }
+
     const hasSession = !!(localStorage.getItem('user') && localStorage.getItem('token'));
     if (!hasSession) {
-      authenticate();
+      authenticateTelegram();
+    } else {
+      setLoading(false);
     }
   }, []);
 
-  async function authenticate(payload?: Record<string, any>) {
+  async function authenticateTelegram(payload?: Record<string, any>) {
     setLoading(true);
     setError(null);
-    setNeedsWidgetLogin(false);
+    setNeedsManualLogin(false);
 
     try {
       let body: Record<string, any>;
 
       if (payload) {
-        // Called directly with widget data or override
         body = payload;
       } else if (initData && initData.length > 20) {
-        // Inside Telegram Mini App — use cryptographic initData
         body = { initData };
       } else if (telegramId) {
-        // Has some Telegram context (username/firstName from WebApp)
         body = { telegramId, username, firstName };
       } else {
-        // No Telegram context at all — needs widget login
-        setNeedsWidgetLogin(true);
+        setNeedsManualLogin(true);
         setLoading(false);
         return;
       }
@@ -63,22 +89,24 @@ export function useAuth() {
       const status = e.response?.status;
       const serverMsg = e.response?.data?.error;
 
+      if (status === 401) {
+        setNeedsManualLogin(true);
+        setLoading(false);
+        return;
+      }
+
       let msg: string;
       if (!e.response) {
         msg = 'Cannot reach the server. Check your internet connection.';
       } else if (status === 405) {
-        msg = 'Server configuration error (405). The API URL may not be set correctly in this deployment.';
-      } else if (status === 401) {
-        // initData rejected → fall back to widget login
-        setNeedsWidgetLogin(true);
-        setLoading(false);
-        return;
+        msg = 'Server configuration error (405). The API URL may not be set correctly.';
       } else if (status === 500) {
         msg = 'Server error. Please try again in a moment.';
       } else {
         msg = serverMsg || e.message || 'Authentication failed';
       }
       setError(msg);
+      setNeedsManualLogin(true);
     } finally {
       setLoading(false);
     }
@@ -92,15 +120,56 @@ export function useAuth() {
     hash: string;
     [key: string]: any;
   }) {
-    await authenticate({ widgetData: widgetUser });
+    await authenticateTelegram({ widgetData: widgetUser });
+  }
+
+  async function loginWithEmail(email: string, password: string): Promise<void> {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await authApi.login({ email, password });
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      setUser(data.user);
+      setNeedsManualLogin(false);
+    } catch (e: any) {
+      const msg = e.response?.data?.error || 'Login failed. Please try again.';
+      setError(msg);
+      throw new Error(msg);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function registerWithEmail(email: string, password: string, firstName?: string): Promise<void> {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await authApi.register({ email, password, firstName });
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      setUser(data.user);
+      setNeedsManualLogin(false);
+    } catch (e: any) {
+      const msg = e.response?.data?.error || 'Registration failed. Please try again.';
+      setError(msg);
+      throw new Error(msg);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function signInWithGoogle() {
+    window.location.href = authApi.googleAuthUrl();
   }
 
   function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setUser(null);
-    setNeedsWidgetLogin(false);
-    authenticate();
+    setNeedsManualLogin(false);
+    setError(null);
+    authenticateTelegram();
   }
 
   function refreshUser(updated: Partial<User>) {
@@ -110,5 +179,18 @@ export function useAuth() {
     setUser(next);
   }
 
-  return { user, loading, error, needsWidgetLogin, authenticate, loginWithWidget, logout, refreshUser };
+  return {
+    user,
+    loading,
+    error,
+    needsManualLogin,
+    needsWidgetLogin: needsManualLogin,
+    authenticate: authenticateTelegram,
+    loginWithWidget,
+    loginWithEmail,
+    registerWithEmail,
+    signInWithGoogle,
+    logout,
+    refreshUser,
+  };
 }

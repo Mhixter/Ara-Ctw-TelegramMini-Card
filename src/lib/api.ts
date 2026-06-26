@@ -31,8 +31,13 @@ export default api;
 export const authApi = {
   telegram: (data: { telegramId?: number; username?: string; firstName?: string; initData?: string }) =>
     api.post('/auth/telegram', data).then(r => r.data),
+  register: (data: { email: string; password: string; firstName?: string }) =>
+    api.post('/auth/register', data).then(r => r.data),
+  login: (data: { email: string; password: string }) =>
+    api.post('/auth/login', data).then(r => r.data),
   adminLogin: (email: string, password: string) =>
-    api.post('/auth/admin/login', { email, password }).then(r => r.data)
+    api.post('/auth/admin/login', { email, password }).then(r => r.data),
+  googleAuthUrl: () => `${API_BASE}/auth/google`,
 };
 
 export const walletApi = {
