@@ -168,6 +168,8 @@ async function runMigrations() {
       `ALTER TABLE users       ADD COLUMN IF NOT EXISTS email         VARCHAR(255)`,
       `ALTER TABLE users       ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255)`,
       `ALTER TABLE users       ADD COLUMN IF NOT EXISTS google_id     VARCHAR(255)`,
+      `ALTER TABLE users       ADD COLUMN IF NOT EXISTS github_id     VARCHAR(255)`,
+      `CREATE UNIQUE INDEX IF NOT EXISTS users_github_id_idx ON users(github_id) WHERE github_id IS NOT NULL`,
       `ALTER TABLE users       ADD COLUMN IF NOT EXISTS first_name    VARCHAR(255)`,
       `ALTER TABLE users       ADD COLUMN IF NOT EXISTS kyc_status    VARCHAR(20)  DEFAULT 'PENDING'`,
       `ALTER TABLE users       ADD COLUMN IF NOT EXISTS is_active     BOOLEAN      DEFAULT true`,

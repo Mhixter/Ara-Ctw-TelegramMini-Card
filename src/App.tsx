@@ -15,7 +15,7 @@ type Tab = 'home' | 'cards' | 'kyc' | 'profile' | 'admin';
 export default function App() {
   const {
     user, loading, error, needsManualLogin,
-    loginWithEmail, registerWithEmail, signInWithGoogle,
+    loginWithEmail, registerWithEmail, signInWithGitHub,
     logout, refreshUser,
   } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>('home');
@@ -64,7 +64,7 @@ export default function App() {
       <AuthPage
         onLogin={loginWithEmail}
         onRegister={registerWithEmail}
-        onGoogleSignIn={signInWithGoogle}
+        onGitHubSignIn={signInWithGitHub}
         error={error}
       />
     );

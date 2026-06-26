@@ -8,29 +8,29 @@ const router = Router();
 
 const IS_PRODUCTION = !!BOT_TOKEN;
 
-const GOOGLE_CLIENT_ID     = process.env.GOOGLE_CLIENT_ID || '';
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
-const GOOGLE_REDIRECT_URI  = process.env.GOOGLE_REDIRECT_URI || '';
+const GITHUB_CLIENT_ID     = process.env.GITHUB_CLIENT_ID || '';
+const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || '';
+const GITHUB_REDIRECT_URI  = process.env.GITHUB_REDIRECT_URI || '';
 
 // ── Helper: upsert user + wallet ──────────────────────────────────────────────
 async function upsertUserAndWallet(fields: {
   telegramId?: number | null;
   email?: string | null;
   firstName?: string | null;
-  googleId?: string | null;
+  githubId?: string | null;
   passwordHash?: string | null;
 }) {
   let upsertResult;
 
-  if (fields.googleId) {
+  if (fields.githubId) {
     upsertResult = await pool.query(
-      `INSERT INTO users (google_id, email, first_name, kyc_status, is_active)
+      `INSERT INTO users (github_id, email, first_name, kyc_status, is_active)
        VALUES ($1, $2, $3, 'PENDING', true)
-       ON CONFLICT (google_id) DO UPDATE
+       ON CONFLICT (github_id) DO UPDATE
          SET email = COALESCE(EXCLUDED.email, users.email),
              first_name = COALESCE(EXCLUDED.first_name, users.first_name)
        RETURNING *`,
-      [fields.googleId, fields.email || null, fields.firstName || null]
+      [fields.githubId, fields.email || null, fields.firstName || null]
     );
   } else if (fields.email && fields.passwordHash) {
     upsertResult = await pool.query(
@@ -198,26 +198,23 @@ router.post('/login', async (req: Request, res: Response) => {
   }
 });
 
-// ── GET /api/auth/google ──────────────────────────────────────────────────────
-router.get('/google', (req: Request, res: Response) => {
-  if (!GOOGLE_CLIENT_ID || !GOOGLE_REDIRECT_URI) {
-    return res.status(503).json({ error: 'Google OAuth is not configured on this server.' });
+// ── GET /api/auth/github ──────────────────────────────────────────────────────
+router.get('/github', (req: Request, res: Response) => {
+  if (!GITHUB_CLIENT_ID || !GITHUB_REDIRECT_URI) {
+    return res.status(503).json({ error: 'GitHub OAuth is not configured on this server.' });
   }
 
   const params = new URLSearchParams({
-    client_id:     GOOGLE_CLIENT_ID,
-    redirect_uri:  GOOGLE_REDIRECT_URI,
-    response_type: 'code',
-    scope:         'openid email profile',
-    access_type:   'online',
-    prompt:        'select_account',
+    client_id:    GITHUB_CLIENT_ID,
+    redirect_uri: GITHUB_REDIRECT_URI,
+    scope:        'user:email',
   });
 
-  res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`);
+  res.redirect(`https://github.com/login/oauth/authorize?${params.toString()}`);
 });
 
-// ── GET /api/auth/google/callback ─────────────────────────────────────────────
-router.get('/google/callback', async (req: Request, res: Response) => {
+// ── GET /api/auth/github/callback ─────────────────────────────────────────────
+router.get('/github/callback', async (req: Request, res: Response) => {
   const { code, error: oauthError } = req.query as Record<string, string>;
 
   const frontendUrl = process.env.FRONTEND_URL || '';
@@ -228,39 +225,48 @@ router.get('/google/callback', async (req: Request, res: Response) => {
   }
 
   if (oauthError || !code) {
-    return redirectError('Google sign-in was cancelled or failed.');
+    return redirectError('GitHub sign-in was cancelled or failed.');
   }
 
   try {
-    const tokenRes = await axios.post('https://oauth2.googleapis.com/token', {
-      code,
-      client_id:     GOOGLE_CLIENT_ID,
-      client_secret: GOOGLE_CLIENT_SECRET,
-      redirect_uri:  GOOGLE_REDIRECT_URI,
-      grant_type:    'authorization_code',
-    });
+    // Exchange code for access token
+    const tokenRes = await axios.post(
+      'https://github.com/login/oauth/access_token',
+      {
+        client_id:     GITHUB_CLIENT_ID,
+        client_secret: GITHUB_CLIENT_SECRET,
+        code,
+        redirect_uri:  GITHUB_REDIRECT_URI,
+      },
+      { headers: { Accept: 'application/json' } }
+    );
 
     const { access_token } = tokenRes.data;
+    if (!access_token) return redirectError('GitHub did not return an access token.');
 
-    const profileRes = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
-      headers: { Authorization: `Bearer ${access_token}` },
+    // Get primary profile
+    const profileRes = await axios.get('https://api.github.com/user', {
+      headers: { Authorization: `Bearer ${access_token}`, 'User-Agent': 'NairaVault' },
     });
+    const profile = profileRes.data as { id: number; name?: string; email?: string | null };
 
-    const profile = profileRes.data as {
-      id: string;
-      email: string;
-      name?: string;
-      given_name?: string;
-    };
-
-    if (!profile.id || !profile.email) {
-      return redirectError('Could not retrieve Google profile.');
+    // GitHub may not expose email in /user — fetch from /user/emails
+    let email = profile.email || null;
+    if (!email) {
+      const emailsRes = await axios.get('https://api.github.com/user/emails', {
+        headers: { Authorization: `Bearer ${access_token}`, 'User-Agent': 'NairaVault' },
+      });
+      const primary = (emailsRes.data as { email: string; primary: boolean; verified: boolean }[])
+        .find(e => e.primary && e.verified);
+      email = primary?.email || null;
     }
 
+    if (!profile.id) return redirectError('Could not retrieve GitHub profile.');
+
     const user = await upsertUserAndWallet({
-      googleId:  profile.id,
-      email:     profile.email,
-      firstName: profile.given_name || profile.name || null,
+      githubId:  String(profile.id),
+      email,
+      firstName: profile.name?.split(' ')[0] || null,
     });
 
     const token = generateJWT(0, user.id);
@@ -272,11 +278,10 @@ router.get('/google/callback', async (req: Request, res: Response) => {
       isActive:  user.is_active,
     }));
 
-    const target = frontendUrl || '';
-    res.redirect(`${target}/?auth_token=${token}&auth_user=${userPayload}`);
+    res.redirect(`${frontendUrl}/?auth_token=${token}&auth_user=${userPayload}`);
   } catch (err) {
-    console.error('[auth] Google callback error:', err);
-    return redirectError('Google authentication failed. Please try again.');
+    console.error('[auth] GitHub callback error:', err);
+    return redirectError('GitHub authentication failed. Please try again.');
   }
 });
 

@@ -159,8 +159,8 @@ export function useAuth() {
     }
   }
 
-  function signInWithGoogle() {
-    window.location.href = authApi.googleAuthUrl();
+  function signInWithGitHub() {
+    window.location.href = authApi.githubAuthUrl();
   }
 
   function logout() {
@@ -189,7 +189,7 @@ export function useAuth() {
     loginWithWidget,
     loginWithEmail,
     registerWithEmail,
-    signInWithGoogle,
+    signInWithGitHub,
     logout,
     refreshUser,
   };

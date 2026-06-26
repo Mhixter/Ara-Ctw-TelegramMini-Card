@@ -37,7 +37,7 @@ export const authApi = {
     api.post('/auth/login', data).then(r => r.data),
   adminLogin: (email: string, password: string) =>
     api.post('/auth/admin/login', { email, password }).then(r => r.data),
-  googleAuthUrl: () => `${API_BASE}/auth/google`,
+  githubAuthUrl: () => `${API_BASE}/auth/github`,
 };
 
 export const walletApi = {
