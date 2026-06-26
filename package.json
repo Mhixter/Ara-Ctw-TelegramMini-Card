@@ -11,7 +11,7 @@
     "build:server": "tsc --project tsconfig.json",
     "deploy:cf": "wrangler deploy",
     "db:setup": "node scripts/setup-db.js",
-    "start": "node server-dist/index.js"
+    "start": "node scripts/setup-db.js && node server-dist/index.js"
   },
   "keywords": [],
   "author": "",

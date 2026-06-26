@@ -1,0 +1,30 @@
+2026-06-26T07:36:37.003184412Z [inf]  Starting Container
+2026-06-26T07:36:37.269071983Z [inf]  > node server-dist/index.js
+2026-06-26T07:36:37.269078373Z [inf]  
+2026-06-26T07:36:37.269082363Z [inf]  Server running on port 8080
+2026-06-26T07:36:37.269084593Z [err]  npm warn config production Use `--omit=dev` instead.
+2026-06-26T07:36:37.269087333Z [inf]  
+2026-06-26T07:36:37.269090342Z [inf]  > nairavault@1.0.0 start
+2026-06-26T07:36:37.870794306Z [err]    line: '3822',
+2026-06-26T07:36:37.870803426Z [err]    column: undefined,
+2026-06-26T07:36:37.870806806Z [err]    dataType: undefined,
+2026-06-26T07:36:37.870810176Z [err]    constraint: undefined,
+2026-06-26T07:36:37.870813166Z [err]    file: 'parse_relation.c',
+2026-06-26T07:36:37.870821086Z [err]  [admin-seed] Failed to upsert super admin: error: column "password_hash" does not exist
+2026-06-26T07:36:37.870821596Z [err]    code: '42703',
+2026-06-26T07:36:37.870828266Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2026-06-26T07:36:37.870831026Z [err]    internalQuery: undefined,
+2026-06-26T07:36:37.870835416Z [err]    detail: undefined,
+2026-06-26T07:36:37.870839066Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+2026-06-26T07:36:37.870843356Z [err]    hint: undefined,
+2026-06-26T07:36:37.870848876Z [err]    where: undefined,
+2026-06-26T07:36:37.870852135Z [err]      at async ensureSuperAdmin (/app/server-dist/index.js:41:26)
+2026-06-26T07:36:37.870855505Z [err]    position: '12',
+2026-06-26T07:36:37.870859355Z [err]    schema: undefined,
+2026-06-26T07:36:37.870863595Z [err]      at async Server.<anonymous> (/app/server-dist/index.js:60:5) {
+2026-06-26T07:36:37.870864965Z [err]    internalPosition: undefined,
+2026-06-26T07:36:37.870869215Z [err]    table: undefined,
+2026-06-26T07:36:37.870873625Z [err]    length: 113,
+2026-06-26T07:36:37.870878065Z [err]    routine: 'errorMissingColumn'
+2026-06-26T07:36:37.870879815Z [err]    severity: 'ERROR',
+2026-06-26T07:36:37.870885535Z [err]  }
