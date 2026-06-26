@@ -28,7 +28,66 @@ app.use('/api/kyc', kycRouter);
 app.use('/api/cards', cardsRouter);
 app.use('/api/admin', adminRouter);
 
-app.get('/api/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString(), powered_by: 'Ara Tech' }));
+app.get('/api/health', async (_req, res) => {
+  const start = Date.now();
+
+  // ── 1. Database ping ────────────────────────────────────────────────────────
+  let dbStatus: 'ok' | 'error' = 'error';
+  let dbError: string | undefined;
+  let dbLatencyMs: number | undefined;
+  try {
+    const t0 = Date.now();
+    await pool.query('SELECT 1');
+    dbLatencyMs = Date.now() - t0;
+    dbStatus = 'ok';
+  } catch (err: any) {
+    dbError = err.message;
+  }
+
+  // ── 2. Required env vars (show presence only, never values) ─────────────────
+  const envChecks: Record<string, boolean> = {
+    DATABASE_URL:         !!process.env.DATABASE_URL,
+    JWT_SECRET:           !!process.env.JWT_SECRET,
+    TELEGRAM_BOT_TOKEN:   !!process.env.TELEGRAM_BOT_TOKEN,
+    ALLOWED_ORIGINS:      !!process.env.ALLOWED_ORIGINS,
+    SUPER_ADMIN_EMAIL:    !!process.env.SUPER_ADMIN_EMAIL,
+    SUPER_ADMIN_PASSWORD: !!process.env.SUPER_ADMIN_PASSWORD,
+  };
+  const optionalEnvChecks: Record<string, boolean> = {
+    WEBHOOK_SECRET:    !!process.env.WEBHOOK_SECRET,
+    CARD_ISSUER_API_KEY: !!process.env.CARD_ISSUER_API_KEY,
+  };
+
+  const allRequired = Object.values(envChecks).every(Boolean);
+  const overall = dbStatus === 'ok' && allRequired ? 'ok' : 'degraded';
+
+  // ── 3. Mode flags ───────────────────────────────────────────────────────────
+  const mode = process.env.TELEGRAM_BOT_TOKEN ? 'production' : 'dev';
+
+  const body = {
+    status: overall,
+    timestamp: new Date().toISOString(),
+    responseTimeMs: Date.now() - start,
+    mode,
+    database: {
+      status: dbStatus,
+      latencyMs: dbLatencyMs,
+      ...(dbError ? { error: dbError } : {}),
+    },
+    env: {
+      required: envChecks,
+      optional: optionalEnvChecks,
+      allRequiredPresent: allRequired,
+    },
+    server: {
+      port: PORT,
+      nodeVersion: process.version,
+      uptime: Math.floor(process.uptime()),
+    },
+  };
+
+  res.status(overall === 'ok' ? 200 : 503).json(body);
+});
 
 app.use(express.static(path.join(__dirname, '../dist')));
 app.get(/(.*)/, (_req, res) => {

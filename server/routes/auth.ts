@@ -53,14 +53,16 @@ router.post('/telegram', async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Invalid Telegram data' });
     }
 
-    const { telegramId, username, firstName } = telegramUser;
+    const resolvedId = telegramUser.telegramId;
+    const resolvedUsername = telegramUser.username;
+    const resolvedFirstName = telegramUser.firstName;
 
     const upsertResult = await pool.query(
       `INSERT INTO users (telegram_id, kyc_status, is_active)
        VALUES ($1, 'PENDING', true)
        ON CONFLICT (telegram_id) DO UPDATE SET telegram_id = EXCLUDED.telegram_id
        RETURNING *`,
-      [telegramId]
+      [resolvedId]
     );
     const user = upsertResult.rows[0];
 
@@ -71,14 +73,14 @@ router.post('/telegram', async (req: Request, res: Response) => {
       [user.id]
     );
 
-    const token = generateJWT(telegramId, user.id);
+    const token = generateJWT(resolvedId, user.id);
     res.json({
       token,
       user: {
         id: user.id,
-        telegramId,
-        username,
-        firstName,
+        telegramId: resolvedId,
+        username: resolvedUsername,
+        firstName: resolvedFirstName,
         kycStatus: user.kyc_status,
         isActive: user.is_active,
       },
