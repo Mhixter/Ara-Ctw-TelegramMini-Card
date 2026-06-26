@@ -12,8 +12,19 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // ── CORS pre-flight ────────────────────────────────────────────────────────
+    if (request.method === 'OPTIONS') {
+      return new Response(null, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        },
+      });
+    }
+
     if (url.pathname.startsWith('/api/')) {
-      // ── Proxy to Railway backend ─────────────────────────────────────────────
+      // ── Proxy to Railway backend ──────────────────────────────────────────────
       const railwayUrl = env.RAILWAY_URL;
 
       if (!railwayUrl) {
@@ -25,7 +36,6 @@ export default {
 
       const target = new URL(url.pathname + url.search, railwayUrl);
 
-      // Clone headers, strip host so Railway sees its own hostname
       const headers = new Headers(request.headers);
       headers.set('host', target.hostname);
       headers.set('x-forwarded-for', request.headers.get('cf-connecting-ip') || '');
@@ -35,16 +45,27 @@ export default {
         method: request.method,
         headers,
         body: ['GET', 'HEAD'].includes(request.method) ? undefined : request.body,
-        redirect: 'follow',
+        // 'manual' lets Railway's 302 redirects (Google OAuth) pass through to the browser
+        redirect: 'manual',
       });
 
       try {
         const response = await fetch(proxied);
-        // Re-attach CORS headers so the browser is happy
+
+        // Pass redirects (Google OAuth flow) straight back to the browser
+        if (response.status >= 300 && response.status < 400) {
+          const location = response.headers.get('Location');
+          if (location) {
+            return Response.redirect(location, response.status);
+          }
+        }
+
+        // Normal response — add CORS headers
         const respHeaders = new Headers(response.headers);
         respHeaders.set('Access-Control-Allow-Origin', '*');
-        respHeaders.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        respHeaders.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
         respHeaders.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
         return new Response(response.body, {
           status: response.status,
           statusText: response.statusText,
@@ -58,18 +79,7 @@ export default {
       }
     }
 
-    // Handle CORS pre-flight for /api routes triggered before the path check
-    if (request.method === 'OPTIONS') {
-      return new Response(null, {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        },
-      });
-    }
-
-    // ── Serve static frontend ────────────────────────────────────────────────
+    // ── Serve static frontend ──────────────────────────────────────────────────
     return env.ASSETS.fetch(request);
   },
 };

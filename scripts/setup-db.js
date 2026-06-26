@@ -19,14 +19,20 @@ const pool = new Pool({
 // ─── Step 1: Create tables (safe if they already exist) ───────────────────────
 const CREATE_TABLES = `
 CREATE TABLE IF NOT EXISTS users (
-  id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  telegram_id  BIGINT UNIQUE NOT NULL,
-  email        VARCHAR(255),
-  kyc_status   VARCHAR(20) DEFAULT 'PENDING',
-  is_active    BOOLEAN DEFAULT true,
-  created_at   TIMESTAMPTZ DEFAULT NOW(),
-  updated_at   TIMESTAMPTZ DEFAULT NOW()
+  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  telegram_id   BIGINT UNIQUE,
+  email         VARCHAR(255),
+  password_hash VARCHAR(255),
+  google_id     VARCHAR(255),
+  first_name    VARCHAR(255),
+  kyc_status    VARCHAR(20)  DEFAULT 'PENDING',
+  is_active     BOOLEAN      DEFAULT true,
+  created_at    TIMESTAMPTZ  DEFAULT NOW(),
+  updated_at    TIMESTAMPTZ  DEFAULT NOW()
 );
+
+CREATE UNIQUE INDEX IF NOT EXISTS users_email_idx     ON users(email)     WHERE email IS NOT NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS users_google_id_idx ON users(google_id) WHERE google_id IS NOT NULL;
 
 CREATE TABLE IF NOT EXISTS wallets (
   id                     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -95,37 +101,41 @@ CREATE TABLE IF NOT EXISTS admin_users (
 `;
 
 // ─── Step 2: Add missing columns to existing tables ───────────────────────────
-// ALTER TABLE ... ADD COLUMN IF NOT EXISTS is idempotent — safe to re-run.
 const ADD_MISSING_COLUMNS = [
-  // admin_users — columns that may be missing from old deployments
-  // Note: no NOT NULL here — existing rows need the default to apply first
+  // admin_users
   `ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255) DEFAULT ''`,
   `ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS role VARCHAR(50) DEFAULT 'CUSTOMER_SUPPORT'`,
 
-  // users — extra columns
-  `ALTER TABLE users ADD COLUMN IF NOT EXISTS email VARCHAR(255)`,
-  `ALTER TABLE users ADD COLUMN IF NOT EXISTS kyc_status VARCHAR(20) DEFAULT 'PENDING'`,
-  `ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true`,
+  // users — email/password/Google auth columns
+  `ALTER TABLE users ADD COLUMN IF NOT EXISTS email         VARCHAR(255)`,
+  `ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255)`,
+  `ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id     VARCHAR(255)`,
+  `ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name    VARCHAR(255)`,
+  `ALTER TABLE users ADD COLUMN IF NOT EXISTS kyc_status    VARCHAR(20) DEFAULT 'PENDING'`,
+  `ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active     BOOLEAN DEFAULT true`,
+  `ALTER TABLE users ALTER COLUMN telegram_id DROP NOT NULL`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS users_email_idx     ON users(email)     WHERE email IS NOT NULL`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS users_google_id_idx ON users(google_id) WHERE google_id IS NOT NULL`,
 
-  // wallets — extra columns
+  // wallets
   `ALTER TABLE wallets ADD COLUMN IF NOT EXISTS virtual_account_number VARCHAR(20)`,
   `ALTER TABLE wallets ADD COLUMN IF NOT EXISTS virtual_bank_name VARCHAR(100)`,
 
-  // cards — extra columns
-  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS card_token VARCHAR(255)`,
-  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS card_tier VARCHAR(20) DEFAULT 'GOLD'`,
-  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS card_brand VARCHAR(20) DEFAULT 'VISA'`,
-  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS card_currency VARCHAR(10) DEFAULT 'NGN'`,
-  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS daily_limit NUMERIC(18,2) DEFAULT 500`,
-  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS monthly_limit NUMERIC(18,2) DEFAULT 5000`,
+  // cards
+  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS card_token         VARCHAR(255)`,
+  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS card_tier          VARCHAR(20) DEFAULT 'GOLD'`,
+  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS card_brand         VARCHAR(20) DEFAULT 'VISA'`,
+  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS card_currency      VARCHAR(10) DEFAULT 'NGN'`,
+  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS daily_limit        NUMERIC(18,2) DEFAULT 500`,
+  `ALTER TABLE cards ADD COLUMN IF NOT EXISTS monthly_limit      NUMERIC(18,2) DEFAULT 5000`,
   `ALTER TABLE cards ADD COLUMN IF NOT EXISTS amount_spent_today NUMERIC(18,2) DEFAULT 0`,
 
-  // user_kyc — extra columns
-  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS bvn_hash VARCHAR(64)`,
-  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS nin_hash VARCHAR(64)`,
+  // user_kyc
+  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS bvn_hash        VARCHAR(64)`,
+  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS nin_hash        VARCHAR(64)`,
   `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS id_document_url TEXT`,
-  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS liveness_score NUMERIC(5,2)`,
-  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS verified_at TIMESTAMPTZ`,
+  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS liveness_score  NUMERIC(5,2)`,
+  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS verified_at     TIMESTAMPTZ`,
 ];
 
 async function setup() {
@@ -138,12 +148,10 @@ async function setup() {
   const client = await pool.connect();
 
   try {
-    // Step 1 — create tables
     console.log('[db:setup] Creating tables…');
     await client.query(CREATE_TABLES);
     console.log('[db:setup] Tables ready.');
 
-    // Step 2 — patch any missing columns
     console.log('[db:setup] Patching missing columns…');
     let patchErrors = 0;
     for (const sql of ADD_MISSING_COLUMNS) {
@@ -157,7 +165,7 @@ async function setup() {
       }
     }
     if (patchErrors > 0) {
-      console.error(`[db:setup] ⚠️  ${patchErrors} column patch(es) failed — check logs above.`);
+      console.warn(`[db:setup] ⚠️  ${patchErrors} patch(es) had issues — check logs above.`);
     }
     console.log('[db:setup] ✅  Schema is up to date.');
   } catch (err) {
