@@ -84,11 +84,13 @@ CREATE TABLE IF NOT EXISTS user_kyc (
 );
 
 CREATE TABLE IF NOT EXISTS admin_users (
-  id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  email      VARCHAR(255) UNIQUE NOT NULL,
-  is_active  BOOLEAN DEFAULT true,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
+  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email         VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL DEFAULT '',
+  role          VARCHAR(50)  NOT NULL DEFAULT 'CUSTOMER_SUPPORT',
+  is_active     BOOLEAN DEFAULT true,
+  created_at    TIMESTAMPTZ DEFAULT NOW(),
+  updated_at    TIMESTAMPTZ DEFAULT NOW()
 );
 `;
 
@@ -96,8 +98,9 @@ CREATE TABLE IF NOT EXISTS admin_users (
 // ALTER TABLE ... ADD COLUMN IF NOT EXISTS is idempotent — safe to re-run.
 const ADD_MISSING_COLUMNS = [
   // admin_users — columns that may be missing from old deployments
-  `ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255) NOT NULL DEFAULT ''`,
-  `ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS role VARCHAR(50) NOT NULL DEFAULT 'CUSTOMER_SUPPORT'`,
+  // Note: no NOT NULL here — existing rows need the default to apply first
+  `ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255) DEFAULT ''`,
+  `ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS role VARCHAR(50) DEFAULT 'CUSTOMER_SUPPORT'`,
 
   // users — extra columns
   `ALTER TABLE users ADD COLUMN IF NOT EXISTS email VARCHAR(255)`,
@@ -142,13 +145,19 @@ async function setup() {
 
     // Step 2 — patch any missing columns
     console.log('[db:setup] Patching missing columns…');
+    let patchErrors = 0;
     for (const sql of ADD_MISSING_COLUMNS) {
       try {
         await client.query(sql);
+        console.log('[db:setup] OK:', sql.slice(0, 80));
       } catch (err) {
-        // Column already exists with a constraint mismatch — log and continue
-        console.warn('[db:setup] Skipped:', sql.slice(0, 60), '…', err.message);
+        patchErrors++;
+        console.error('[db:setup] FAILED:', sql.slice(0, 80));
+        console.error('[db:setup] Error:', err.message);
       }
+    }
+    if (patchErrors > 0) {
+      console.error(`[db:setup] ⚠️  ${patchErrors} column patch(es) failed — check logs above.`);
     }
     console.log('[db:setup] ✅  Schema is up to date.');
   } catch (err) {
