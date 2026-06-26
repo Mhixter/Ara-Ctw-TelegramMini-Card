@@ -67,7 +67,7 @@ export function useAuth() {
       if (!e.response) {
         msg = 'Cannot reach the server. Check your internet connection.';
       } else if (status === 405) {
-        msg = 'Server configuration error (405). RAILWAY_URL may not be set in Cloudflare.';
+        msg = 'Server configuration error (405). The API URL may not be set correctly in this deployment.';
       } else if (status === 401) {
         // initData rejected → fall back to widget login
         setNeedsWidgetLogin(true);

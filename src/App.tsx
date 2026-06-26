@@ -8,6 +8,7 @@ import AdminPage from './pages/AdminPage';
 import AdminLoginPage from './pages/AdminLoginPage';
 import TelegramLoginWidget from './components/TelegramLoginWidget';
 import { useAuth } from './hooks/useAuth';
+import { API_BASE, API_TARGET_HOST } from './lib/api';
 
 type Tab = 'home' | 'cards' | 'kyc' | 'profile' | 'admin';
 
@@ -101,18 +102,39 @@ export default function App() {
 
   if (error) {
     const is405 = error.includes('405');
+    const isNoConnection = error.includes('reach the server');
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px', textAlign: 'center', gap: '12px' }}>
         <div style={{ fontSize: '48px' }}>⚠️</div>
-        <h2 style={{ fontWeight: 700 }}>Connection Error</h2>
-        <p style={{ color: 'var(--tg-theme-hint-color)', fontSize: '14px', maxWidth: '280px' }}>
+        <h2 style={{ fontWeight: 700 }}>Authentication Failed</h2>
+        <p style={{ color: 'var(--tg-theme-hint-color)', fontSize: '14px', maxWidth: '300px' }}>
           {error}
         </p>
         {is405 && (
-          <p style={{ color: '#f59e0b', fontSize: '12px', maxWidth: '280px', lineHeight: '1.5' }}>
-            Set <strong>RAILWAY_URL</strong> in Cloudflare Worker Variables and redeploy.
+          <p style={{ color: '#f59e0b', fontSize: '12px', maxWidth: '300px', lineHeight: '1.5' }}>
+            This usually means <strong>VITE_API_URL</strong> is missing in your Cloudflare build settings,
+            or your Telegram bot URL still points to the old Workers address.
+            Set <strong>VITE_API_URL</strong> to your Railway backend URL and redeploy.
           </p>
         )}
+        {isNoConnection && (
+          <p style={{ color: '#f59e0b', fontSize: '12px', maxWidth: '300px', lineHeight: '1.5' }}>
+            The app is trying to reach: <strong style={{ wordBreak: 'break-all' }}>{API_TARGET_HOST}</strong>
+          </p>
+        )}
+        <div style={{
+          background: 'rgba(255,255,255,0.05)',
+          borderRadius: '10px',
+          padding: '10px 14px',
+          fontSize: '11px',
+          color: 'var(--tg-theme-hint-color)',
+          maxWidth: '300px',
+          wordBreak: 'break-all',
+          lineHeight: '1.6'
+        }}>
+          <span style={{ opacity: 0.6 }}>API target:</span><br />
+          <strong>{API_BASE}</strong>
+        </div>
         <button className="btn-primary" onClick={() => window.location.reload()} style={{ maxWidth: '200px', marginTop: '8px' }}>
           Retry
         </button>
