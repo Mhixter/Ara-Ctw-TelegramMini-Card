@@ -1,0 +1,3191 @@
+logger.ts:144 [60.593] [SW] something has disconnected WindowClient {visibilityState: 'visible', focused: true, url: 'https://web.telegram.org/k/', id: '44318e98-30e6-4a6e-8564-b252d72c0ace', type: 'window', …}
+logger.ts:144 [60.594] [SW] window disconnected, left 0
+logger.ts:156 [60.594] [SW] no windows left
+(anonymous) @ logger.ts:156
+(anonymous) @ index.service.ts:232
+detachPort @ superMessagePort.ts:296
+(anonymous) @ superMessagePort.ts:482
+(anonymous) @ superMessagePort.ts:511
+logger.ts:144 [60.594] [SW] something has disconnected MessagePort {onmessage: null, onmessageerror: null}
+logger.ts:156 [60.595] [SW] it is not a window
+(anonymous) @ logger.ts:156
+(anonymous) @ index.service.ts:225
+detachPort @ superMessagePort.ts:296
+(anonymous) @ index.service.ts:242
+detachPort @ superMessagePort.ts:296
+(anonymous) @ superMessagePort.ts:482
+(anonymous) @ superMessagePort.ts:511
+logger.ts:144 [60.596] [SW] cancelling all downloads
+index.ts:82 Supported image mime types Set(5) {'image/jpeg', 'image/png', 'image/bmp', 'image/webp', 'image/avif'}
+logger.ts:144 [61.237] [SW] [windowConnected] new 90df80b5-f630-4ceb-aa85-66b917df6ff6 from hello before 0
+logger.ts:144 [61.237] [SW] [windowConnected] before []
+logger.ts:144 [61.238] [SW] sending message port for mtproto
+logger.ts:144 [61.238] [SW] [windowConnected] after [Array(2)]
+index.ts:451 Elapsed time since unlocked: 48.3720703125 ms allStates loaded
+index.ts:456 Elapsed time since unlocked: 49.339111328125 ms singleInstance started
+index.ts:465 Elapsed time since unlocked: 59.80810546875 ms sent all states (1)
+index.ts:478 Elapsed time since unlocked: 71.526123046875 ms await I18n.getCacheLangPack()
+index.ts:492 Elapsed time since unlocked: 288.8662109375 ms sent all states (2)
+index.ts:528 got state, time: 686.8999999985099
+index.ts:532 Elapsed time since unlocked: 292.651123046875 ms IMAGE_MIME_TYPES_SUPPORTED_PROMISE
+index.ts:602 Will mount IM page: 1782430574.018
+horizontalMenu.ts:91 Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'classList')
+    at DM (horizontalMenu.ts:91:13)
+selectTarget @ horizontalMenu.ts:91
+await in selectTarget
+(anonymous) @ horizontalMenu.ts:164
+(anonymous) @ horizontalMenu.ts:192
+onStateLoaded @ appDialogsManager.ts:1044
+await in onStateLoaded
+start @ appDialogsManager.ts:724
+bootstrapIm @ bootstrapIm.ts:51
+await in bootstrapIm
+(anonymous) @ index.ts:631
+telegramWebView.ts:35 Unrecognized feature: 'device-orientation'.
+constructor @ telegramWebView.ts:35
+createWebView @ webApp.tsx:942
+init @ webApp.tsx:1325
+await in init
+openWebAppInAppBrowser @ browser.tsx:665
+await in openWebAppInAppBrowser
+openWebApp @ appImManager.ts:1051
+await in openWebApp
+openWebApp @ chat.ts:1445
+(anonymous) @ input.ts:909
+Promise.then
+(anonymous) @ input.ts:904
+(anonymous) @ clickEvent.ts:67
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color: '#212a33'}
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#1a2026'}
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+VM14642 telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+VM14644 main-aj.js:44 history init curState = {i: 0, u: 'https://webappinternal.telegram.org/botfather#tgWe…22%2C%22header_dark_color%22%3A%22%23212a33%22%7D'}
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#212a33'}
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_swipe_behavior {allow_vertical_swipe: false}
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_back_button {is_visible: false}
+VM14644 main-aj.js:276 added to onUnload
+VM14644 main-aj.js:392 onUnload 0
+VM14644 main-aj.js:558 history push oldState = {i: 0, u: 'https://webappinternal.telegram.org/botfather#tgWe…22%2C%22header_dark_color%22%3A%22%23212a33%22%7D'} newState = {i: 1, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739'}
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_back_button {is_visible: true}
+VM14644 main-aj.js:271 added to onLoad
+VM14644 main-aj.js:276 added to onUnload
+VM14644 main-aj.js:301 onLoad 0
+VM14648 botfather.js:2166 300
+VM14644 main-aj.js:276 added to onUnload
+[Violation] Forced reflow while executing JavaScript took 33ms
+VM14644 main-aj.js:392 onUnload 0
+VM14644 main-aj.js:392 onUnload 1
+VM14644 main-aj.js:558 history push oldState = {i: 1, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739'} newState = {i: 2, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739/settings'}
+VM14644 main-aj.js:276 added to onUnload
+VM14642 telegram-web-app.js:162 [Telegram.WebView] < receiveEvent back_button_pressed undefined
+VM14644 main-aj.js:392 onUnload 0
+VM14644 main-aj.js:558 history push oldState = {i: 2, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739/settings'} newState = {i: 3, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739'}
+VM14644 main-aj.js:271 added to onLoad
+VM14644 main-aj.js:276 added to onUnload
+VM14644 main-aj.js:301 onLoad 0
+VM14648 botfather.js:2166 300
+VM14644 main-aj.js:276 added to onUnload
+VM14644 main-aj.js:392 onUnload 0
+VM14644 main-aj.js:392 onUnload 1
+VM14644 main-aj.js:558 history push oldState = {i: 3, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739'} newState = {i: 4, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739/apps'}
+VM14644 main-aj.js:276 added to onUnload
+VM14644 main-aj.js:392 onUnload 0
+VM14644 main-aj.js:558 history push oldState = {i: 4, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739/apps'} newState = {i: 5, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739/menuapp'}
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: true, is_active: true, is_progress_visible: false, icon_custom_emoji_id: false, text: 'Save', …}
+VM14644 main-aj.js:276 added to onUnload
+VM14644 main-aj.js:276 added to onUnload
+VM14642 telegram-web-app.js:162 [Telegram.WebView] < receiveEvent main_button_pressed undefined
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: true, is_active: false, is_progress_visible: true, icon_custom_emoji_id: false, text: 'Save', …}
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: true, is_active: true, is_progress_visible: false, icon_custom_emoji_id: false, text: 'Save', …}
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_trigger_haptic_feedback {type: 'notification', notification_type: 'error'}
+VM14642 telegram-web-app.js:162 [Telegram.WebView] < receiveEvent main_button_pressed undefined
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: true, is_active: false, is_progress_visible: true, icon_custom_emoji_id: false, text: 'Save', …}
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: true, is_active: true, is_progress_visible: false, icon_custom_emoji_id: false, text: 'Save', …}
+VM14644 main-aj.js:276 added to onUnload
+VM14644 main-aj.js:392 onUnload 0
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+VM14644 main-aj.js:392 onUnload 1
+VM14644 main-aj.js:392 onUnload 2
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_trigger_haptic_feedback {type: 'notification', notification_type: 'success'}
+VM14644 main-aj.js:558 history push oldState = {i: 5, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739/menuapp'} newState = {i: 6, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739/apps'}
+VM14644 main-aj.js:276 added to onUnload
+VM14642 telegram-web-app.js:162 [Telegram.WebView] < receiveEvent back_button_pressed undefined
+VM14644 main-aj.js:392 onUnload 0
+VM14644 main-aj.js:558 history push oldState = {i: 6, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739/apps'} newState = {i: 7, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739'}
+VM14644 main-aj.js:271 added to onLoad
+VM14644 main-aj.js:276 added to onUnload
+VM14644 main-aj.js:301 onLoad 0
+VM14648 botfather.js:2166 300
+VM14644 main-aj.js:276 added to onUnload
+VM14644 main-aj.js:392 onUnload 0
+VM14644 main-aj.js:392 onUnload 1
+VM14644 main-aj.js:558 history push oldState = {i: 7, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739'} newState = {i: 8, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739/apps'}
+VM14644 main-aj.js:276 added to onUnload
+VM14642 telegram-web-app.js:162 [Telegram.WebView] < receiveEvent back_button_pressed undefined
+VM14644 main-aj.js:392 onUnload 0
+VM14644 main-aj.js:558 history push oldState = {i: 8, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739/apps'} newState = {i: 9, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739'}
+VM14644 main-aj.js:271 added to onLoad
+VM14644 main-aj.js:276 added to onUnload
+VM14644 main-aj.js:301 onLoad 0
+VM14648 botfather.js:2166 300
+VM14644 main-aj.js:276 added to onUnload
+VM14644 main-aj.js:392 onUnload 0
+VM14644 main-aj.js:392 onUnload 1
+VM14644 main-aj.js:558 history push oldState = {i: 9, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739'} newState = {i: 10, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739/settings'}
+VM14644 main-aj.js:276 added to onUnload
+VM14642 telegram-web-app.js:162 [Telegram.WebView] < receiveEvent back_button_pressed undefined
+VM14644 main-aj.js:392 onUnload 0
+VM14644 main-aj.js:558 history push oldState = {i: 10, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739/settings'} newState = {i: 11, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739'}
+VM14644 main-aj.js:271 added to onLoad
+VM14644 main-aj.js:276 added to onUnload
+VM14644 main-aj.js:301 onLoad 0
+VM14648 botfather.js:2166 300
+VM14644 main-aj.js:276 added to onUnload
+VM14644 main-aj.js:392 onUnload 0
+VM14644 main-aj.js:392 onUnload 1
+VM14644 main-aj.js:558 history push oldState = {i: 11, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739'} newState = {i: 12, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739/profile'}
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: true, is_active: true, is_progress_visible: false, icon_custom_emoji_id: false, text: 'Update', …}
+VM14644 main-aj.js:276 added to onUnload
+VM14644 main-aj.js:276 added to onUnload
+VM14642 telegram-web-app.js:162 [Telegram.WebView] < receiveEvent back_button_pressed undefined
+VM14644 main-aj.js:392 onUnload 0
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+VM14644 main-aj.js:392 onUnload 1
+VM14644 main-aj.js:558 history push oldState = {i: 12, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739/profile'} newState = {i: 13, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739'}
+VM14644 main-aj.js:271 added to onLoad
+VM14644 main-aj.js:276 added to onUnload
+VM14644 main-aj.js:301 onLoad 0
+VM14648 botfather.js:2166 300
+VM14644 main-aj.js:276 added to onUnload
+VM14642 telegram-web-app.js:162 [Telegram.WebView] < receiveEvent back_button_pressed undefined
+VM14644 main-aj.js:392 onUnload 0
+VM14644 main-aj.js:392 onUnload 1
+VM14644 main-aj.js:558 history push oldState = {i: 13, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739'} newState = {i: 14, u: 'https://webappinternal.telegram.org/botfather'}
+VM14642 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_back_button {is_visible: false}
+VM14644 main-aj.js:276 added to onUnload
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+VM15602 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color: '#212a33'}
+VM15602 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#1a2026'}
+VM15602 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+VM15602 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+VM15602 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+VM15602 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+VM15602 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+VM15602 telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+VM15602 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+VM15602 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+VM15596 main-aj.js:44 history init curState = {i: 0, u: 'https://webappinternal.telegram.org/botfather#tgWe…22%2C%22header_dark_color%22%3A%22%23212a33%22%7D'}
+VM15602 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+VM15602 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#212a33'}
+VM15602 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_swipe_behavior {allow_vertical_swipe: false}
+VM15602 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_back_button {is_visible: false}
+VM15596 main-aj.js:276 added to onUnload
+VM15602 telegram-web-app.js:162 [Telegram.WebView] < receiveEvent visibility_changed {is_visible: false}
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent visibility_changed {is_visible: false}
+VM15602 telegram-web-app.js:162 [Telegram.WebView] < receiveEvent visibility_changed {is_visible: true}
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent visibility_changed {is_visible: true}
+VM15596 main-aj.js:392 onUnload 0
+VM15596 main-aj.js:558 history push oldState = {i: 0, u: 'https://webappinternal.telegram.org/botfather#tgWe…22%2C%22header_dark_color%22%3A%22%23212a33%22%7D'} newState = {i: 1, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739'}
+VM15602 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_back_button {is_visible: true}
+VM15596 main-aj.js:271 added to onLoad
+VM15596 main-aj.js:276 added to onUnload
+VM15596 main-aj.js:301 onLoad 0
+VM15600 botfather.js:2166 300
+VM15596 main-aj.js:276 added to onUnload
+[Violation] Forced reflow while executing JavaScript took 39ms
+VM15602 telegram-web-app.js:162 [Telegram.WebView] < receiveEvent back_button_pressed undefined
+VM15596 main-aj.js:392 onUnload 0
+VM15596 main-aj.js:392 onUnload 1
+VM15596 main-aj.js:558 history push oldState = {i: 1, u: 'https://webappinternal.telegram.org/botfather/bot/8971565739'} newState = {i: 2, u: 'https://webappinternal.telegram.org/botfather'}
+VM15602 telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_back_button {is_visible: false}
+VM15596 main-aj.js:276 added to onUnload
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+[Violation] 'message' handler took <N>ms
+[Violation] 'message' handler took <N>ms
+[Violation] 'message' handler took <N>ms
+[Violation] 'message' handler took <N>ms
+[Violation] 'message' handler took <N>ms
+[Violation] 'message' handler took <N>ms
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+index.ts:341  GET https://web.telegram.org/k/version net::ERR_INTERNET_DISCONNECTED
+(anonymous) @ index.ts:341
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+langPack.ts:489 [Violation] 'setTimeout' handler took 216ms
+langPack.ts:489 [Violation] 'setTimeout' handler took 75ms
+groupCallInstance.ts:433 [Violation] 'setInterval' handler took 60ms
+index-C8rWXq6h.js:9 [Violation] 'offline' handler took 178ms
+index.ts:341  GET https://web.telegram.org/k/version net::ERR_INTERNET_DISCONNECTED
+(anonymous) @ index.ts:341
+index.ts:341  GET https://web.telegram.org/k/version net::ERR_INTERNET_DISCONNECTED
+(anonymous) @ index.ts:341
+index.ts:341  GET https://web.telegram.org/k/version net::ERR_INTERNET_DISCONNECTED
+(anonymous) @ index.ts:341
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+D @ index-C8rWXq6h.js:1
+postMessage
+O @ index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ index-C8rWXq6h.js:1
+sd @ index-C8rWXq6h.js:8
+od @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ index-C8rWXq6h.js:11
+xhr @ index-C8rWXq6h.js:11
+Ta @ index-C8rWXq6h.js:13
+Promise.then
+_request @ index-C8rWXq6h.js:17
+request @ index-C8rWXq6h.js:13
+(anonymous) @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:9
+telegram @ index-C8rWXq6h.js:17
+u @ index-C8rWXq6h.js:17
+(anonymous) @ index-C8rWXq6h.js:17
+Vc @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Tl @ index-C8rWXq6h.js:8
+El @ index-C8rWXq6h.js:8
+Uu @ index-C8rWXq6h.js:8
+(anonymous) @ index-C8rWXq6h.js:8
+D @ index-C8rWXq6h.js:1
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-C8rWXq6h.js:11  POST https://payonline-1js.pages.dev/api/auth/telegram 405 (Method Not Allowed)
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+xhr @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:11
+Ta @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+request @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:9
+telegram @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+u @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:17
+Vc @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Tl @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+El @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+Uu @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+postMessage
+O @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+D @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+postMessage
+O @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+e.unstable_scheduleCallback @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:1
+sd @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+od @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-C8rWXq6h.js:8
+[Violation] Forced reflow while executing JavaScript took 34ms
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-JEbNIZlk.js:11  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ index-JEbNIZlk.js:11
+xhr @ index-JEbNIZlk.js:11
+Ta @ index-JEbNIZlk.js:13
+Promise.then
+_request @ index-JEbNIZlk.js:17
+request @ index-JEbNIZlk.js:13
+(anonymous) @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:9
+telegram @ index-JEbNIZlk.js:17
+u @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:17
+Vc @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Uu @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
+D @ index-JEbNIZlk.js:1
+postMessage
+O @ index-JEbNIZlk.js:1
+D @ index-JEbNIZlk.js:1
+postMessage
+O @ index-JEbNIZlk.js:1
+e.unstable_scheduleCallback @ index-JEbNIZlk.js:1
+sd @ index-JEbNIZlk.js:8
+od @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ index-JEbNIZlk.js:11
+xhr @ index-JEbNIZlk.js:11
+Ta @ index-JEbNIZlk.js:13
+Promise.then
+_request @ index-JEbNIZlk.js:17
+request @ index-JEbNIZlk.js:13
+(anonymous) @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:9
+telegram @ index-JEbNIZlk.js:17
+u @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:17
+Vc @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Uu @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
+D @ index-JEbNIZlk.js:1
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-JEbNIZlk.js:11  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ index-JEbNIZlk.js:11
+xhr @ index-JEbNIZlk.js:11
+Ta @ index-JEbNIZlk.js:13
+Promise.then
+_request @ index-JEbNIZlk.js:17
+request @ index-JEbNIZlk.js:13
+(anonymous) @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:9
+telegram @ index-JEbNIZlk.js:17
+u @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:17
+Vc @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Uu @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
+D @ index-JEbNIZlk.js:1
+postMessage
+O @ index-JEbNIZlk.js:1
+D @ index-JEbNIZlk.js:1
+postMessage
+O @ index-JEbNIZlk.js:1
+e.unstable_scheduleCallback @ index-JEbNIZlk.js:1
+sd @ index-JEbNIZlk.js:8
+od @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ index-JEbNIZlk.js:11
+xhr @ index-JEbNIZlk.js:11
+Ta @ index-JEbNIZlk.js:13
+Promise.then
+_request @ index-JEbNIZlk.js:17
+request @ index-JEbNIZlk.js:13
+(anonymous) @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:9
+telegram @ index-JEbNIZlk.js:17
+u @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:17
+Vc @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Uu @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
+D @ index-JEbNIZlk.js:1
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-JEbNIZlk.js:11  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ index-JEbNIZlk.js:11
+xhr @ index-JEbNIZlk.js:11
+Ta @ index-JEbNIZlk.js:13
+Promise.then
+_request @ index-JEbNIZlk.js:17
+request @ index-JEbNIZlk.js:13
+(anonymous) @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:9
+telegram @ index-JEbNIZlk.js:17
+u @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:17
+Vc @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Uu @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
+D @ index-JEbNIZlk.js:1
+postMessage
+O @ index-JEbNIZlk.js:1
+D @ index-JEbNIZlk.js:1
+postMessage
+O @ index-JEbNIZlk.js:1
+e.unstable_scheduleCallback @ index-JEbNIZlk.js:1
+sd @ index-JEbNIZlk.js:8
+od @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-JEbNIZlk.js:11  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ index-JEbNIZlk.js:11
+xhr @ index-JEbNIZlk.js:11
+Ta @ index-JEbNIZlk.js:13
+Promise.then
+_request @ index-JEbNIZlk.js:17
+request @ index-JEbNIZlk.js:13
+(anonymous) @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:9
+telegram @ index-JEbNIZlk.js:17
+u @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:17
+Vc @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Uu @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
+D @ index-JEbNIZlk.js:1
+postMessage
+O @ index-JEbNIZlk.js:1
+D @ index-JEbNIZlk.js:1
+postMessage
+O @ index-JEbNIZlk.js:1
+e.unstable_scheduleCallback @ index-JEbNIZlk.js:1
+sd @ index-JEbNIZlk.js:8
+od @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-JEbNIZlk.js:11  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ index-JEbNIZlk.js:11
+xhr @ index-JEbNIZlk.js:11
+Ta @ index-JEbNIZlk.js:13
+Promise.then
+_request @ index-JEbNIZlk.js:17
+request @ index-JEbNIZlk.js:13
+(anonymous) @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:9
+telegram @ index-JEbNIZlk.js:17
+u @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:17
+Vc @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Uu @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
+D @ index-JEbNIZlk.js:1
+postMessage
+O @ index-JEbNIZlk.js:1
+D @ index-JEbNIZlk.js:1
+postMessage
+O @ index-JEbNIZlk.js:1
+e.unstable_scheduleCallback @ index-JEbNIZlk.js:1
+sd @ index-JEbNIZlk.js:8
+od @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-JEbNIZlk.js:11  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ index-JEbNIZlk.js:11
+xhr @ index-JEbNIZlk.js:11
+Ta @ index-JEbNIZlk.js:13
+Promise.then
+_request @ index-JEbNIZlk.js:17
+request @ index-JEbNIZlk.js:13
+(anonymous) @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:9
+telegram @ index-JEbNIZlk.js:17
+u @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:17
+Vc @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Uu @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
+D @ index-JEbNIZlk.js:1
+postMessage
+O @ index-JEbNIZlk.js:1
+D @ index-JEbNIZlk.js:1
+postMessage
+O @ index-JEbNIZlk.js:1
+e.unstable_scheduleCallback @ index-JEbNIZlk.js:1
+sd @ index-JEbNIZlk.js:8
+od @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
+  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+xhr @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:11
+Ta @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+Promise.then
+_request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+request @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:13
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:9
+telegram @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+u @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:17
+Vc @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Tl @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+El @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+Uu @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+(anonymous) @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:8
+D @ payonline-1js.pages.dev/assets/index-JEbNIZlk.js:1
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_header_color {color_key: 'bg_color'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_background_color {color: '#ffffff'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_set_bottom_bar_color {color: '#f4f4f5'}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_theme 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_viewport 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_safe_area 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_request_content_safe_area 
+telegram-web-app.js:162 [Telegram.WebView] < receiveEvent theme_changed {theme_params: {…}}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_main_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_setup_secondary_button {is_visible: false}
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_ready 
+telegram-web-app.js:135 [Telegram.WebView] > postEvent web_app_expand 
+index-JEbNIZlk.js:11  POST https://ara-ctw-telegrammini-card-production.up.railway.app//api/auth/telegram 404 (Not Found)
+(anonymous) @ index-JEbNIZlk.js:11
+xhr @ index-JEbNIZlk.js:11
+Ta @ index-JEbNIZlk.js:13
+Promise.then
+_request @ index-JEbNIZlk.js:17
+request @ index-JEbNIZlk.js:13
+(anonymous) @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:9
+telegram @ index-JEbNIZlk.js:17
+u @ index-JEbNIZlk.js:17
+(anonymous) @ index-JEbNIZlk.js:17
+Vc @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Tl @ index-JEbNIZlk.js:8
+El @ index-JEbNIZlk.js:8
+Uu @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
+D @ index-JEbNIZlk.js:1
+postMessage
+O @ index-JEbNIZlk.js:1
+D @ index-JEbNIZlk.js:1
+postMessage
+O @ index-JEbNIZlk.js:1
+e.unstable_scheduleCallback @ index-JEbNIZlk.js:1
+sd @ index-JEbNIZlk.js:8
+od @ index-JEbNIZlk.js:8
+(anonymous) @ index-JEbNIZlk.js:8
