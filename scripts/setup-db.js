@@ -16,112 +16,112 @@ const pool = new Pool({
     : { rejectUnauthorized: false },
 });
 
-// ─── Step 1: Create tables (safe if they already exist) ───────────────────────
-const CREATE_TABLES = `
-CREATE TABLE IF NOT EXISTS users (
-  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  telegram_id   BIGINT UNIQUE,
-  email         VARCHAR(255),
-  password_hash VARCHAR(255),
-  google_id     VARCHAR(255),
-  first_name    VARCHAR(255),
-  kyc_status    VARCHAR(20)  DEFAULT 'PENDING',
-  is_active     BOOLEAN      DEFAULT true,
-  created_at    TIMESTAMPTZ  DEFAULT NOW(),
-  updated_at    TIMESTAMPTZ  DEFAULT NOW()
-);
+// ─── Step 1: Create tables only (no indexes here — indexes go in Step 2) ──────
+const CREATE_TABLES = [
+  `CREATE TABLE IF NOT EXISTS users (
+    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    telegram_id   BIGINT UNIQUE,
+    email         VARCHAR(255),
+    password_hash VARCHAR(255),
+    google_id     VARCHAR(255),
+    github_id     VARCHAR(255),
+    first_name    VARCHAR(255),
+    kyc_status    VARCHAR(20)  DEFAULT 'PENDING',
+    is_active     BOOLEAN      DEFAULT true,
+    created_at    TIMESTAMPTZ  DEFAULT NOW(),
+    updated_at    TIMESTAMPTZ  DEFAULT NOW()
+  )`,
 
-CREATE UNIQUE INDEX IF NOT EXISTS users_email_idx     ON users(email)     WHERE email IS NOT NULL;
-CREATE UNIQUE INDEX IF NOT EXISTS users_google_id_idx ON users(google_id) WHERE google_id IS NOT NULL;
+  `CREATE TABLE IF NOT EXISTS wallets (
+    id                     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id                UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    currency               VARCHAR(10) NOT NULL DEFAULT 'NGN',
+    balance                NUMERIC(18,2) NOT NULL DEFAULT 0,
+    virtual_account_number VARCHAR(20),
+    virtual_bank_name      VARCHAR(100),
+    created_at             TIMESTAMPTZ DEFAULT NOW(),
+    updated_at             TIMESTAMPTZ DEFAULT NOW()
+  )`,
 
-CREATE TABLE IF NOT EXISTS wallets (
-  id                     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id                UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  currency               VARCHAR(10) NOT NULL DEFAULT 'NGN',
-  balance                NUMERIC(18,2) NOT NULL DEFAULT 0,
-  virtual_account_number VARCHAR(20),
-  virtual_bank_name      VARCHAR(100),
-  created_at             TIMESTAMPTZ DEFAULT NOW(),
-  updated_at             TIMESTAMPTZ DEFAULT NOW()
-);
+  `CREATE TABLE IF NOT EXISTS ledger_entries (
+    id                    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    transaction_reference VARCHAR(255) UNIQUE NOT NULL,
+    debit_wallet_id       UUID REFERENCES wallets(id),
+    credit_wallet_id      UUID REFERENCES wallets(id),
+    amount                NUMERIC(18,2) NOT NULL,
+    purpose               VARCHAR(50) NOT NULL,
+    metadata              JSONB DEFAULT '{}',
+    created_at            TIMESTAMPTZ DEFAULT NOW()
+  )`,
 
-CREATE UNIQUE INDEX IF NOT EXISTS wallets_user_currency_idx ON wallets(user_id, currency);
+  `CREATE TABLE IF NOT EXISTS cards (
+    id                 UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id            UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    provider_card_id   VARCHAR(255) NOT NULL,
+    card_token         VARCHAR(255),
+    mask_pan           VARCHAR(20),
+    card_tier          VARCHAR(20) DEFAULT 'GOLD',
+    card_brand         VARCHAR(20) DEFAULT 'VISA',
+    card_currency      VARCHAR(10) DEFAULT 'NGN',
+    daily_limit        NUMERIC(18,2) DEFAULT 500,
+    monthly_limit      NUMERIC(18,2) DEFAULT 5000,
+    amount_spent_today NUMERIC(18,2) DEFAULT 0,
+    status             VARCHAR(20) DEFAULT 'ACTIVE',
+    created_at         TIMESTAMPTZ DEFAULT NOW(),
+    updated_at         TIMESTAMPTZ DEFAULT NOW()
+  )`,
 
-CREATE TABLE IF NOT EXISTS ledger_entries (
-  id                    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  transaction_reference VARCHAR(255) UNIQUE NOT NULL,
-  debit_wallet_id       UUID REFERENCES wallets(id),
-  credit_wallet_id      UUID REFERENCES wallets(id),
-  amount                NUMERIC(18,2) NOT NULL,
-  purpose               VARCHAR(50) NOT NULL,
-  metadata              JSONB DEFAULT '{}',
-  created_at            TIMESTAMPTZ DEFAULT NOW()
-);
+  `CREATE TABLE IF NOT EXISTS user_kyc (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id         UUID UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    bvn_hash        VARCHAR(64),
+    nin_hash        VARCHAR(64),
+    full_name       VARCHAR(255),
+    date_of_birth   DATE,
+    id_document_url TEXT,
+    liveness_score  NUMERIC(5,2),
+    verified_at     TIMESTAMPTZ,
+    created_at      TIMESTAMPTZ DEFAULT NOW(),
+    updated_at      TIMESTAMPTZ DEFAULT NOW()
+  )`,
 
-CREATE TABLE IF NOT EXISTS cards (
-  id                 UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id            UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  provider_card_id   VARCHAR(255) NOT NULL,
-  card_token         VARCHAR(255),
-  mask_pan           VARCHAR(20),
-  card_tier          VARCHAR(20) DEFAULT 'GOLD',
-  card_brand         VARCHAR(20) DEFAULT 'VISA',
-  card_currency      VARCHAR(10) DEFAULT 'NGN',
-  daily_limit        NUMERIC(18,2) DEFAULT 500,
-  monthly_limit      NUMERIC(18,2) DEFAULT 5000,
-  amount_spent_today NUMERIC(18,2) DEFAULT 0,
-  status             VARCHAR(20) DEFAULT 'ACTIVE',
-  created_at         TIMESTAMPTZ DEFAULT NOW(),
-  updated_at         TIMESTAMPTZ DEFAULT NOW()
-);
+  `CREATE TABLE IF NOT EXISTS admin_users (
+    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email         VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL DEFAULT '',
+    role          VARCHAR(50)  NOT NULL DEFAULT 'CUSTOMER_SUPPORT',
+    is_active     BOOLEAN DEFAULT true,
+    created_at    TIMESTAMPTZ DEFAULT NOW(),
+    updated_at    TIMESTAMPTZ DEFAULT NOW()
+  )`,
+];
 
-CREATE TABLE IF NOT EXISTS user_kyc (
-  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id         UUID UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  bvn_hash        VARCHAR(64),
-  nin_hash        VARCHAR(64),
-  full_name       VARCHAR(255),
-  date_of_birth   DATE,
-  id_document_url TEXT,
-  liveness_score  NUMERIC(5,2),
-  verified_at     TIMESTAMPTZ,
-  created_at      TIMESTAMPTZ DEFAULT NOW(),
-  updated_at      TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE TABLE IF NOT EXISTS admin_users (
-  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  email         VARCHAR(255) UNIQUE NOT NULL,
-  password_hash VARCHAR(255) NOT NULL DEFAULT '',
-  role          VARCHAR(50)  NOT NULL DEFAULT 'CUSTOMER_SUPPORT',
-  is_active     BOOLEAN DEFAULT true,
-  created_at    TIMESTAMPTZ DEFAULT NOW(),
-  updated_at    TIMESTAMPTZ DEFAULT NOW()
-);
-`;
-
-// ─── Step 2: Add missing columns to existing tables ───────────────────────────
-const ADD_MISSING_COLUMNS = [
-  // admin_users
-  `ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255) DEFAULT ''`,
-  `ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS role VARCHAR(50) DEFAULT 'CUSTOMER_SUPPORT'`,
-
-  // users — email/password/Google auth columns
+// ─── Step 2: Patch missing columns + indexes (each runs in its own try/catch) ─
+const PATCHES = [
+  // users — add any columns missing from old deployments
   `ALTER TABLE users ADD COLUMN IF NOT EXISTS email         VARCHAR(255)`,
   `ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255)`,
   `ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id     VARCHAR(255)`,
   `ALTER TABLE users ADD COLUMN IF NOT EXISTS github_id     VARCHAR(255)`,
-  `CREATE UNIQUE INDEX IF NOT EXISTS users_github_id_idx ON users(github_id) WHERE github_id IS NOT NULL`,
   `ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name    VARCHAR(255)`,
   `ALTER TABLE users ADD COLUMN IF NOT EXISTS kyc_status    VARCHAR(20) DEFAULT 'PENDING'`,
   `ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active     BOOLEAN DEFAULT true`,
   `ALTER TABLE users ALTER COLUMN telegram_id DROP NOT NULL`,
+
+  // users — indexes (run AFTER column patches so columns exist)
   `CREATE UNIQUE INDEX IF NOT EXISTS users_email_idx     ON users(email)     WHERE email IS NOT NULL`,
   `CREATE UNIQUE INDEX IF NOT EXISTS users_google_id_idx ON users(google_id) WHERE google_id IS NOT NULL`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS users_github_id_idx ON users(github_id) WHERE github_id IS NOT NULL`,
 
   // wallets
+  `CREATE UNIQUE INDEX IF NOT EXISTS wallets_user_currency_idx ON wallets(user_id, currency)`,
   `ALTER TABLE wallets ADD COLUMN IF NOT EXISTS virtual_account_number VARCHAR(20)`,
   `ALTER TABLE wallets ADD COLUMN IF NOT EXISTS virtual_bank_name VARCHAR(100)`,
+
+  // admin_users
+  `ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255) DEFAULT ''`,
+  `ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS role      VARCHAR(50)  DEFAULT 'CUSTOMER_SUPPORT'`,
+  `ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true`,
 
   // cards
   `ALTER TABLE cards ADD COLUMN IF NOT EXISTS card_token         VARCHAR(255)`,
@@ -150,33 +150,38 @@ async function setup() {
   const client = await pool.connect();
 
   try {
+    // Step 1 — create tables individually so one failure doesn't block others
     console.log('[db:setup] Creating tables…');
-    await client.query(CREATE_TABLES);
-    console.log('[db:setup] Tables ready.');
-
-    console.log('[db:setup] Patching missing columns…');
-    let patchErrors = 0;
-    for (const sql of ADD_MISSING_COLUMNS) {
+    for (const sql of CREATE_TABLES) {
       try {
         await client.query(sql);
-        console.log('[db:setup] OK:', sql.slice(0, 80));
       } catch (err) {
-        patchErrors++;
-        console.error('[db:setup] FAILED:', sql.slice(0, 80));
-        console.error('[db:setup] Error:', err.message);
+        console.error('[db:setup] Table create failed:', err.message);
       }
     }
-    if (patchErrors > 0) {
-      console.warn(`[db:setup] ⚠️  ${patchErrors} patch(es) had issues — check logs above.`);
+
+    // Step 2 — patch columns and indexes, each in its own try/catch
+    console.log('[db:setup] Patching columns and indexes…');
+    let ok = 0, failed = 0;
+    for (const sql of PATCHES) {
+      try {
+        await client.query(sql);
+        ok++;
+      } catch (err) {
+        failed++;
+        console.error('[db:setup] PATCH FAILED:', sql.slice(0, 80));
+        console.error('[db:setup] Reason:', err.message);
+      }
     }
-    console.log('[db:setup] ✅  Schema is up to date.');
-  } catch (err) {
-    console.error('[db:setup] ❌  Migration failed:', err.message);
-    process.exit(1);
+
+    console.log(`[db:setup] ✅  Done — ${ok} patches applied, ${failed} skipped/failed.`);
   } finally {
     client.release();
     await pool.end();
   }
 }
 
-setup();
+setup().catch(err => {
+  console.error('[db:setup] Fatal error:', err.message);
+  process.exit(1);
+});
