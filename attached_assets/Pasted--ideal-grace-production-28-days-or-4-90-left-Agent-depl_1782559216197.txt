@@ -1,0 +1,103 @@
+
+
+ideal-grace
+
+production
+
+
+
+28 days or $4.90 left
+
+
+Agent
+
+(@deployment:306bd4b3-8d2e-45d1-93cf-6e13ef8fad1a)
+(@deployment:306bd4b3-8d2e-45d1-93cf-6e13ef8fad1a)
+
+
+Last 15 min
+
+
+You reached the start of the range
+Jun 27, 2026, 4:05 AM
+{"message":"Server running on port 8080","severity":"info","attributes":{"level":"info"},"timestamp":"2026-06-27T11:15:27.815371814Z"}
+{"message":"npm warn config production Use `--omit=dev` instead.","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815382780Z"}
+{"message":"","severity":"info","attributes":{"level":"info"},"timestamp":"2026-06-27T11:15:27.815390774Z"}
+{"message":"> nairavault@1.0.0 start","severity":"info","attributes":{"level":"info"},"timestamp":"2026-06-27T11:15:27.815398716Z"}
+{"message":"> node server-dist/index.js","severity":"info","attributes":{"level":"info"},"timestamp":"2026-06-27T11:15:27.815405810Z"}
+{"message":"","severity":"info","attributes":{"level":"info"},"timestamp":"2026-06-27T11:15:27.815412394Z"}
+{"message":"[admin-seed] Failed to upsert super admin: error: column \"password_hash\" does not exist","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815598209Z"}
+{"message":"    at /app/node_modules/pg-pool/index.js:45:11","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815608296Z"}
+{"message":"    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815616074Z"}
+{"message":"    at async ensureSuperAdmin (/app/server-dist/index.js:41:26)","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815624145Z"}
+{"message":"    at async Server.<anonymous> (/app/server-dist/index.js:60:5) {","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815631542Z"}
+{"message":"  length: 113,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815639176Z"}
+{"message":"  severity: 'ERROR',","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815646627Z"}
+{"message":"  code: '42703',","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815654295Z"}
+{"message":"  detail: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815662647Z"}
+{"message":"  hint: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815670992Z"}
+{"message":"  position: '12',","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815678733Z"}
+{"message":"  internalPosition: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815692031Z"}
+{"message":"  internalQuery: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815698997Z"}
+{"message":"  where: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815706339Z"}
+{"message":"  schema: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815713328Z"}
+{"message":"  table: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815720999Z"}
+{"message":"  column: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815728637Z"}
+{"message":"  dataType: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815736807Z"}
+{"message":"  constraint: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815744438Z"}
+{"message":"  file: 'parse_relation.c',","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815751801Z"}
+{"message":"  line: '3822',","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815759022Z"}
+{"message":"  routine: 'errorMissingColumn'","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815766868Z"}
+{"message":"}","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:15:27.815783250Z"}
+{"message":"Starting Container","severity":"info","attributes":{"level":"info"},"timestamp":"2026-06-27T11:15:27.981184915Z"}
+{"message":"  internalQuery: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.680798841Z"}
+{"message":"  where: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.680833307Z"}
+{"message":"    at async Promise.all (index 0)","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.680842157Z"}
+{"message":"  detail: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.680848240Z"}
+{"message":"  hint: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.680855550Z"}
+{"message":"    at async /app/server-dist/routes/wallet.js:25:26 {","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.680855982Z"}
+{"message":"  position: '225',","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.680862804Z"}
+{"message":"  length: 114,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.680863493Z"}
+{"message":"  severity: 'ERROR',","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.680870306Z"}
+{"message":"  internalPosition: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.680871769Z"}
+{"message":"  code: '42P01',","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.680876843Z"}
+{"message":"Wallet fetch error: error: relation \"ledger_entries\" does not exist","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.680944253Z"}
+{"message":"    at /app/node_modules/pg/lib/client.js:652:17","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.680949211Z"}
+{"message":"    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.680953923Z"}
+{"message":"    at async /app/server-dist/routes/wallet.js:27:34","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.680959395Z"}
+{"message":"  schema: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.681227091Z"}
+{"message":"  table: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.681235555Z"}
+{"message":"  column: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.681240593Z"}
+{"message":"  dataType: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.681246050Z"}
+{"message":"  constraint: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.681251158Z"}
+{"message":"  file: 'parse_relation.c',","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.681256008Z"}
+{"message":"  line: '1466',","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.681260253Z"}
+{"message":"  routine: 'parserOpenTable'","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.681264972Z"}
+{"message":"}","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.681268974Z"}
+{"message":"Wallet fetch error: error: relation \"ledger_entries\" does not exist","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.681273437Z"}
+{"message":"    at /app/node_modules/pg/lib/client.js:652:17","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.681278571Z"}
+{"message":"    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.681283363Z"}
+{"message":"    at async /app/server-dist/routes/wallet.js:25:26 {","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682908965Z"}
+{"message":"  length: 114,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682915799Z"}
+{"message":"  dataType: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682915813Z"}
+{"message":"  severity: 'ERROR',","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682921871Z"}
+{"message":"  constraint: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682924918Z"}
+{"message":"  code: '42P01',","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682927641Z"}
+{"message":"  file: 'parse_relation.c',","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682947604Z"}
+{"message":"  line: '1466',","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682953879Z"}
+{"message":"  internalQuery: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682960777Z"}
+{"message":"  routine: 'parserOpenTable'","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682961173Z"}
+{"message":"  where: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682967976Z"}
+{"message":"}","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682969319Z"}
+{"message":"  detail: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682973287Z"}
+{"message":"  schema: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682976309Z"}
+{"message":"  hint: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682982236Z"}
+{"message":"  table: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682984723Z"}
+{"message":"  position: '225',","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682988446Z"}
+{"message":"  column: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682991589Z"}
+{"message":"  internalPosition: undefined,","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.682993670Z"}
+{"message":"    at async /app/server-dist/routes/wallet.js:27:34","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.683483267Z"}
+{"message":"    at async Promise.all (index 0)","severity":"error","attributes":{"level":"error"},"timestamp":"2026-06-27T11:16:28.683490846Z"}
+
+
+8
