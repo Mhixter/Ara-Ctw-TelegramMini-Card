@@ -143,7 +143,7 @@ export default function ProfilePage({ user, onLogout }: Props) {
                 style={{
                   width: '100%', display: 'flex', alignItems: 'center', gap: '14px',
                   padding: '16px', background: 'none', border: 'none', cursor: 'pointer',
-                  color: 'white', textAlign: 'left', transition: 'background 0.15s'
+                  color: 'var(--tg-theme-text-color)', textAlign: 'left', transition: 'background 0.15s'
                 }}
               >
                 <div style={{

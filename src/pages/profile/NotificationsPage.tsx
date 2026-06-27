@@ -46,7 +46,7 @@ export default function NotificationsPage({ onBack }: Props) {
       {/* Telegram note */}
       <div className="glass" style={{ padding: '14px', marginBottom: '20px', background: 'rgba(108,99,255,0.06)', borderColor: 'rgba(108,99,255,0.2)' }}>
         <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', lineHeight: 1.6 }}>
-          📱 <strong style={{ color: 'white' }}>Telegram native alerts.</strong> All notifications are delivered directly through your Telegram bot — no push permission required. Make sure you haven't muted the NairaVault bot.
+          📱 <strong style={{ color: 'var(--tg-theme-text-color)' }}>Telegram native alerts.</strong> All notifications are delivered directly through your Telegram bot — no push permission required. Make sure you haven't muted the NairaVault bot.
         </p>
       </div>
 

@@ -194,7 +194,7 @@ export default function KYCPage({ user, onKycUpdated }: Props) {
               {tier.done ? <CheckCircle size={22} color={tier.color} /> : <Shield size={22} color={tier.locked ? 'var(--tg-theme-hint-color)' : tier.color} strokeWidth={1.5} />}
             </div>
             <div style={{ flex: 1 }}>
-              <p style={{ fontWeight: 700, fontSize: '14px', marginBottom: '2px', color: tier.done ? tier.color : 'white' }}>{tier.label}</p>
+              <p style={{ fontWeight: 700, fontSize: '14px', marginBottom: '2px', color: tier.done ? tier.color : 'var(--tg-theme-text-color)' }}>{tier.label}</p>
               <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)' }}>{tier.desc}</p>
               <p style={{ fontSize: '11px', fontWeight: 600, color: tier.color, marginTop: '4px' }}>{tier.limit}</p>
             </div>

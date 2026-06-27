@@ -43,7 +43,7 @@ html, body, #root {
 body {
   background: radial-gradient(ellipse at top left, rgba(108, 99, 255, 0.08) 0%, transparent 60%),
               radial-gradient(ellipse at bottom right, rgba(245, 185, 66, 0.05) 0%, transparent 60%),
-              #0a0a0f;
+              var(--tg-theme-bg-color);
 }
 
 /* Scrollbar */
@@ -133,10 +133,10 @@ body {
 .input-field {
   width: 100%;
   padding: 14px 16px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   border-radius: 12px;
-  color: white;
+  color: var(--tg-theme-text-color);
   font-size: 15px;
   font-family: inherit;
   transition: all 0.2s;
@@ -204,7 +204,7 @@ body {
   transform: translateX(-50%);
   width: 100%;
   max-width: 480px;
-  background: rgba(10, 10, 15, 0.95);
+  background: color-mix(in srgb, var(--tg-theme-bg-color) 95%, transparent);
   backdrop-filter: blur(30px);
   border-top: 1px solid var(--glass-border);
   display: flex;
@@ -280,4 +280,38 @@ body {
   background-size: 1000px 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 8px;
+}
+
+/* ── Light mode overrides ─────────────────────────────────────────────────── */
+@media (prefers-color-scheme: light) {
+  :root {
+    --tg-theme-bg-color: #f2f2f7;
+    --tg-theme-text-color: #1c1c1e;
+    --tg-theme-hint-color: #6e6e73;
+    --tg-theme-secondary-bg-color: #ffffff;
+    --glass-bg: rgba(0, 0, 0, 0.04);
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+
+  body {
+    background: radial-gradient(ellipse at top left, rgba(108, 99, 255, 0.05) 0%, transparent 60%),
+                radial-gradient(ellipse at bottom right, rgba(245, 185, 66, 0.03) 0%, transparent 60%),
+                #f2f2f7;
+  }
+
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.04) 100%);
+    background-size: 1000px 100%;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+  }
 }

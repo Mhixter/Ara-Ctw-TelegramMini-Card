@@ -42,7 +42,7 @@ function CopyField({ label, value }: { label: string; value: string }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '11px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
       <span style={{ fontSize: 12, color: 'var(--tg-theme-hint-color)' }}>{label}</span>
-      <button onClick={copy} style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', cursor: 'pointer', color: copied ? 'var(--success)' : 'white', fontSize: 13, fontWeight: 500, padding: 0 }}>
+      <button onClick={copy} style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', cursor: 'pointer', color: copied ? 'var(--success)' : 'var(--tg-theme-text-color)', fontSize: 13, fontWeight: 500, padding: 0 }}>
         <span style={{ maxWidth: 180, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{value}</span>
         {copied ? <CheckCircle2 size={13} color="var(--success)" /> : <Copy size={12} color="var(--tg-theme-hint-color)" />}
       </button>
@@ -54,7 +54,7 @@ function Row({ label, value, color }: { label: string; value: string; color?: st
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '11px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
       <span style={{ fontSize: 12, color: 'var(--tg-theme-hint-color)' }}>{label}</span>
-      <span style={{ fontSize: 13, fontWeight: 500, color: color || 'white' }}>{value}</span>
+      <span style={{ fontSize: 13, fontWeight: 500, color: color || 'var(--tg-theme-text-color)' }}>{value}</span>
     </div>
   );
 }
@@ -205,7 +205,7 @@ export default function TransactionReceipt({ tx, onClose }: Props) {
                     {i < 4 && <div style={{ width: 1, flex: 1, background: step.done ? 'rgba(34,197,94,0.3)' : 'rgba(255,255,255,0.06)', marginTop: 3 }} />}
                   </div>
                   <div style={{ paddingBottom: 4 }}>
-                    <p style={{ fontSize: 12, fontWeight: 600, color: step.done ? 'white' : 'var(--tg-theme-hint-color)', marginBottom: 1 }}>{step.label}</p>
+                    <p style={{ fontSize: 12, fontWeight: 600, color: step.done ? 'var(--tg-theme-text-color)' : 'var(--tg-theme-hint-color)', marginBottom: 1 }}>{step.label}</p>
                     <p style={{ fontSize: 11, color: 'var(--tg-theme-hint-color)' }}>{step.time}</p>
                   </div>
                 </div>

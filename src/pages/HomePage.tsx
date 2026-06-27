@@ -120,7 +120,7 @@ export default function HomePage({ user }: Props) {
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px' }}>
                 <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--success)' }} />
                 <p style={{ fontSize: '11px', color: 'var(--tg-theme-hint-color)' }}>
-                  {ngnWallet.virtual_bank_name} · <strong style={{ color: 'white' }}>{ngnWallet.virtual_account_number}</strong>
+                  {ngnWallet.virtual_bank_name} · <strong style={{ color: 'var(--tg-theme-text-color)' }}>{ngnWallet.virtual_account_number}</strong>
                 </p>
               </div>
             ) : (

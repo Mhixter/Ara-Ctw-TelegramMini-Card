@@ -63,7 +63,7 @@ export default function HelpPage({ onBack }: Props) {
             <div key={i} className="glass" style={{ overflow: 'hidden', borderColor: isOpen ? 'rgba(108,99,255,0.3)' : 'var(--glass-border)', transition: 'border-color 0.2s' }}>
               <button
                 onClick={() => setOpenIdx(isOpen ? null : i)}
-                style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', padding: '16px', background: 'none', border: 'none', cursor: 'pointer', color: 'white', textAlign: 'left' }}
+                style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', padding: '16px', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--tg-theme-text-color)', textAlign: 'left' }}
               >
                 <p style={{ fontSize: '13px', fontWeight: 600, lineHeight: 1.4, flex: 1 }}>{faq.q}</p>
                 {isOpen ? <ChevronUp size={16} color="var(--accent)" style={{ flexShrink: 0 }} /> : <ChevronDown size={16} color="var(--tg-theme-hint-color)" style={{ flexShrink: 0 }} />}
@@ -88,7 +88,7 @@ export default function HelpPage({ onBack }: Props) {
         ].map(item => {
           const Icon = item.icon;
           return (
-            <button key={item.label} onClick={item.action} style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '16px', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', borderRadius: '14px', cursor: 'pointer', color: 'white', textAlign: 'left' }}>
+            <button key={item.label} onClick={item.action} style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '16px', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', borderRadius: '14px', cursor: 'pointer', color: 'var(--tg-theme-text-color)', textAlign: 'left' }}>
               <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: `${item.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <Icon size={20} color={item.color} />
               </div>

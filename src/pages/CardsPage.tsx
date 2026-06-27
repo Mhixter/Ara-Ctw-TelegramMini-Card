@@ -266,7 +266,7 @@ export default function CardsPage({ user }: Props) {
                     <span style={{ fontSize: 12, color: 'var(--tg-theme-hint-color)' }}>{label}</span>
                     <button
                       onClick={() => copyField(value, field)}
-                      style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: copiedField === field ? 'var(--success)' : 'white', fontSize: 13, fontWeight: 600, padding: 0 }}
+                      style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: copiedField === field ? 'var(--success)' : 'var(--tg-theme-text-color)', fontSize: 13, fontWeight: 600, padding: 0 }}
                     >
                       <span style={{ fontFamily: field === 'pan' || field === 'cvv' ? 'monospace' : 'inherit', letterSpacing: field === 'pan' ? '1px' : 'normal' }}>{value}</span>
                       {copiedField === field ? <CheckCircle2 size={13} color="var(--success)" /> : <Copy size={12} color="var(--tg-theme-hint-color)" />}
@@ -299,7 +299,7 @@ export default function CardsPage({ user }: Props) {
                   flex: 1, padding: '10px', borderRadius: '10px', border: '1px solid',
                   borderColor: issueBrand === b ? 'var(--gold)' : 'var(--glass-border)',
                   background: issueBrand === b ? 'rgba(245,185,66,0.1)' : 'transparent',
-                  color: 'white', fontSize: '13px', fontWeight: 600, cursor: 'pointer'
+                  color: 'var(--tg-theme-text-color)', fontSize: '13px', fontWeight: 600, cursor: 'pointer'
                 }}>{b}</button>
               ))}
             </div>
@@ -334,7 +334,7 @@ export default function CardsPage({ user }: Props) {
                   padding: '6px 12px', borderRadius: '20px', border: '1px solid',
                   borderColor: spendMerchant === m ? 'var(--accent)' : 'var(--glass-border)',
                   background: spendMerchant === m ? 'rgba(108,99,255,0.15)' : 'transparent',
-                  color: 'white', fontSize: '12px', cursor: 'pointer', fontWeight: spendMerchant === m ? 700 : 400
+                  color: 'var(--tg-theme-text-color)', fontSize: '12px', cursor: 'pointer', fontWeight: spendMerchant === m ? 700 : 400
                 }}>{m}</button>
               ))}
             </div>

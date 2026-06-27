@@ -406,9 +406,9 @@ export default function AdminPage({ adminRole }: Props) {
               <span style={{
                 display: 'inline-block', padding: '3px 10px', borderRadius: '8px',
                 fontSize: '11px', fontWeight: 700,
-                color: KYC_COLOR[userDetail.user.kyc_status] || 'white',
-                background: `${KYC_COLOR[userDetail.user.kyc_status] || 'rgba(255,255,255,0.1)'}18`,
-                border: `1px solid ${KYC_COLOR[userDetail.user.kyc_status] || 'rgba(255,255,255,0.2)'}40`,
+                color: KYC_COLOR[userDetail.user.kyc_status] || 'var(--tg-theme-text-color)',
+                background: `${KYC_COLOR[userDetail.user.kyc_status] || 'var(--glass-bg)'}`,
+                border: `1px solid ${KYC_COLOR[userDetail.user.kyc_status] || 'var(--glass-border)'}`,
               }}>
                 {userDetail.user.kyc_status}
               </span>
@@ -426,7 +426,7 @@ export default function AdminPage({ adminRole }: Props) {
                       padding: '7px 14px', borderRadius: '8px', border: '1px solid',
                       borderColor: userDetail.user.kyc_status === s ? (KYC_COLOR[s] || 'var(--accent)') : 'var(--glass-border)',
                       background: userDetail.user.kyc_status === s ? `${KYC_COLOR[s] || 'var(--accent)'}18` : 'transparent',
-                      color: userDetail.user.kyc_status === s ? (KYC_COLOR[s] || 'white') : 'white',
+                      color: userDetail.user.kyc_status === s ? (KYC_COLOR[s] || 'var(--accent)') : 'var(--tg-theme-text-color)',
                       fontSize: '12px', cursor: 'pointer', fontWeight: 600,
                     }} disabled={kycMutation.isPending}>
                       {s}
