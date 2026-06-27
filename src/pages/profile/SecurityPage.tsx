@@ -86,7 +86,7 @@ export default function SecurityPage({ user, onBack }: Props) {
       {/* Privacy note */}
       <div className="glass" style={{ padding: '16px', background: 'rgba(108,99,255,0.06)', borderColor: 'rgba(108,99,255,0.2)' }}>
         <p style={{ fontSize: '12px', lineHeight: 1.7, color: 'var(--tg-theme-hint-color)' }}>
-          <strong style={{ color: 'var(--tg-theme-text-color)' }}>Your data stays yours.</strong> NairaVault never stores raw identity numbers. BVN and NIN are hashed with SHA-256 before leaving your device context. Card credentials are encrypted with AES-256-GCM. We do not sell or share your data with third parties.
+          <strong style={{ color: 'var(--tg-theme-text-color)' }}>Your data stays yours.</strong> BoorderPay never stores raw identity numbers. BVN and NIN are hashed with SHA-256 before leaving your device context. Card credentials are encrypted with AES-256-GCM. We do not sell or share your data with third parties.
         </p>
       </div>
     </div>

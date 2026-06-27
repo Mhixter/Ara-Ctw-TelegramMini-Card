@@ -26,7 +26,7 @@ const faqs = [
   },
   {
     q: 'What networks do virtual cards work on?',
-    a: 'NairaVault issues Visa and Mastercard virtual cards denominated in NGN. They work on any online platform that accepts Visa/Mastercard, including Netflix, Spotify, Amazon, and international merchants.'
+    a: 'BoorderPay issues Visa and Mastercard virtual cards denominated in NGN. They work on any online platform that accepts Visa/Mastercard, including Netflix, Spotify, Amazon, and international merchants.'
   },
   {
     q: 'My wallet balance didn\'t update after a transfer.',
@@ -83,8 +83,8 @@ export default function HelpPage({ onBack }: Props) {
       <h3 style={{ fontSize: '13px', fontWeight: 700, color: 'var(--tg-theme-hint-color)', letterSpacing: '0.5px', marginBottom: '12px' }}>CONTACT SUPPORT</h3>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {[
-          { icon: MessageCircle, color: '#229ed9', label: 'Telegram Support', desc: 'Chat with us @NairaVaultSupport', action: () => {} },
-          { icon: Mail, color: 'var(--accent)', label: 'Email Support', desc: 'support@nairavault.io · 24h response', action: () => {} },
+          { icon: MessageCircle, color: '#229ed9', label: 'Telegram Support', desc: 'Chat with us @BoorderPaySupport', action: () => {} },
+          { icon: Mail, color: 'var(--accent)', label: 'Email Support', desc: 'support@boorderpay.io · 24h response', action: () => {} },
         ].map(item => {
           const Icon = item.icon;
           return (

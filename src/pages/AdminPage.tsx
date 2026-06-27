@@ -239,7 +239,7 @@ export default function AdminPage({ adminRole }: Props) {
                     <div className="glass" style={{ padding: '20px', marginBottom: '16px' }}>
                       <h4 style={{ fontWeight: 700, marginBottom: '16px' }}>New Admin Account</h4>
                       {[
-                        { key: 'email',    label: 'Email',    type: 'email',    placeholder: 'admin@nairavault.com' },
+                        { key: 'email',    label: 'Email',    type: 'email',    placeholder: 'admin@boorderpay.com' },
                         { key: 'password', label: 'Password', type: 'password', placeholder: '••••••••' },
                       ].map(f => (
                         <div key={f.key} style={{ marginBottom: '12px' }}>

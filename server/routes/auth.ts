@@ -246,7 +246,7 @@ router.get('/github/callback', async (req: Request, res: Response) => {
 
     // Get primary profile
     const profileRes = await axios.get('https://api.github.com/user', {
-      headers: { Authorization: `Bearer ${access_token}`, 'User-Agent': 'NairaVault' },
+      headers: { Authorization: `Bearer ${access_token}`, 'User-Agent': 'BoorderPay' },
     });
     const profile = profileRes.data as { id: number; name?: string; email?: string | null };
 
@@ -254,7 +254,7 @@ router.get('/github/callback', async (req: Request, res: Response) => {
     let email = profile.email || null;
     if (!email) {
       const emailsRes = await axios.get('https://api.github.com/user/emails', {
-        headers: { Authorization: `Bearer ${access_token}`, 'User-Agent': 'NairaVault' },
+        headers: { Authorization: `Bearer ${access_token}`, 'User-Agent': 'BoorderPay' },
       });
       const primary = (emailsRes.data as { email: string; primary: boolean; verified: boolean }[])
         .find(e => e.primary && e.verified);

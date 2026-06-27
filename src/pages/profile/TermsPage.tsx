@@ -6,7 +6,7 @@ interface Props { onBack: () => void; }
 const sections = [
   {
     title: '1. Acceptance of Terms',
-    body: 'By accessing or using NairaVault (the "Platform"), you agree to be bound by these Terms of Service and all applicable laws and regulations of the Federal Republic of Nigeria. If you do not agree, you may not use the Platform.'
+    body: 'By accessing or using BoorderPay (the "Platform"), you agree to be bound by these Terms of Service and all applicable laws and regulations of the Federal Republic of Nigeria. If you do not agree, you may not use the Platform.'
   },
   {
     title: '2. Eligibility',
@@ -18,11 +18,11 @@ const sections = [
   },
   {
     title: '4. Virtual Cards',
-    body: 'Virtual cards issued through NairaVault are for lawful online purchases only. Cards may not be used for gambling, adult content platforms, illegal goods or services, or circumventing foreign exchange controls. Spending limits are set by KYC tier and may be adjusted by the Platform at any time.'
+    body: 'Virtual cards issued through BoorderPay are for lawful online purchases only. Cards may not be used for gambling, adult content platforms, illegal goods or services, or circumventing foreign exchange controls. Spending limits are set by KYC tier and may be adjusted by the Platform at any time.'
   },
   {
     title: '5. Wallet Funding',
-    body: 'Funds deposited to your virtual NGN wallet are held in trust. NairaVault does not pay interest on wallet balances. You may withdraw available balances (excluding reserved amounts) subject to applicable processing times. The Platform reserves the right to hold funds pending AML/fraud review.'
+    body: 'Funds deposited to your virtual NGN wallet are held in trust. BoorderPay does not pay interest on wallet balances. You may withdraw available balances (excluding reserved amounts) subject to applicable processing times. The Platform reserves the right to hold funds pending AML/fraud review.'
   },
   {
     title: '6. Fees',
@@ -30,7 +30,7 @@ const sections = [
   },
   {
     title: '7. Security Responsibilities',
-    body: 'You are responsible for maintaining the confidentiality of your Telegram account, which serves as your authentication credential. You must notify us immediately of any unauthorized use. NairaVault is not liable for losses resulting from your failure to secure your Telegram account.'
+    body: 'You are responsible for maintaining the confidentiality of your Telegram account, which serves as your authentication credential. You must notify us immediately of any unauthorized use. BoorderPay is not liable for losses resulting from your failure to secure your Telegram account.'
   },
   {
     title: '8. Data Privacy',
@@ -42,7 +42,7 @@ const sections = [
   },
   {
     title: '10. Limitation of Liability',
-    body: 'NairaVault\'s total liability for any claim shall not exceed the total fees paid by you in the 30 days preceding the claim. We are not liable for losses arising from third-party payment processor downtime, force majeure events, or your own negligence.'
+    body: 'BoorderPay\'s total liability for any claim shall not exceed the total fees paid by you in the 30 days preceding the claim. We are not liable for losses arising from third-party payment processor downtime, force majeure events, or your own negligence.'
   },
   {
     title: '11. Governing Law',
@@ -72,7 +72,7 @@ export default function TermsPage({ onBack }: Props) {
       {/* Intro */}
       <div className="glass" style={{ padding: '16px', marginBottom: '20px', background: 'rgba(245,185,66,0.06)', borderColor: 'rgba(245,185,66,0.2)' }}>
         <p style={{ fontSize: '12px', color: 'var(--warning)', lineHeight: 1.6 }}>
-          ⚠️ Please read these terms carefully before using NairaVault. By using the Platform, you accept all the terms below in full.
+          ⚠️ Please read these terms carefully before using BoorderPay. By using the Platform, you accept all the terms below in full.
         </p>
       </div>
 
@@ -89,7 +89,7 @@ export default function TermsPage({ onBack }: Props) {
       {/* Footer */}
       <div style={{ textAlign: 'center', paddingBottom: '8px' }}>
         <p style={{ fontSize: '11px', color: 'var(--tg-theme-hint-color)', lineHeight: 1.6 }}>
-          NairaVault Financial Services Ltd.<br />
+          BoorderPay Financial Services Ltd.<br />
           RC Number: 0000001 · Lagos, Nigeria<br />
           Licensed by the Central Bank of Nigeria
         </p>

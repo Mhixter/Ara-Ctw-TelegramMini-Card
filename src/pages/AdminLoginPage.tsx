@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Shield, Eye, EyeOff } from 'lucide-react';
 import { authApi } from '../lib/api';
+import { BoorderPayIcon } from '../components/BoorderPayLogo';
 
 interface Props {
   onLogin: (adminData: { token: string; role: string }) => void;
@@ -30,22 +31,17 @@ export default function AdminLoginPage({ onLogin }: Props) {
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
       <div style={{ width: '100%', maxWidth: '380px' }}>
         <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-          <div style={{
-            width: '64px', height: '64px', borderRadius: '20px', margin: '0 auto 16px',
-            background: 'linear-gradient(135deg, var(--accent), #8b5cf6)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 8px 24px var(--accent-glow)'
-          }}>
-            <Shield size={28} color="white" />
+          <div style={{ margin: '0 auto 16px', display: 'inline-block' }}>
+            <BoorderPayIcon size={64} />
           </div>
           <h1 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '4px' }}>Admin Console</h1>
-          <p style={{ fontSize: '14px', color: 'var(--tg-theme-hint-color)' }}>NairaVault Back Office</p>
+          <p style={{ fontSize: '14px', color: 'var(--tg-theme-hint-color)' }}>BoorderPay Back Office</p>
         </div>
 
         <div className="glass" style={{ padding: '28px 24px' }}>
           <div style={{ marginBottom: '16px' }}>
             <label style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', marginBottom: '6px', display: 'block', fontWeight: 500 }}>Email Address</label>
-            <input className="input-field" type="email" placeholder="admin@nairavault.io" value={email} onChange={e => setEmail(e.target.value)}
+            <input className="input-field" type="email" placeholder="admin@boorderpay.io" value={email} onChange={e => setEmail(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleLogin()} />
           </div>
           <div style={{ marginBottom: '20px' }}>

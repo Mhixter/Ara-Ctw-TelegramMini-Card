@@ -9,6 +9,7 @@ import AdminLoginPage from './pages/AdminLoginPage';
 import AuthPage from './components/AuthPage';
 import { useAuth } from './hooks/useAuth';
 import { API_BASE, API_TARGET_HOST } from './lib/api';
+import { BoorderPayIcon } from './components/BoorderPayLogo';
 
 type Tab = 'home' | 'cards' | 'kyc' | 'profile' | 'admin';
 
@@ -41,17 +42,11 @@ export default function App() {
   if (loading) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-        <div style={{
-          width: '56px', height: '56px', borderRadius: '18px',
-          background: 'linear-gradient(135deg, var(--accent), #8b5cf6)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: '0 8px 24px var(--accent-glow)',
-          animation: 'pulse-glow 2s infinite'
-        }}>
-          <span style={{ fontSize: '24px' }}>₦</span>
+        <div style={{ animation: 'pulse-glow 2s infinite' }}>
+          <BoorderPayIcon size={56} />
         </div>
         <div style={{ textAlign: 'center' }}>
-          <p style={{ fontWeight: 700, fontSize: '18px' }}>NairaVault</p>
+          <p style={{ fontWeight: 700, fontSize: '18px' }}>BoorderPay</p>
           <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)', marginTop: '4px' }}>Initializing secure session...</p>
         </div>
         <div className="spinner" style={{ width: '24px', height: '24px', borderRadius: '50%', border: '2px solid rgba(108,99,255,0.2)', borderTopColor: 'var(--accent)' }} />

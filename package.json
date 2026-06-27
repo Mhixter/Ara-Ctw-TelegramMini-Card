@@ -1,5 +1,5 @@
 {
-  "name": "nairavault",
+  "name": "boorderpay",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "NairaVault - Telegram Mini App FinTech Platform",
+  "description": "BoorderPay - Cross-Border Payments Telegram Mini App",
   "dependencies": {
     "@tanstack/react-query": "^5.101.1",
     "@vitejs/plugin-react": "^6.0.3",

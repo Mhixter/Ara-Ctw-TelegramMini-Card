@@ -95,7 +95,7 @@ export default function VirtualCard({ card, onFreeze, onUnfreeze }: Props) {
               fontSize: '11px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase',
               color: isGold ? 'rgba(255,220,80,0.9)' : 'rgba(168,178,200,0.7)', marginBottom: '2px'
             }}>
-              NairaVault
+              BoorderPay
             </p>
             <p style={{
               fontSize: '13px', fontWeight: 700, letterSpacing: '1px',

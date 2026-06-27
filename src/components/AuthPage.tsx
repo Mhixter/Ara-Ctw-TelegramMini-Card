@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import BoorderPayLogo from './BoorderPayLogo';
 
 interface AuthPageProps {
   onLogin: (email: string, password: string) => Promise<void>;
@@ -79,18 +80,11 @@ export default function AuthPage({ onLogin, onRegister, onGitHubSignIn, error, l
 
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <div style={{
-            width: '64px', height: '64px', borderRadius: '20px',
-            background: 'linear-gradient(135deg, var(--accent, #6c63ff), #8b5cf6)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 8px 32px rgba(108,99,255,0.35)',
-            margin: '0 auto 16px',
-          }}>
-            <span style={{ fontSize: '28px' }}>₦</span>
+          <div style={{ margin: '0 auto 8px' }}>
+            <BoorderPayLogo size={64} showText={true} />
           </div>
-          <h1 style={{ fontWeight: 800, fontSize: '24px', margin: 0 }}>NairaVault</h1>
           <p style={{ color: 'var(--tg-theme-hint-color, #8a8a9a)', fontSize: '13px', marginTop: '6px' }}>
-            Your secure digital wallet
+            Cross-border payments, simplified
           </p>
         </div>
 
