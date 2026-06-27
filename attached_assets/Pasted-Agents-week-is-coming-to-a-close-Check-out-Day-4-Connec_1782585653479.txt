@@ -1,0 +1,152 @@
+Agents week is coming to a close! Check out Day 4 - Connect!
+
+
+
+ideal-grace
+
+production
+
+
+
+28 days or $4.89 left
+
+
+Agent
+
+
+
+
+
+
+
+
+
+Ara-Ctw-TelegramMini-Card
+Deployments
+Variables
+Metrics
+Console
+Settings
+ara-ctw-telegrammini-card-production.up.railway.app
+22.22.3node@22.22.3
+US West
+1 Replica
+
+
+
+
+History
+
+Hide Skipped
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ara-Ctw-TelegramMini-Card
+/
+7c068838
+Active
+
+Jun 27, 2026, 11:37 AM PDT
+ara-ctw-telegrammini-card-production.up.railway.app
+Details
+Build Logs
+Deploy Logs
+HTTP Logs
+Network Flow Logs
+Filter and search logs
+
+You reached the start of the range
+Jun 27, 2026, 11:37 AM
+npm warn config production Use `--omit=dev` instead.
+> nairavault@1.0.0 start
+> node server-dist/index.js
+Server running on port 8080
+Starting Container
+[admin-seed] Failed to upsert super admin: error: column "is_active" of relation "admin_users" does not exist
+  table: undefined,
+    at /app/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async ensureSuperAdmin (/app/server-dist/index.js:44:13)
+  column: undefined,
+    at async Server.<anonymous> (/app/server-dist/index.js:60:5) {
+  dataType: undefined,
+  length: 133,
+  severity: 'ERROR',
+  constraint: undefined,
+  code: '42703',
+  file: 'parse_target.c',
+  detail: undefined,
+  hint: undefined,
+  line: '1068',
+  position: '54',
+  routine: 'checkInsertTargets'
+  internalPosition: undefined,
+  internalQuery: undefined,
+}
+  where: undefined,
+  schema: undefined,
+Wallet fetch error: error: relation "ledger_entries" does not exist
+    at /app/node_modules/pg/lib/client.js:652:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async /app/server-dist/routes/wallet.js:27:34
+    at async Promise.all (index 0)
+    at async /app/server-dist/routes/wallet.js:25:26 {
+  length: 114,
+  severity: 'ERROR',
+  code: '42P01',
+  detail: undefined,
+  hint: undefined,
+  position: '225',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '1466',
+  routine: 'parserOpenTable'
+}
+Wallet fetch error: error: relation "ledger_entries" does not exist
+    at /app/node_modules/pg/lib/client.js:652:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '1466',
+  routine: 'parserOpenTable'
+    at async /app/server-dist/routes/wallet.js:27:34
+}
+    at async Promise.all (index 0)
+    at async /app/server-dist/routes/wallet.js:25:26 {
+  length: 114,
+  severity: 'ERROR',
+  code: '42P01',
+  detail: undefined,
+  hint: undefined,
+  position: '225',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+
+
