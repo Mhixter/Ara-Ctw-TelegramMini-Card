@@ -1,0 +1,102 @@
+Agents week is coming to a close! Check out Day 4 - Connect!
+
+
+
+ideal-grace
+
+production
+
+
+
+28 days or $4.89 left
+
+
+Agent
+
+
+
+
+
+
+
+
+Ara-Ctw-TelegramMini-Card
+Deployments
+Variables
+Metrics
+Console
+Settings
+Unexposed service
+US West
+1 Replica
+
+
+
+
+History
+
+Hide Skipped
+
+
+
+
+
+
+Ara-Ctw-TelegramMini-Card
+/
+dd3a972a
+Active
+
+Jun 27, 2026, 1:46 PM PDT
+Details
+Build Logs
+Deploy Logs
+Network Flow Logs
+Filter and search logs
+
+You reached the start of the range
+Jun 27, 2026, 1:46 PM
+[db:setup] Connecting to database…
+[db:setup] Creating tables…
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[db:setup] Table create failed: foreign key constraint "ledger_entries_debit_wallet_id_fkey" cannot be implemented
+[db:setup] Table create failed: foreign key constraint "user_kyc_user_id_fkey" cannot be implemented
+[db:setup] Patching columns and indexes…
+[db:setup] PATCH FAILED: ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS bvn_hash        VARCHAR(64)
+[db:setup] Reason: relation "user_kyc" does not exist
+[db:setup] PATCH FAILED: ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS nin_hash        VARCHAR(64)
+[db:setup] Reason: relation "user_kyc" does not exist
+[db:setup] PATCH FAILED: ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS id_document_url TEXT
+[db:setup] Reason: relation "user_kyc" does not exist
+[db:setup] PATCH FAILED: ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS liveness_score  NUMERIC(5,2)
+[db:setup] Reason: relation "user_kyc" does not exist
+[db:setup] PATCH FAILED: ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS verified_at     TIMESTAMPTZ
+[db:setup] Reason: relation "user_kyc" does not exist
+[db:setup] ✅  Done — 24 patches applied, 5 skipped/failed.
+Server running on port 8080
+Starting Container
+  column: 'password',
+  dataType: undefined,
+[admin-seed] Failed to upsert super admin: error: null value in column "password" of relation "admin_users" violates not-null constraint
+  position: undefined,
+    at /app/node_modules/pg-pool/index.js:45:11
+  constraint: undefined,
+  internalPosition: undefined,
+  where: undefined,
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+  file: 'execMain.c',
+  internalQuery: undefined,
+  line: '2213',
+    at async ensureSuperAdmin (/app/server-dist/index.js:47:13)
+  schema: 'public',
+  routine: 'ReportNotNullViolationError'
+    at async Server.<anonymous> (/app/server-dist/index.js:63:5) {
+  table: 'admin_users',
+}
+  length: 359,
+  severity: 'ERROR',
+  code: '23502',
+  detail: 'Failing row contains (1, saidumuhammed664@gmail.com, null, SUPER_ADMIN, 2026-06-27 20:47:38.205786, $2b$12$VUAR0Vcn.sUT1zxg7ZxPIuuPRzwoGQ.QZ6dkuBD7XRvsOsOigZHMW, t).',
+  hint: undefined,
+
+

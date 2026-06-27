@@ -98,7 +98,48 @@ const CREATE_TABLES = [
 
 // ─── Step 2: Patch missing columns + indexes (each runs in its own try/catch) ─
 const PATCHES = [
-  // users — add any columns missing from old deployments
+  // ── Old-schema compatibility ────────────────────────────────────────────────
+  // The original admin_users table may have `password NOT NULL` instead of
+  // `password_hash`. Drop the NOT NULL so INSERTs using password_hash don't fail.
+  `ALTER TABLE admin_users ALTER COLUMN password DROP NOT NULL`,
+
+  // Retry creating FK-dependent tables that may have failed in Step 1
+  // (they fail if wallets/users didn't exist yet at that point)
+  `CREATE TABLE IF NOT EXISTS wallets (
+    id                     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id                UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    currency               VARCHAR(10) NOT NULL DEFAULT 'NGN',
+    balance                NUMERIC(18,2) NOT NULL DEFAULT 0,
+    virtual_account_number VARCHAR(20),
+    virtual_bank_name      VARCHAR(100),
+    created_at             TIMESTAMPTZ DEFAULT NOW(),
+    updated_at             TIMESTAMPTZ DEFAULT NOW()
+  )`,
+  `CREATE TABLE IF NOT EXISTS ledger_entries (
+    id                    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    transaction_reference VARCHAR(255) UNIQUE NOT NULL,
+    debit_wallet_id       UUID REFERENCES wallets(id),
+    credit_wallet_id      UUID REFERENCES wallets(id),
+    amount                NUMERIC(18,2) NOT NULL,
+    purpose               VARCHAR(50) NOT NULL,
+    metadata              JSONB DEFAULT '{}',
+    created_at            TIMESTAMPTZ DEFAULT NOW()
+  )`,
+  `CREATE TABLE IF NOT EXISTS user_kyc (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id         UUID UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    bvn_hash        VARCHAR(64),
+    nin_hash        VARCHAR(64),
+    full_name       VARCHAR(255),
+    date_of_birth   DATE,
+    id_document_url TEXT,
+    liveness_score  NUMERIC(5,2),
+    verified_at     TIMESTAMPTZ,
+    created_at      TIMESTAMPTZ DEFAULT NOW(),
+    updated_at      TIMESTAMPTZ DEFAULT NOW()
+  )`,
+
+  // ── users — add any columns missing from old deployments ───────────────────
   `ALTER TABLE users ADD COLUMN IF NOT EXISTS email         VARCHAR(255)`,
   `ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255)`,
   `ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id     VARCHAR(255)`,
