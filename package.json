@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "dev": "npx concurrently \"npm run server\" \"npm run client\"",
     "client": "vite --config vite.config.ts",
     "server": "nodemon --exec ts-node --project tsconfig.json --ext ts server/index.ts",
     "build": "vite build --config vite.config.ts && tsc --project tsconfig.json",
