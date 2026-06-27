@@ -1,12 +1,11 @@
 {
   "name": "payonline",
+   "name": "borderpay",
   "main": "worker.js",
   "compatibility_date": "2026-06-25",
   "assets": {
     "directory": "./dist",
     "not_found_handling": "single-page-application",
     "binding": "ASSETS"
-// wrangler.jsonc
-"name": "borderpay",
   }
 }
