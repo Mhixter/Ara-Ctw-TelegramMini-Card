@@ -6,5 +6,8 @@
     "directory": "./dist",
     "not_found_handling": "single-page-application",
     "binding": "ASSETS"
+  },
+  "vars": {
+    "RAILWAY_URL": "https://borderpay-production.up.railway.app"
   }
 }
