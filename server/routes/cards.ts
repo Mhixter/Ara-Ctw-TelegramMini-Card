@@ -1,13 +1,13 @@
 import { Router, Response, Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import pool from '../db';
-import { requireAuth, AuthRequest } from '../middleware/auth';
+import { requireAuth, requireUUID, AuthRequest } from '../middleware/auth';
 import { issueCard, getCardDetails, updateCardStatus, verifyWebhookSignature } from '../services/sudoAfrica';
 
 const router = Router();
 
 // ── List user's cards ─────────────────────────────────────────────────────────
-router.get('/', requireAuth, async (req: AuthRequest, res: Response) => {
+router.get('/', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
   try {
     const cards = await pool.query(
       `SELECT id, provider_card_id, mask_pan, card_tier, card_brand, card_currency,
@@ -22,7 +22,7 @@ router.get('/', requireAuth, async (req: AuthRequest, res: Response) => {
 });
 
 // ── Get card details (PAN + one-time CVV from Sudo) ──────────────────────────
-router.get('/:cardId/details', requireAuth, async (req: AuthRequest, res: Response) => {
+router.get('/:cardId/details', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
   try {
     const { cardId } = req.params;
     const cardResult = await pool.query(
@@ -51,7 +51,7 @@ router.get('/:cardId/details', requireAuth, async (req: AuthRequest, res: Respon
 });
 
 // ── Issue a new card ──────────────────────────────────────────────────────────
-router.post('/issue', requireAuth, async (req: AuthRequest, res: Response) => {
+router.post('/issue', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
   const client = await pool.connect();
   try {
     const { currency = 'NGN', brand = 'VISA' } = req.body;
@@ -137,7 +137,7 @@ router.post('/issue', requireAuth, async (req: AuthRequest, res: Response) => {
 });
 
 // ── Simulate a card spend (sandbox / test) ────────────────────────────────────
-router.post('/:cardId/spend', requireAuth, async (req: AuthRequest, res: Response) => {
+router.post('/:cardId/spend', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
   const client = await pool.connect();
   try {
     const { cardId } = req.params;
@@ -331,7 +331,7 @@ router.post('/webhook/spend', async (req: Request, res: Response) => {
 });
 
 // ── Freeze / Unfreeze ─────────────────────────────────────────────────────────
-router.patch('/:cardId/status', requireAuth, async (req: AuthRequest, res: Response) => {
+router.patch('/:cardId/status', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
   try {
     const { cardId } = req.params;
     const { status } = req.body;
@@ -360,7 +360,7 @@ router.patch('/:cardId/status', requireAuth, async (req: AuthRequest, res: Respo
 });
 
 // ── Update spending limits ────────────────────────────────────────────────────
-router.patch('/:cardId/limits', requireAuth, async (req: AuthRequest, res: Response) => {
+router.patch('/:cardId/limits', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
   try {
     const { cardId } = req.params;
     const { dailyLimit, monthlyLimit } = req.body;

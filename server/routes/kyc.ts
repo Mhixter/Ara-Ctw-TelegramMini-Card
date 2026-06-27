@@ -1,7 +1,7 @@
 import { Router, Response } from 'express';
 import crypto from 'crypto';
 import pool from '../db';
-import { requireAuth, AuthRequest } from '../middleware/auth';
+import { requireAuth, requireUUID, AuthRequest } from '../middleware/auth';
 
 const router = Router();
 
@@ -20,7 +20,7 @@ function hashField(value: string): string {
   return crypto.createHash('sha256').update(value + ENCRYPTION_KEY).digest('hex');
 }
 
-router.get('/status', requireAuth, async (req: AuthRequest, res: Response) => {
+router.get('/status', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
   try {
     const user = await pool.query('SELECT kyc_status FROM users WHERE id = $1', [req.user!.userId]);
     const kyc = await pool.query('SELECT full_name, date_of_birth, liveness_score, verified_at FROM user_kyc WHERE user_id = $1', [req.user!.userId]);
@@ -30,7 +30,7 @@ router.get('/status', requireAuth, async (req: AuthRequest, res: Response) => {
   }
 });
 
-router.post('/tier1', requireAuth, async (req: AuthRequest, res: Response) => {
+router.post('/tier1', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
   const client = await pool.connect();
   try {
     const { bvn, nin, fullName, dateOfBirth } = req.body;
@@ -86,7 +86,7 @@ router.post('/tier1', requireAuth, async (req: AuthRequest, res: Response) => {
   }
 });
 
-router.post('/tier2', requireAuth, async (req: AuthRequest, res: Response) => {
+router.post('/tier2', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
   const client = await pool.connect();
   try {
     const { documentUrl, livenessScore } = req.body;

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * NairaVault — Database Setup Script
+ * BoorderPay — Database Setup Script
  * Safe to re-run: creates tables if missing, adds columns if missing.
  * Usage: node scripts/setup-db.js
  * Railway: runs automatically on every deploy (see railway.json).

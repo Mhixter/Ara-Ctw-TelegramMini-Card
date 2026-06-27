@@ -128,6 +128,8 @@ export function verifyJWT(
   }
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export function requireAuth(req: AuthRequest, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith('Bearer ')) {
@@ -137,6 +139,22 @@ export function requireAuth(req: AuthRequest, res: Response, next: NextFunction)
   const payload = verifyJWT(token);
   if (!payload) return res.status(401).json({ error: 'Invalid token' });
   req.user = payload;
+  next();
+}
+
+/**
+ * Must be used after requireAuth on any route that queries DB columns typed UUID.
+ * Rejects sessions where userId is an old integer ID (pre-UUID schema migration).
+ * The client must re-authenticate to receive a fresh UUID-based JWT.
+ */
+export function requireUUID(req: AuthRequest, res: Response, next: NextFunction) {
+  const uid = req.user?.userId;
+  if (!uid || !UUID_RE.test(uid)) {
+    return res.status(401).json({
+      error: 'Your session is outdated. Please sign in again.',
+      code: 'SESSION_EXPIRED',
+    });
+  }
   next();
 }
 

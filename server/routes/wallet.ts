@@ -1,7 +1,7 @@
 import { Router, Response, Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import pool from '../db';
-import { requireAuth, AuthRequest } from '../middleware/auth';
+import { requireAuth, requireUUID, AuthRequest } from '../middleware/auth';
 import { fetchProviderBalance, verifyProviderWebhookSignature } from '../services/providerBalance';
 
 const router = Router();
@@ -16,7 +16,7 @@ const router = Router();
  * If a provider API key is configured, the authoritative provider balance is
  * fetched and returned alongside the ledger balance for reconciliation.
  */
-router.get('/', requireAuth, async (req: AuthRequest, res: Response) => {
+router.get('/', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
   const client = await pool.connect();
   try {
     const wallets = await client.query(
@@ -88,7 +88,7 @@ router.get('/', requireAuth, async (req: AuthRequest, res: Response) => {
  * GET /api/wallet/transactions/:id
  * Returns full details for a single ledger entry (owned by the requesting user).
  */
-router.get('/transactions/:id', requireAuth, async (req: AuthRequest, res: Response) => {
+router.get('/transactions/:id', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user!.userId;
     const { id } = req.params;
@@ -124,7 +124,7 @@ router.get('/transactions/:id', requireAuth, async (req: AuthRequest, res: Respo
  * GET /api/wallet/transactions
  * Returns the last 50 ledger entries for all user wallets.
  */
-router.get('/transactions', requireAuth, async (req: AuthRequest, res: Response) => {
+router.get('/transactions', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user!.userId;
     const wallets = await pool.query('SELECT id FROM wallets WHERE user_id = $1', [userId]);
@@ -152,7 +152,7 @@ router.get('/transactions', requireAuth, async (req: AuthRequest, res: Response)
  * POST /api/wallet/fund  (manual / sandbox funding)
  * Idempotent — duplicate references are silently ignored.
  */
-router.post('/fund', requireAuth, async (req: AuthRequest, res: Response) => {
+router.post('/fund', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
   const client = await pool.connect();
   try {
     const { amount, currency = 'NGN', reference } = req.body;

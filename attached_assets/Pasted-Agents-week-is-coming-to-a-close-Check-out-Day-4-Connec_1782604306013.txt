@@ -1,0 +1,131 @@
+Agents week is coming to a close! Check out Day 4 - Connect!
+
+
+
+ideal-grace
+
+production
+
+
+
+28 days or $4.89 left
+
+
+Agent
+
+
+
+
+
+
+
+
+
+BorderPay
+Deployments
+Variables
+Metrics
+Console
+Settings
+boorderpay.com
+US West
+1 Replica
+
+
+
+
+History
+
+Hide Skipped
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BorderPay
+/
+90440a25
+Active
+
+Jun 27, 2026, 4:49 PM PDT
+boorderpay.com
+Details
+Build Logs
+Deploy Logs
+HTTP Logs
+Network Flow Logs
+Filter and search logs
+
+You reached the start of the range
+Jun 27, 2026, 4:49 PM
+Starting Container
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[db:setup] Connecting to database…
+[db:setup] Creating tables…
+[db:setup] Patching columns and indexes…
+[db:setup] ✅  Done — 33 patches applied, 0 skipped/failed.
+Server running on port 8080
+[admin-seed] Super admin credentials refreshed: saidumuhammed664@gmail.com
+Wallet fetch error: error: invalid input syntax for type uuid: "15"
+    at /app/node_modules/pg/lib/client.js:652:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /app/server-dist/routes/wallet.js:27:34
+    at async Promise.all (index 0)
+    at async /app/server-dist/routes/wallet.js:25:26 {
+  length: 134,
+  severity: 'ERROR',
+  code: '22P02',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: "unnamed portal parameter $1 = '...'",
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'uuid.c',
+  line: '174',
+  routine: 'string_to_uuid'
+}
+Wallet fetch error: error: invalid input syntax for type uuid: "15"
+    at /app/node_modules/pg/lib/client.js:652:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /app/server-dist/routes/wallet.js:27:34
+    at async Promise.all (index 0)
+    at async /app/server-dist/routes/wallet.js:25:26 {
+  length: 134,
+  severity: 'ERROR',
+  code: '22P02',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: "unnamed portal parameter $1 = '...'",
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'uuid.c',
+  line: '174',
+  routine: 'string_to_uuid'
+}
+
+
