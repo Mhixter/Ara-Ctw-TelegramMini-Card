@@ -6,6 +6,23 @@
     "directory": "./dist",
     "not_found_handling": "single-page-application",
     "binding": "ASSETS"
+{
+  "observability": {
+    "enabled": false,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": false,
+      "persist": true,
+      "head_sampling_rate": 1
+    }
+  }
+}
   },
   "vars": {
     "RAILWAY_URL": "https://borderpay-production.up.railway.app"
