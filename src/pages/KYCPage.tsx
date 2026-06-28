@@ -156,8 +156,15 @@ export default function KYCPage({ user, onKycUpdated }: Props) {
             className="input-field"
             type="date"
             value={form1.dateOfBirth}
+            max={new Date().toISOString().split('T')[0]}
+            min="1900-01-01"
             onChange={e => setForm1(f => ({ ...f, dateOfBirth: e.target.value }))}
           />
+          {!form1.dateOfBirth && (
+            <p style={{ fontSize: '11px', color: 'var(--tg-theme-hint-color)', marginTop: '4px' }}>
+              If the picker doesn't open, type in YYYY-MM-DD format (e.g. 1999-11-25)
+            </p>
+          )}
         </div>
 
         <div style={{ marginBottom: '16px' }}>

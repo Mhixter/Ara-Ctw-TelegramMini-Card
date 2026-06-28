@@ -7,7 +7,9 @@ interface Props { user: User; onBack: () => void; }
 export default function SecurityPage({ user, onBack }: Props) {
   const [showToken, setShowToken] = useState(false);
   const token = localStorage.getItem('token') || '';
-  const maskedToken = token.slice(0, 12) + '•'.repeat(20) + token.slice(-8);
+  const maskedToken = token.length > 20
+    ? token.slice(0, 12) + '•'.repeat(20) + token.slice(-8)
+    : '••••••••••••••••••••••••••••••••';
 
   const features = [
     { icon: Lock, label: 'AES-256-GCM Encryption', desc: 'BVN, NIN and card tokens encrypted at rest before database storage.', active: true },
@@ -40,7 +42,7 @@ export default function SecurityPage({ user, onBack }: Props) {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
           {[
-            { label: 'User ID', value: user.id.slice(0, 8) + '...' },
+            { label: 'User ID', value: String(user.id || 'N/A').slice(0, 8) + '...' },
             { label: 'KYC Level', value: user.kycStatus },
             { label: 'Account', value: user.isActive ? 'Active' : 'Inactive' },
             { label: 'Token TTL', value: '24 hours' },

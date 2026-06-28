@@ -15,19 +15,20 @@ export default function ProfilePage({ user, onLogout }: Props) {
   const { isInTelegram } = useTelegram();
   const [subPage, setSubPage] = useState<SubPage>(null);
 
-  const kycLabel = {
+  const kycLabel: Record<string, string> = {
     PENDING: 'Unverified',
+    PENDING_REVIEW: 'Under Review',
     TIER_1: 'Gold Verified',
     TIER_2: 'Platinum Verified',
-    BANNED: 'Banned'
-  }[user.kycStatus];
-
-  const kycColor = {
+    BANNED: 'Banned',
+  };
+  const kycColor: Record<string, string> = {
     PENDING: 'var(--warning)',
+    PENDING_REVIEW: 'var(--accent)',
     TIER_1: 'var(--gold)',
     TIER_2: 'var(--platinum)',
-    BANNED: 'var(--danger)'
-  }[user.kycStatus];
+    BANNED: 'var(--danger)',
+  };
 
   if (subPage === 'security')      return <SecurityPage user={user} onBack={() => setSubPage(null)} />;
   if (subPage === 'notifications') return <NotificationsPage onBack={() => setSubPage(null)} />;
@@ -95,11 +96,11 @@ export default function ProfilePage({ user, onLogout }: Props) {
           {user.username ? `@${user.username}` : `TG ID: ${user.telegramId}`}
         </p>
         <span className="badge" style={{
-          background: `${kycColor}18`,
-          color: kycColor,
-          border: `1px solid ${kycColor}40`
+          background: `${kycColor[user.kycStatus] || 'var(--warning)'}18`,
+          color: kycColor[user.kycStatus] || 'var(--warning)',
+          border: `1px solid ${kycColor[user.kycStatus] || 'var(--warning)'}40`
         }}>
-          {kycLabel}
+          {kycLabel[user.kycStatus] || 'Unverified'}
         </span>
       </div>
 
@@ -108,7 +109,7 @@ export default function ProfilePage({ user, onLogout }: Props) {
         {[
           { label: 'Platform', value: isInTelegram ? 'Telegram' : 'Browser' },
           { label: 'Status', value: user.isActive ? 'Active' : 'Inactive' },
-          { label: 'KYC Tier', value: user.kycStatus === 'PENDING' ? 'None' : user.kycStatus === 'TIER_1' ? 'Gold' : user.kycStatus === 'TIER_2' ? 'Platinum' : 'Banned' }
+          { label: 'KYC Tier', value: ({ PENDING: 'None', PENDING_REVIEW: 'Review', TIER_1: 'Gold', TIER_2: 'Platinum', BANNED: 'Banned' } as Record<string,string>)[user.kycStatus] || 'None' }
         ].map(stat => (
           <div key={stat.label} className="glass" style={{ padding: '12px', textAlign: 'center' }}>
             <p style={{ fontSize: '13px', fontWeight: 700, marginBottom: '2px' }}>{stat.value}</p>

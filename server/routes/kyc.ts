@@ -68,8 +68,16 @@ router.post('/tier1', requireAuth, requireUUID, async (req: AuthRequest, res: Re
       bvn, nin,
     } = req.body;
 
-    if (!fullName?.trim() || !dateOfBirth || !country) {
-      return res.status(400).json({ error: 'Full name, date of birth, and country are required.' });
+    console.log('[KYC tier1] body:', { fullName: fullName ? fullName.slice(0,4)+'…' : '(empty)', dateOfBirth, country, idType, hasIdNumber: !!idNumber, hasBvn: !!bvn, hasNin: !!nin });
+
+    if (!fullName?.trim()) {
+      return res.status(400).json({ error: 'Full legal name is required.' });
+    }
+    if (!dateOfBirth) {
+      return res.status(400).json({ error: 'Date of birth is required. Use YYYY-MM-DD format (e.g. 1999-11-25).' });
+    }
+    if (!country) {
+      return res.status(400).json({ error: 'Country of residence is required.' });
     }
 
     const isNigerian = country === 'NG';
