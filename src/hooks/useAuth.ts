@@ -26,6 +26,17 @@ export function useAuth() {
   const [needsManualLogin, setNeedsManualLogin] = useState(false);
 
   useEffect(() => {
+    function handleSignout() {
+      setUser(null);
+      setNeedsManualLogin(true);
+      setLoading(false);
+      setError(null);
+    }
+    window.addEventListener('auth:signout', handleSignout);
+    return () => window.removeEventListener('auth:signout', handleSignout);
+  }, []);
+
+  useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const authToken = urlParams.get('auth_token');
     const authUser  = urlParams.get('auth_user');
