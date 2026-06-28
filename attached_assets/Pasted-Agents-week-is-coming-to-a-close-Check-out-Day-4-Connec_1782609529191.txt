@@ -1,0 +1,145 @@
+Agents week is coming to a close! Check out Day 4 - Connect!
+
+
+
+ideal-grace
+
+production
+
+
+
+28 days or $4.89 left
+
+
+Agent
+
+Filter and search logs
+
+Last 15 min
+
+
+  internalQuery: undefined,
+  where: "unnamed portal parameter $1 = '...'",
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'uuid.c',
+  line: '174',
+  routine: 'string_to_uuid'
+}
+  line: '174',
+  routine: 'string_to_uuid'
+}
+Wallet fetch error: error: invalid input syntax for type uuid: "15"
+    at /app/node_modules/pg/lib/client.js:652:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /app/server-dist/routes/wallet.js:27:34
+    at async Promise.all (index 0)
+    at async /app/server-dist/routes/wallet.js:25:26 {
+  length: 134,
+  severity: 'ERROR',
+  code: '22P02',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: "unnamed portal parameter $1 = '...'",
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'uuid.c',
+Wallet fetch error: error: invalid input syntax for type uuid: "15"
+    at /app/node_modules/pg/lib/client.js:652:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /app/server-dist/routes/wallet.js:27:34
+    at async Promise.all (index 0)
+    at async /app/server-dist/routes/wallet.js:25:26 {
+  length: 134,
+  severity: 'ERROR',
+  code: '22P02',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: "unnamed portal parameter $1 = '...'",
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'uuid.c',
+  line: '174',
+  routine: 'string_to_uuid'
+}
+2026-06-28 01:06:44.106 UTC [516] ERROR:  invalid input syntax for type uuid: "21"
+2026-06-28 01:06:44.106 UTC [516] CONTEXT:  unnamed portal parameter $1 = '...'
+2026-06-28 01:06:44.106 UTC [516] STATEMENT:  SELECT full_name, date_of_birth, liveness_score, verified_at FROM user_kyc WHERE user_id = $1
+2026-06-28 01:06:45.331 UTC [517] ERROR:  invalid input syntax for type uuid: "21"
+2026-06-28 01:06:45.331 UTC [517] CONTEXT:  unnamed portal parameter $1 = '...'
+2026-06-28 01:06:45.331 UTC [517] STATEMENT:  SELECT id FROM user_kyc WHERE user_id = $1
+2026-06-28 01:06:48.854 UTC [517] ERROR:  invalid input syntax for type uuid: "15"
+2026-06-28 01:06:48.854 UTC [517] CONTEXT:  unnamed portal parameter $1 = '...'
+2026-06-28 01:06:48.854 UTC [517] STATEMENT:  SELECT
+	             COALESCE(SUM(CASE WHEN credit_wallet_id = $1 THEN amount ELSE 0 END), 0)
+	           - COALESCE(SUM(CASE WHEN debit_wallet_id  = $1 THEN amount ELSE 0 END), 0)
+	           AS ledger_balance
+	           FROM ledger_entries
+	           WHERE credit_wallet_id = $1 OR debit_wallet_id = $1
+2026-06-28 01:06:48.859 UTC [517] ERROR:  operator does not exist: uuid = integer at character 175
+2026-06-28 01:06:48.859 UTC [517] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2026-06-28 01:06:48.859 UTC [517] STATEMENT:  SELECT le.*,
+	         dw.currency as debit_currency,
+	         cw.currency as credit_currency
+	       FROM ledger_entries le
+	       LEFT JOIN wallets dw ON le.debit_wallet_id  = dw.id
+	       LEFT JOIN wallets dw ON le.debit_wallet_id  = dw.id
+	       LEFT JOIN wallets cw ON le.credit_wallet_id = cw.id
+	       LEFT JOIN wallets cw ON le.credit_wallet_id = cw.id
+	       WHERE le.debit_wallet_id = ANY($1) OR le.credit_wallet_id = ANY($1)
+	       WHERE le.debit_wallet_id = ANY($1) OR le.credit_wallet_id = ANY($1)
+	       ORDER BY le.created_at DESC LIMIT 50
+	       ORDER BY le.created_at DESC LIMIT 50
+2026-06-28 01:06:50.269 UTC [518] ERROR:  operator does not exist: uuid = integer at character 175
+2026-06-28 01:06:50.270 UTC [519] ERROR:  invalid input syntax for type uuid: "15"
+2026-06-28 01:06:50.269 UTC [518] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2026-06-28 01:06:50.270 UTC [519] CONTEXT:  unnamed portal parameter $1 = '...'
+2026-06-28 01:06:50.270 UTC [519] STATEMENT:  SELECT
+2026-06-28 01:06:50.269 UTC [518] STATEMENT:  SELECT le.*,
+	         dw.currency as debit_currency,
+	         cw.currency as credit_currency
+	       FROM ledger_entries le
+	             COALESCE(SUM(CASE WHEN credit_wallet_id = $1 THEN amount ELSE 0 END), 0)
+	           - COALESCE(SUM(CASE WHEN debit_wallet_id  = $1 THEN amount ELSE 0 END), 0)
+	           AS ledger_balance
+	           FROM ledger_entries
+	           WHERE credit_wallet_id = $1 OR debit_wallet_id = $1
+2026-06-28 01:06:50.674 UTC [519] ERROR:  invalid input syntax for type uuid: "21"
+2026-06-28 01:06:50.674 UTC [519] CONTEXT:  unnamed portal parameter $1 = '...'
+2026-06-28 01:06:50.674 UTC [519] STATEMENT:  SELECT full_name, date_of_birth, liveness_score, verified_at FROM user_kyc WHERE user_id = $1
+2026-06-28 01:06:52.064 UTC [520] ERROR:  invalid input syntax for type uuid: "21"
+2026-06-28 01:06:52.064 UTC [520] CONTEXT:  unnamed portal parameter $1 = '...'
+2026-06-28 01:06:52.064 UTC [520] STATEMENT:  SELECT full_name, date_of_birth, liveness_score, verified_at FROM user_kyc WHERE user_id = $1
+Stopping Container
+2026-06-28 01:07:58.377 UTC [524] ERROR:  invalid input syntax for type uuid: "21"
+2026-06-28 01:07:58.377 UTC [524] CONTEXT:  unnamed portal parameter $1 = '...'
+2026-06-28 01:07:58.377 UTC [524] STATEMENT:  SELECT full_name, date_of_birth, liveness_score, verified_at FROM user_kyc WHERE user_id = $1
+2026-06-28 01:07:59.765 UTC [525] ERROR:  invalid input syntax for type uuid: "21"
+2026-06-28 01:07:59.765 UTC [525] CONTEXT:  unnamed portal parameter $1 = '...'
+2026-06-28 01:07:59.765 UTC [525] STATEMENT:  SELECT full_name, date_of_birth, liveness_score, verified_at FROM user_kyc WHERE user_id = $1
+2026-06-28 01:08:23.161 UTC [526] ERROR:  invalid input syntax for type uuid: "21"
+2026-06-28 01:08:23.161 UTC [526] CONTEXT:  unnamed portal parameter $1 = '...'
+2026-06-28 01:08:23.161 UTC [526] STATEMENT:  SELECT full_name, date_of_birth, liveness_score, verified_at FROM user_kyc WHERE user_id = $1
+2026-06-28 01:08:24.558 UTC [527] ERROR:  invalid input syntax for type uuid: "21"
+2026-06-28 01:08:24.558 UTC [527] CONTEXT:  unnamed portal parameter $1 = '...'
+2026-06-28 01:08:24.558 UTC [527] STATEMENT:  SELECT full_name, date_of_birth, liveness_score, verified_at FROM user_kyc WHERE user_id = $1
+2026-06-28 01:08:49.557 UTC [49] LOG:  checkpoint starting: time
+2026-06-28 01:08:49.671 UTC [49] LOG:  checkpoint complete: wrote 1 buffers (0.0%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.102 s, sync=0.004 s, total=0.115 s; sync files=2, longest=0.003 s, average=0.002 s; distance=8 kB, estimate=177 kB; lsn=0/1ED9458, redo lsn=0/1ED9400
+
+
+50

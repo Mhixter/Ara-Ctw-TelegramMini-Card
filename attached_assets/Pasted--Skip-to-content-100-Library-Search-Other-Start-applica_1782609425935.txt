@@ -1,0 +1,267 @@
+
+Skip to content
+
+
+100%
+
+
+
+
+
+Library
+Search
+Other
+Start application
+Website
+
+
+
+~/workspace
+: 
+git fetch origin
+
+
+
+Enable "Accessible Terminal" in Workspace Settings to use a screen reader with the shell.
+Add real-time notifications for wallet credits and KYC status updates
+
+
+
+12 messages & 31 actions
+
+Checkpoint made
+1 hour ago
+
+Worked for 9 minutes
+← Back
+Identity Verification
+Tier 1 · Gold Card Unlocked ($500/day)
+
+Full Legal Name
+SAIDU MUHAMMED
+Date of Birth
+
+11/11/1999
+Country of Residence
+
+France
+ID Type
+
+International Passport
+
+National ID Card / NIN
+
+Driver's License
+
+Voter's Card / Registration
+National ID Card Number
+345698574
+🔒 Your ID numbers are hashed with SHA-256+salt before storage. We never store raw identity numbers.
+
+Submit for Verification
+Missing required fields ALSO THE security an privacy also load not moving to the pages
+
+51 minutes ago
+
+18 messages & 52 actions
+
+Checkpoint made
+41 minutes ago
+
+Worked for 10 minutes
+
+Attached Image
+34 minutes ago
+
+6 messages & 17 actions
+
+Checkpoint made
+32 minutes ago
+
+Worked for 1 minute
+
+Pasted-horizontalMenu-ts-91-Uncaught-in-promise-TypeError-Cann_1782607665545.txt
+add a real-time transaction notification system that sends a Telegram bot message the moment a user's wallet is credited
+
+29 minutes ago
+
+Planning notification service integration (19 seconds)
+The production server at borderpay.saidumuhammed664.workers.dev has all endpoints returning 500 — even /api/wallet and /api/kyc/status which existed before my changes. That suggests the production DB connection itself is failing, not just missing columns. That's likely a separate deployment environment issue. Let me tackle the notification feature while you sort out the deployment.
+
+Let me read the wallet route first to find exactly where credits happen:
+
+
+Show less
+
+Opened wallet.ts
+
+Ran grep
+
+Deciding wallet handler logic
+Let me read the webhook handler in wallet.ts to understand where funds are credited, then I'll build the Telegram notification service.
+
+Let me read the webhook handler and check the users table structure in parallel:
+
+
+Show less
+
+Opened wallet.ts
+
+Ran grep
+
+Planning Telegram notification system (8 seconds)
+I have all the context I need. Now let me implement the Telegram notification system:
+
+server/services/telegramNotify.ts — sends messages via the Telegram Bot API
+Update server/routes/wallet.ts — call notify after both webhook credit AND manual fund
+Update server/routes/kyc.ts — notify on KYC approval
+The TELEGRAM_BOT_TOKEN is already referenced in server/middleware/auth.ts and server/index.ts. The telegram_id column exists on the users table.
+
+The notification service needs to:
+
+Accept telegramId and a message
+Make a request to the Telegram Bot API endpoint with the token and message
+Catch any errors without interrupting the main transaction flow
+For the wallet routes, after crediting the account, I'll fetch the user's telegram ID and send a formatted notification showing the new balance.
+
+Now I'm setting up the notification service in a separate file, then integrating it into the wallet funding endpoints and the KYC approval flow.
+
+I have everything I need. The TELEGRAM_BOT_TOKEN is already referenced in auth middleware, and telegram_id is on the users table. I'll build this in parallel:
+
+A telegramNotify service
+Wire it into both wallet credit paths (manual fund + webhook)
+Wire it into KYC approval
+
+Show less
+
+Created telegramNotify.ts
+
+Planning service integration
+Let me now wire the telegramNotify service into wallet.ts and kyc.ts. I'll do both edits in parallel.
+
+Now wiring the notification service into both wallet credit paths and KYC approval simultaneously:
+
+
+Show less
+
+Opened wallet.ts
+
+Opened kyc.ts
+
+Planning service integration
+
+Edited wallet.ts
+
+Edited kyc.ts
+
+Planning notification integration logic
+Let me now add the notification calls to the wallet webhook, manual fund, and KYC approval handlers. I'll do all three edits in parallel.
+
+For wallet webhook (after COMMIT at line 326):
+
+Look up user's telegram_id via wallet.user_id
+Compute new balance = wallet.balance + amount
+Send notification
+For manual fund (after COMMIT at line 208):
+
+Look up user's telegram_id
+Compute new balance
+Send notification
+For KYC auto-approve (after COMMIT at line 129):
+
+Look up user's telegram_id
+Send KYC approval notification
+Now adding the actual notification calls to all three credit/approval points in parallel:
+
+
+Show less
+
+Edited wallet.ts
+
+Edited wallet.ts
+
+Edited kyc.ts
+
+Planning admin notification integration
+Now let me also wire notifications into the admin approve/reject flow, and check the server restarted cleanly:
+
+
+3 actions
+Server is running cleanly. Now adding notifications to the admin approve/reject endpoints:
+
+
+Show less
+
+Opened admin.ts
+
+Planning notification integration
+
+Opened admin.ts
+
+Planning parallel notification additions
+Let me add notifications to the admin approve/reject endpoints in parallel, then set up the env secret for TELEGRAM_BOT_TOKEN.
+
+Adding notifications to both admin approve and reject handlers now:
+
+
+Show less
+
+Edited admin.ts
+
+Edited admin.ts
+
+Edited admin.ts
+
+Verifying server restart and token
+Checked system logs
+
+Planning notification setup instructions
+Server running cleanly. Now I need to wire up your TELEGRAM_BOT_TOKEN so messages actually fire. Let me check the secrets skill for the right way to do this:
+
+
+Show less
+Loaded environment-secrets skill
+
+Requesting Telegram bot token
+The server is running cleanly. I need to request the TELEGRAM_BOT_TOKEN from the user. Let me use the code_execution sandbox to call requestEnvVar.
+
+
+Planning requestEnvVar usage
+Let me use the correct requestEnvVar call format by reading the skill properly.
+
+Loaded environment-secrets skill
+
+Planning requestEnvVar function execution
+Let me continue with the requestEnvVar function. Looking at the skill, the correct format is:
+requestEnvVar(requestType, keys, envVars, userMessage)
+
+Let me read more of the skill to get the exact parameters.
+
+Loaded environment-secrets skill
+
+Requesting TELEGRAM_BOT_TOKEN input
+Let me request the TELEGRAM_BOT_TOKEN from the user using the correct format.
+
+Please provide your Telegram Bot token from @BotFather. This is used to send instant wallet credit and KYC status notifications directly to users in Telegram.
+
+Secrets
+Key
+Value
+TELEGRAM_BOT_TOKEN
+
+
+Checkpoint made
+26 minutes ago
+
+Worked for 2 minutes
+
+Scroll to latest
+You're out of credits.
+
+Make, test, iterate…
+
+
+
+
+
+Loading... - Replit

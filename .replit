@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "web"]
+modules = ["nodejs-20", "web", "postgresql-16"]
 [agent]
 expertMode = true
 stack = "BEST_EFFORT_FALLBACK"
@@ -47,3 +47,6 @@ build = ["npm", "run", "build"]
 
 [userenv.shared]
 JWT_SECRET = "b53002411c2c7fac3809b134fe339fb094f29fb7b76a3ee57f90767c981baaebd333270523d71bfe89e42d3b943200ff"
+NODE_ENV = "development"
+PORT = "3001"
+ALLOWED_ORIGINS = "true"
