@@ -10,7 +10,7 @@ const auth_1 = require("../middleware/auth");
 const sudoAfrica_1 = require("../services/sudoAfrica");
 const router = (0, express_1.Router)();
 // ── List user's cards ─────────────────────────────────────────────────────────
-router.get('/', auth_1.requireAuth, async (req, res) => {
+router.get('/', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
     try {
         const cards = await db_1.default.query(`SELECT id, provider_card_id, mask_pan, card_tier, card_brand, card_currency,
               daily_limit, monthly_limit, amount_spent_today, status, created_at
@@ -22,7 +22,7 @@ router.get('/', auth_1.requireAuth, async (req, res) => {
     }
 });
 // ── Get card details (PAN + one-time CVV from Sudo) ──────────────────────────
-router.get('/:cardId/details', auth_1.requireAuth, async (req, res) => {
+router.get('/:cardId/details', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
     try {
         const { cardId } = req.params;
         const cardResult = await db_1.default.query('SELECT id, provider_card_id, mask_pan, card_brand, card_tier, status FROM cards WHERE id = $1 AND user_id = $2', [cardId, req.user.userId]);
@@ -49,7 +49,7 @@ router.get('/:cardId/details', auth_1.requireAuth, async (req, res) => {
     }
 });
 // ── Issue a new card ──────────────────────────────────────────────────────────
-router.post('/issue', auth_1.requireAuth, async (req, res) => {
+router.post('/issue', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
     const client = await db_1.default.connect();
     try {
         const { currency = 'NGN', brand = 'VISA' } = req.body;
@@ -119,7 +119,7 @@ router.post('/issue', auth_1.requireAuth, async (req, res) => {
     }
 });
 // ── Simulate a card spend (sandbox / test) ────────────────────────────────────
-router.post('/:cardId/spend', auth_1.requireAuth, async (req, res) => {
+router.post('/:cardId/spend', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
     const client = await db_1.default.connect();
     try {
         const { cardId } = req.params;
@@ -279,7 +279,7 @@ router.post('/webhook/spend', async (req, res) => {
     }
 });
 // ── Freeze / Unfreeze ─────────────────────────────────────────────────────────
-router.patch('/:cardId/status', auth_1.requireAuth, async (req, res) => {
+router.patch('/:cardId/status', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
     try {
         const { cardId } = req.params;
         const { status } = req.body;
@@ -301,7 +301,7 @@ router.patch('/:cardId/status', auth_1.requireAuth, async (req, res) => {
     }
 });
 // ── Update spending limits ────────────────────────────────────────────────────
-router.patch('/:cardId/limits', auth_1.requireAuth, async (req, res) => {
+router.patch('/:cardId/limits', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
     try {
         const { cardId } = req.params;
         const { dailyLimit, monthlyLimit } = req.body;

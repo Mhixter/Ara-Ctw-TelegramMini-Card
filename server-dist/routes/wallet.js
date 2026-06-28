@@ -7,6 +7,7 @@ const express_1 = require("express");
 const db_1 = __importDefault(require("../db"));
 const auth_1 = require("../middleware/auth");
 const providerBalance_1 = require("../services/providerBalance");
+const telegramNotify_1 = require("../services/telegramNotify");
 const router = (0, express_1.Router)();
 /**
  * GET /api/wallet
@@ -18,7 +19,7 @@ const router = (0, express_1.Router)();
  * If a provider API key is configured, the authoritative provider balance is
  * fetched and returned alongside the ledger balance for reconciliation.
  */
-router.get('/', auth_1.requireAuth, async (req, res) => {
+router.get('/', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
     const client = await db_1.default.connect();
     try {
         const wallets = await client.query('SELECT * FROM wallets WHERE user_id = $1', [req.user.userId]);
@@ -71,7 +72,7 @@ router.get('/', auth_1.requireAuth, async (req, res) => {
  * GET /api/wallet/transactions/:id
  * Returns full details for a single ledger entry (owned by the requesting user).
  */
-router.get('/transactions/:id', auth_1.requireAuth, async (req, res) => {
+router.get('/transactions/:id', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
     try {
         const userId = req.user.userId;
         const { id } = req.params;
@@ -90,7 +91,7 @@ router.get('/transactions/:id', auth_1.requireAuth, async (req, res) => {
        LEFT JOIN wallets dw ON le.debit_wallet_id  = dw.id
        LEFT JOIN wallets cw ON le.credit_wallet_id = cw.id
        WHERE le.id = $1
-         AND (le.debit_wallet_id = ANY($2) OR le.credit_wallet_id = ANY($2))`, [id, walletIds]);
+         AND (le.debit_wallet_id = ANY($2::uuid[]) OR le.credit_wallet_id = ANY($2::uuid[]))`, [id, walletIds]);
         if (!result.rows.length)
             return res.status(404).json({ error: 'Transaction not found' });
         res.json(result.rows[0]);
@@ -104,7 +105,7 @@ router.get('/transactions/:id', auth_1.requireAuth, async (req, res) => {
  * GET /api/wallet/transactions
  * Returns the last 50 ledger entries for all user wallets.
  */
-router.get('/transactions', auth_1.requireAuth, async (req, res) => {
+router.get('/transactions', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
     try {
         const userId = req.user.userId;
         const wallets = await db_1.default.query('SELECT id FROM wallets WHERE user_id = $1', [userId]);
@@ -117,7 +118,7 @@ router.get('/transactions', auth_1.requireAuth, async (req, res) => {
        FROM ledger_entries le
        LEFT JOIN wallets dw ON le.debit_wallet_id  = dw.id
        LEFT JOIN wallets cw ON le.credit_wallet_id = cw.id
-       WHERE le.debit_wallet_id = ANY($1) OR le.credit_wallet_id = ANY($1)
+       WHERE le.debit_wallet_id = ANY($1::uuid[]) OR le.credit_wallet_id = ANY($1::uuid[])
        ORDER BY le.created_at DESC LIMIT 50`, [walletIds]);
         res.json(txns.rows);
     }
@@ -129,7 +130,7 @@ router.get('/transactions', auth_1.requireAuth, async (req, res) => {
  * POST /api/wallet/fund  (manual / sandbox funding)
  * Idempotent — duplicate references are silently ignored.
  */
-router.post('/fund', auth_1.requireAuth, async (req, res) => {
+router.post('/fund', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
     const client = await db_1.default.connect();
     try {
         const { amount, currency = 'NGN', reference } = req.body;
@@ -165,6 +166,24 @@ router.post('/fund', auth_1.requireAuth, async (req, res) => {
             JSON.stringify({ source: 'manual', currency }),
         ]);
         await client.query('COMMIT');
+        // Fire-and-forget Telegram notification
+        const newBalance = Number(wallet.balance) + Number(amount);
+        db_1.default.query('SELECT telegram_id FROM users WHERE id = $1', [req.user.userId])
+            .then(r => {
+            const tgId = r.rows[0]?.telegram_id;
+            if (tgId) {
+                (0, telegramNotify_1.sendTelegramMessage)(tgId, (0, telegramNotify_1.buildCreditMessage)({
+                    amount: Number(amount),
+                    currency,
+                    newBalance,
+                    reference,
+                    source: 'Manual / Sandbox',
+                    accountNumber: wallet.virtual_account_number,
+                    bankName: wallet.virtual_bank_name,
+                }));
+            }
+        })
+            .catch(() => { });
         res.json({ success: true, message: 'Wallet funded successfully' });
     }
     catch (err) {
@@ -255,6 +274,24 @@ router.post('/webhook/funding', async (req, res) => {
         ]);
         await client.query('COMMIT');
         console.log(`[webhook] Credited ₦${amount} to wallet ${wallet.id} (ref: ${reference})`);
+        // Fire-and-forget Telegram notification
+        const newBalance = Number(wallet.balance) + Number(amount);
+        db_1.default.query('SELECT telegram_id FROM users WHERE id = $1', [wallet.user_id])
+            .then(r => {
+            const tgId = r.rows[0]?.telegram_id;
+            if (tgId) {
+                (0, telegramNotify_1.sendTelegramMessage)(tgId, (0, telegramNotify_1.buildCreditMessage)({
+                    amount,
+                    currency,
+                    newBalance,
+                    reference,
+                    source: `${provider.charAt(0).toUpperCase() + provider.slice(1)} webhook`,
+                    accountNumber: wallet.virtual_account_number,
+                    bankName: wallet.virtual_bank_name,
+                }));
+            }
+        })
+            .catch(() => { });
         res.json({ success: true });
     }
     catch (err) {

@@ -4,10 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BOT_TOKEN = void 0;
+exports.verifyTelegramWidgetData = verifyTelegramWidgetData;
 exports.verifyTelegramInitData = verifyTelegramInitData;
 exports.generateJWT = generateJWT;
 exports.verifyJWT = verifyJWT;
 exports.requireAuth = requireAuth;
+exports.requireUUID = requireUUID;
 exports.requireAdmin = requireAdmin;
 exports.requireRole = requireRole;
 const crypto_1 = __importDefault(require("crypto"));
@@ -19,6 +21,47 @@ const INIT_DATA_MAX_AGE_SECONDS = 24 * 60 * 60; // 24 hours
  * Verifies Telegram WebApp initData using HMAC-SHA256.
  * Also rejects data older than INIT_DATA_MAX_AGE_SECONDS to prevent replay attacks.
  */
+/**
+ * Verifies data from the Telegram Login Widget.
+ * Widget sends: id, first_name, last_name?, username?, photo_url?, auth_date, hash
+ * Verification: HMAC-SHA256(data-check-string, SHA256(bot_token))
+ */
+function verifyTelegramWidgetData(data) {
+    try {
+        if (!exports.BOT_TOKEN)
+            return null;
+        const { hash, ...fields } = data;
+        if (!hash)
+            return null;
+        const authDate = Number(fields.auth_date);
+        const age = Math.floor(Date.now() / 1000) - authDate;
+        if (age > INIT_DATA_MAX_AGE_SECONDS) {
+            console.warn('[auth] Widget data expired (age=%ds)', age);
+            return null;
+        }
+        const dataCheckString = Object.entries(fields)
+            .sort(([a], [b]) => a.localeCompare(b))
+            .map(([k, v]) => `${k}=${v}`)
+            .join('\n');
+        const secretKey = crypto_1.default.createHash('sha256').update(exports.BOT_TOKEN).digest();
+        const computedHash = crypto_1.default
+            .createHmac('sha256', secretKey)
+            .update(dataCheckString)
+            .digest('hex');
+        if (computedHash !== hash) {
+            console.warn('[auth] Widget HMAC mismatch');
+            return null;
+        }
+        return {
+            telegramId: Number(fields.id),
+            username: fields.username,
+            firstName: fields.first_name,
+        };
+    }
+    catch {
+        return null;
+    }
+}
 function verifyTelegramInitData(initData) {
     try {
         if (!exports.BOT_TOKEN)
@@ -74,6 +117,7 @@ function verifyJWT(token) {
         return null;
     }
 }
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 function requireAuth(req, res, next) {
     const authHeader = req.headers.authorization;
     if (!authHeader?.startsWith('Bearer ')) {
@@ -84,6 +128,21 @@ function requireAuth(req, res, next) {
     if (!payload)
         return res.status(401).json({ error: 'Invalid token' });
     req.user = payload;
+    next();
+}
+/**
+ * Must be used after requireAuth on any route that queries DB columns typed UUID.
+ * Rejects sessions where userId is an old integer ID (pre-UUID schema migration).
+ * The client must re-authenticate to receive a fresh UUID-based JWT.
+ */
+function requireUUID(req, res, next) {
+    const uid = req.user?.userId;
+    if (!uid || !UUID_RE.test(uid)) {
+        return res.status(401).json({
+            error: 'Your session is outdated. Please sign in again.',
+            code: 'SESSION_EXPIRED',
+        });
+    }
     next();
 }
 function requireAdmin(req, res, next) {

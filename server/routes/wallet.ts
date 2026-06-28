@@ -110,7 +110,7 @@ router.get('/transactions/:id', requireAuth, requireUUID, async (req: AuthReques
        LEFT JOIN wallets dw ON le.debit_wallet_id  = dw.id
        LEFT JOIN wallets cw ON le.credit_wallet_id = cw.id
        WHERE le.id = $1
-         AND (le.debit_wallet_id = ANY($2) OR le.credit_wallet_id = ANY($2))`,
+         AND (le.debit_wallet_id = ANY($2::uuid[]) OR le.credit_wallet_id = ANY($2::uuid[]))`,
       [id, walletIds]
     );
     if (!result.rows.length) return res.status(404).json({ error: 'Transaction not found' });
@@ -139,7 +139,7 @@ router.get('/transactions', requireAuth, requireUUID, async (req: AuthRequest, r
        FROM ledger_entries le
        LEFT JOIN wallets dw ON le.debit_wallet_id  = dw.id
        LEFT JOIN wallets cw ON le.credit_wallet_id = cw.id
-       WHERE le.debit_wallet_id = ANY($1) OR le.credit_wallet_id = ANY($1)
+       WHERE le.debit_wallet_id = ANY($1::uuid[]) OR le.credit_wallet_id = ANY($1::uuid[])
        ORDER BY le.created_at DESC LIMIT 50`,
       [walletIds]
     );
