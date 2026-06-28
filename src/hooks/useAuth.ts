@@ -27,7 +27,9 @@ export function useAuth() {
     function handleSignout() {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.reload();
+      setUser(null);
+      setLoading(false);
+      setError('Your session expired. Tap Retry to reconnect.');
     }
     window.addEventListener('auth:signout', handleSignout);
     return () => window.removeEventListener('auth:signout', handleSignout);
