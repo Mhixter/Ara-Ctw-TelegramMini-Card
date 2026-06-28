@@ -83,7 +83,7 @@ export function useAuth() {
       if (payload) {
         body = payload;
       } else if (initData && initData.length > 20) {
-        body = { initData };
+        body = { initData, telegramId, username, firstName };
       } else if (telegramId) {
         body = { telegramId, username, firstName };
       } else {
@@ -93,10 +93,15 @@ export function useAuth() {
       }
 
       const data = await authApi.telegram(body);
+
+      if (localStorage.getItem('token')) return;
+
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       setUser(data.user);
     } catch (e: any) {
+      if (localStorage.getItem('token')) return;
+
       const status = e.response?.status;
       const serverMsg = e.response?.data?.error;
 
