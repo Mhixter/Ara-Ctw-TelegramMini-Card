@@ -8,17 +8,13 @@ import AdminPage from './pages/AdminPage';
 import AdminLoginPage from './pages/AdminLoginPage';
 import AuthPage from './components/AuthPage';
 import { useAuth } from './hooks/useAuth';
-import { API_BASE, API_TARGET_HOST } from './lib/api';
+import { API_BASE } from './lib/api';
 import { BoorderPayIcon } from './components/BoorderPayLogo';
 
 type Tab = 'home' | 'cards' | 'kyc' | 'profile' | 'admin';
 
 export default function App() {
-  const {
-    user, loading, error, needsManualLogin,
-    loginWithEmail, registerWithEmail, signInWithGitHub,
-    logout, refreshUser,
-  } = useAuth();
+  const { user, loading, error, isInTelegram, authenticate, logout, refreshUser } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>('home');
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [adminRole, setAdminRole] = useState<string | null>(null);
@@ -47,79 +43,63 @@ export default function App() {
         </div>
         <div style={{ textAlign: 'center' }}>
           <p style={{ fontWeight: 700, fontSize: '18px' }}>BoorderPay</p>
-          <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)', marginTop: '4px' }}>Initializing secure session...</p>
+          <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)', marginTop: '4px' }}>
+            {isInTelegram ? 'Signing you in…' : 'Initializing…'}
+          </p>
         </div>
         <div className="spinner" style={{ width: '24px', height: '24px', borderRadius: '50%', border: '2px solid rgba(108,99,255,0.2)', borderTopColor: 'var(--accent)' }} />
       </div>
     );
   }
 
-  if (needsManualLogin || (!user && !error)) {
+  if (!user) {
     return (
       <AuthPage
-        onLogin={loginWithEmail}
-        onRegister={registerWithEmail}
-        onGitHubSignIn={signInWithGitHub}
+        isInTelegram={isInTelegram}
         error={error}
+        onRetry={authenticate}
       />
     );
   }
 
   if (error && !user) {
-    const is405 = error.includes('405');
     const isNoConnection = error.includes('reach the server');
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px', textAlign: 'center', gap: '12px' }}>
         <div style={{ fontSize: '48px' }}>⚠️</div>
         <h2 style={{ fontWeight: 700 }}>Connection Error</h2>
-        <p style={{ color: 'var(--tg-theme-hint-color)', fontSize: '14px', maxWidth: '300px' }}>
-          {error}
-        </p>
-        {is405 && (
-          <p style={{ color: '#f59e0b', fontSize: '12px', maxWidth: '300px', lineHeight: '1.5' }}>
-            This usually means <strong>VITE_API_URL</strong> is missing in your build settings.
-            Set it to your backend URL and redeploy.
-          </p>
-        )}
+        <p style={{ color: 'var(--tg-theme-hint-color)', fontSize: '14px', maxWidth: '300px' }}>{error}</p>
         {isNoConnection && (
           <p style={{ color: '#f59e0b', fontSize: '12px', maxWidth: '300px', lineHeight: '1.5' }}>
-            The app is trying to reach: <strong style={{ wordBreak: 'break-all' }}>{API_TARGET_HOST}</strong>
+            Trying to reach: <strong style={{ wordBreak: 'break-all' }}>{API_BASE}</strong>
           </p>
         )}
-        <div style={{
-          background: 'rgba(255,255,255,0.05)', borderRadius: '10px',
-          padding: '10px 14px', fontSize: '11px',
-          color: 'var(--tg-theme-hint-color)', maxWidth: '300px',
-          wordBreak: 'break-all', lineHeight: '1.6'
-        }}>
-          <span style={{ opacity: 0.6 }}>API target:</span><br />
-          <strong>{API_BASE}</strong>
-        </div>
-        <button className="btn-primary" onClick={() => window.location.reload()} style={{ maxWidth: '200px', marginTop: '8px' }}>
+        <button className="btn-primary" onClick={authenticate} style={{ maxWidth: '200px', marginTop: '8px' }}>
           Retry
         </button>
       </div>
     );
   }
 
-  if (!user) return null;
-
   const isAdmin = adminRole !== null;
 
   return (
     <Layout activeTab={activeTab} onTabChange={setActiveTab} isAdmin={isAdmin}>
       <div className="fade-in-up" key={activeTab}>
-        {activeTab === 'home' && <HomePage user={user} />}
-        {activeTab === 'cards' && <CardsPage user={user} />}
-        {activeTab === 'kyc' && (
+        {activeTab === 'home'    && <HomePage user={user} />}
+        {activeTab === 'cards'   && <CardsPage user={user} />}
+        {activeTab === 'kyc'     && (
           <KYCPage
             user={user}
             onKycUpdated={(status) => refreshUser({ kycStatus: status as any })}
           />
         )}
-        {activeTab === 'admin' && isAdmin && <AdminPage adminRole={adminRole!} />}
+        {activeTab === 'admin'   && isAdmin && <AdminPage adminRole={adminRole!} />}
         {activeTab === 'profile' && (
-          <ProfilePage user={user} onLogout={() => { logout(); setIsAdminMode(false); setAdminRole(null); }} />
+          <ProfilePage
+            user={user}
+            onLogout={() => { logout(); setIsAdminMode(false); setAdminRole(null); }}
+          />
         )}
       </div>
     </Layout>
