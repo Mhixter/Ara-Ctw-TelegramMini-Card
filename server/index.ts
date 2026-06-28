@@ -190,6 +190,12 @@ async function runMigrations() {
       `ALTER TABLE user_kyc    ADD COLUMN IF NOT EXISTS id_document_url TEXT`,
       `ALTER TABLE user_kyc    ADD COLUMN IF NOT EXISTS liveness_score  NUMERIC(5,2)`,
       `ALTER TABLE user_kyc    ADD COLUMN IF NOT EXISTS verified_at     TIMESTAMPTZ`,
+      `ALTER TABLE user_kyc    ADD COLUMN IF NOT EXISTS country         VARCHAR(10)  DEFAULT 'NG'`,
+      `ALTER TABLE user_kyc    ADD COLUMN IF NOT EXISTS id_type         VARCHAR(30)  DEFAULT 'BVN_NIN'`,
+      `ALTER TABLE user_kyc    ADD COLUMN IF NOT EXISTS id_number_hash  VARCHAR(64)`,
+      `ALTER TABLE user_kyc    ADD COLUMN IF NOT EXISTS updated_at      TIMESTAMPTZ  DEFAULT NOW()`,
+      `ALTER TABLE users       ADD COLUMN IF NOT EXISTS kyc_rejection_reason TEXT`,
+      `ALTER TABLE users       ADD COLUMN IF NOT EXISTS updated_at      TIMESTAMPTZ  DEFAULT NOW()`,
     ];
 
     let ok = 0;
