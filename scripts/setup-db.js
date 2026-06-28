@@ -173,12 +173,20 @@ const PATCHES = [
   `ALTER TABLE cards ADD COLUMN IF NOT EXISTS monthly_limit      NUMERIC(18,2) DEFAULT 5000`,
   `ALTER TABLE cards ADD COLUMN IF NOT EXISTS amount_spent_today NUMERIC(18,2) DEFAULT 0`,
 
-  // user_kyc
+  // user_kyc — base columns
   `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS bvn_hash        VARCHAR(64)`,
   `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS nin_hash        VARCHAR(64)`,
   `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS id_document_url TEXT`,
   `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS liveness_score  NUMERIC(5,2)`,
   `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS verified_at     TIMESTAMPTZ`,
+  // user_kyc — international KYC fields
+  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS country         VARCHAR(100) DEFAULT 'NG'`,
+  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS id_type         VARCHAR(50)  DEFAULT 'BVN_NIN'`,
+  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS id_number_hash  VARCHAR(64)`,
+  `ALTER TABLE user_kyc ADD COLUMN IF NOT EXISTS updated_at      TIMESTAMPTZ  DEFAULT NOW()`,
+  // users — rejection reason + review status
+  `ALTER TABLE users ADD COLUMN IF NOT EXISTS kyc_rejection_reason TEXT`,
+  `ALTER TABLE users ADD COLUMN IF NOT EXISTS updated_at           TIMESTAMPTZ DEFAULT NOW()`,
 ];
 
 async function setup() {

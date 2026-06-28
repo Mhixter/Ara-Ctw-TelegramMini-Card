@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Users, BarChart2, BookOpen, Shield, RefreshCw,
-  ChevronRight, X, TrendingUp, CreditCard, Activity
+  ChevronRight, X, TrendingUp, CreditCard, Activity,
+  Clock, CheckCircle, XCircle, Globe
 } from 'lucide-react';
 import { adminApi } from '../lib/api';
 import { useTelegram } from '../hooks/useTelegram';
@@ -26,10 +27,11 @@ const PURPOSE_LABELS: Record<string, string> = {
 };
 
 const KYC_COLOR: Record<string, string> = {
-  PENDING: 'var(--warning)',
-  TIER_1:  'var(--gold)',
-  TIER_2:  'var(--platinum)',
-  BANNED:  'var(--danger)',
+  PENDING:        'var(--warning)',
+  PENDING_REVIEW: 'var(--accent)',
+  TIER_1:         'var(--gold)',
+  TIER_2:         'var(--platinum)',
+  BANNED:         'var(--danger)',
 };
 
 function fmtNGN(n: number | string) {
@@ -47,6 +49,7 @@ export default function AdminPage({ adminRole }: Props) {
   const tabs = [
     { id: 'overview', label: 'Overview', icon: BarChart2 },
     { id: 'users',    label: 'Users',    icon: Users },
+    ...(canManageKyc ? [{ id: 'kycqueue', label: 'KYC Queue', icon: Clock }] : []),
     ...(canSeeFinance ? [{ id: 'ledger', label: 'Ledger', icon: BookOpen }] : []),
   ];
 
@@ -106,6 +109,36 @@ export default function AdminPage({ adminRole }: Props) {
       haptic('success');
       setShowCreateAdmin(false);
       setNewAdmin({ email: '', password: '', role: 'CUSTOMER_SUPPORT' });
+    },
+  });
+
+  const { data: kycQueueData, isLoading: kycQueueLoading } = useQuery({
+    queryKey: ['admin-kyc-queue'],
+    queryFn: adminApi.kycQueue,
+    enabled: activeSection === 'kycqueue' && canManageKyc,
+    refetchInterval: 30_000,
+  });
+
+  const [rejectState, setRejectState] = useState<{ userId: string; reason: string } | null>(null);
+
+  const approveKycMutation = useMutation({
+    mutationFn: ({ userId, tier }: { userId: string; tier: string }) =>
+      adminApi.approveKyc(userId, tier),
+    onSuccess: () => {
+      haptic('success');
+      qc.invalidateQueries({ queryKey: ['admin-kyc-queue'] });
+      qc.invalidateQueries({ queryKey: ['admin-stats'] });
+    },
+  });
+
+  const rejectKycMutation = useMutation({
+    mutationFn: ({ userId, reason }: { userId: string; reason: string }) =>
+      adminApi.rejectKyc(userId, reason),
+    onSuccess: () => {
+      haptic('success');
+      setRejectState(null);
+      qc.invalidateQueries({ queryKey: ['admin-kyc-queue'] });
+      qc.invalidateQueries({ queryKey: ['admin-stats'] });
     },
   });
 
@@ -284,7 +317,7 @@ export default function AdminPage({ adminRole }: Props) {
           <input className="input-field" placeholder="Search by name…"
             value={search} onChange={e => setSearch(e.target.value)} style={{ marginBottom: '10px' }} />
           <div style={{ display: 'flex', gap: '6px', marginBottom: '16px', overflowX: 'auto', paddingBottom: '4px' }}>
-            {['', 'PENDING', 'TIER_1', 'TIER_2', 'BANNED'].map(s => (
+            {['', 'PENDING', 'PENDING_REVIEW', 'TIER_1', 'TIER_2', 'BANNED'].map(s => (
               <button key={s} onClick={() => setKycFilter(s)} style={{
                 padding: '6px 12px', borderRadius: '16px', border: '1px solid',
                 borderColor: kycFilter === s ? 'var(--accent)' : 'var(--glass-border)',
@@ -329,6 +362,141 @@ export default function AdminPage({ adminRole }: Props) {
               )}
             </div>
           )}
+        </div>
+      )}
+
+      {/* ── KYC REVIEW QUEUE ── */}
+      {activeSection === 'kycqueue' && canManageKyc && (
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <div>
+              <h3 style={{ fontWeight: 700, marginBottom: '2px' }}>KYC Review Queue</h3>
+              <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)' }}>
+                {kycQueueData?.total ?? 0} pending submission{kycQueueData?.total !== 1 ? 's' : ''}
+              </p>
+            </div>
+            <button onClick={() => qc.invalidateQueries({ queryKey: ['admin-kyc-queue'] })}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--tg-theme-hint-color)', padding: '8px' }}>
+              <RefreshCw size={16} />
+            </button>
+          </div>
+
+          {kycQueueLoading ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {[...Array(3)].map((_, i) => <div key={i} className="skeleton" style={{ height: '120px', borderRadius: '14px' }} />)}
+            </div>
+          ) : kycQueueData?.queue?.length === 0 ? (
+            <div className="glass" style={{ padding: '40px', textAlign: 'center' }}>
+              <CheckCircle size={32} color="var(--success)" style={{ margin: '0 auto 12px' }} />
+              <p style={{ fontWeight: 700, marginBottom: '4px' }}>All clear!</p>
+              <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)' }}>No pending KYC submissions.</p>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {kycQueueData?.queue?.map((u: any) => (
+                <div key={u.id} className="glass" style={{ padding: '16px', borderColor: 'rgba(108,99,255,0.25)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                    <div>
+                      <p style={{ fontWeight: 700, fontSize: '15px', marginBottom: '2px' }}>{u.full_name || 'No name'}</p>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                        <span style={{ fontSize: '11px', color: 'var(--tg-theme-hint-color)' }}>
+                          DOB: {u.date_of_birth ? new Date(u.date_of_birth).toLocaleDateString() : '—'}
+                        </span>
+                        {u.country && (
+                          <span style={{ fontSize: '11px', color: 'var(--accent)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '3px' }}>
+                            <Globe size={10} />{u.country}
+                          </span>
+                        )}
+                        {u.id_type && (
+                          <span style={{ fontSize: '10px', padding: '2px 7px', borderRadius: '6px', background: 'rgba(108,99,255,0.12)', color: 'var(--accent)', fontWeight: 600 }}>
+                            {u.id_type.replace(/_/g, ' ')}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '10px', color: 'var(--tg-theme-hint-color)' }}>
+                      {u.created_at ? new Date(u.created_at).toLocaleDateString() : ''}
+                    </span>
+                  </div>
+
+                  {u.id_document_url && (
+                    <a href={u.id_document_url} target="_blank" rel="noopener noreferrer"
+                      style={{ display: 'block', marginBottom: '12px', fontSize: '12px', color: 'var(--accent)', textDecoration: 'none', fontWeight: 500 }}>
+                      📎 View Document →
+                    </a>
+                  )}
+
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button
+                      onClick={() => approveKycMutation.mutate({ userId: u.id, tier: 'TIER_1' })}
+                      disabled={approveKycMutation.isPending}
+                      style={{
+                        flex: 1, padding: '10px', borderRadius: '10px', border: '1px solid rgba(34,197,94,0.3)',
+                        background: 'rgba(34,197,94,0.1)', color: 'var(--success)',
+                        fontSize: '12px', fontWeight: 700, cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                      }}>
+                      <CheckCircle size={13} /> Approve Tier 1
+                    </button>
+                    <button
+                      onClick={() => approveKycMutation.mutate({ userId: u.id, tier: 'TIER_2' })}
+                      disabled={approveKycMutation.isPending}
+                      style={{
+                        flex: 1, padding: '10px', borderRadius: '10px', border: '1px solid rgba(245,185,66,0.3)',
+                        background: 'rgba(245,185,66,0.1)', color: 'var(--gold)',
+                        fontSize: '12px', fontWeight: 700, cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                      }}>
+                      <CheckCircle size={13} /> Approve T2
+                    </button>
+                    <button
+                      onClick={() => setRejectState({ userId: u.id, reason: '' })}
+                      style={{
+                        padding: '10px 14px', borderRadius: '10px', border: '1px solid rgba(239,68,68,0.3)',
+                        background: 'rgba(239,68,68,0.1)', color: 'var(--danger)',
+                        fontSize: '12px', fontWeight: 700, cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                      }}>
+                      <XCircle size={13} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── REJECT MODAL ── */}
+      {rejectState && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.82)', backdropFilter: 'blur(10px)', zIndex: 300, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+          <div className="glass-strong" style={{ width: '100%', maxWidth: '480px', padding: '24px', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
+            <h3 style={{ fontWeight: 700, marginBottom: '8px' }}>Reject KYC Submission</h3>
+            <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)', marginBottom: '16px' }}>
+              The user will be notified with this reason and can resubmit.
+            </p>
+            <textarea
+              className="input-field"
+              rows={3}
+              placeholder="e.g. Document not legible, please resubmit a clearer photo."
+              value={rejectState.reason}
+              onChange={e => setRejectState(s => s ? { ...s, reason: e.target.value } : null)}
+              style={{ resize: 'none', marginBottom: '12px' }}
+            />
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button
+                onClick={() => setRejectState(null)}
+                style={{ flex: 1, padding: '12px', borderRadius: '10px', border: '1px solid var(--glass-border)', background: 'transparent', color: 'var(--tg-theme-hint-color)', fontSize: '13px', cursor: 'pointer', fontWeight: 600 }}>
+                Cancel
+              </button>
+              <button
+                onClick={() => rejectState && rejectKycMutation.mutate({ userId: rejectState.userId, reason: rejectState.reason || 'Identity could not be verified. Please resubmit.' })}
+                disabled={rejectKycMutation.isPending}
+                style={{ flex: 1, padding: '12px', borderRadius: '10px', border: 'none', background: 'var(--danger)', color: '#fff', fontSize: '13px', cursor: 'pointer', fontWeight: 700 }}>
+                {rejectKycMutation.isPending ? 'Rejecting...' : 'Reject Submission'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -421,7 +589,7 @@ export default function AdminPage({ adminRole }: Props) {
                   UPDATE KYC STATUS
                 </p>
                 <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                  {['PENDING', 'TIER_1', 'TIER_2', 'BANNED'].map(s => (
+                  {['PENDING', 'PENDING_REVIEW', 'TIER_1', 'TIER_2', 'BANNED'].map(s => (
                     <button key={s} onClick={() => kycMutation.mutate({ userId: selectedUser, kycStatus: s })} style={{
                       padding: '7px 14px', borderRadius: '8px', border: '1px solid',
                       borderColor: userDetail.user.kyc_status === s ? (KYC_COLOR[s] || 'var(--accent)') : 'var(--glass-border)',

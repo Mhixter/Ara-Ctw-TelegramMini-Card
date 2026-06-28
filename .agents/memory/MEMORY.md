@@ -1,0 +1,2 @@
+- [KYC flow decisions](kyc-flow.md) — PENDING_REVIEW status added; KYC_AUTO_APPROVE env var controls instant vs manual approval
+- [TypeScript req.params issue](ts-params-cast.md) — req.params values need String() cast when passed to typed functions in this Express/ts-node version

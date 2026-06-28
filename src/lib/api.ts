@@ -52,10 +52,12 @@ export const walletApi = {
 
 export const kycApi = {
   status: () => api.get('/kyc/status').then(r => r.data),
-  tier1: (data: { bvn: string; nin: string; fullName: string; dateOfBirth: string }) =>
-    api.post('/kyc/tier1', data).then(r => r.data),
+  tier1: (data: {
+    fullName: string; dateOfBirth: string; country: string;
+    idType: string; idNumber?: string; bvn?: string; nin?: string;
+  }) => api.post('/kyc/tier1', data).then(r => r.data),
   tier2: (data: { documentUrl: string; livenessScore: number }) =>
-    api.post('/kyc/tier2', data).then(r => r.data)
+    api.post('/kyc/tier2', data).then(r => r.data),
 };
 
 export const cardsApi = {
@@ -82,5 +84,10 @@ export const adminApi = {
     api.patch(`/admin/cards/${cardId}/freeze`, { status }).then(r => r.data),
   ledger: (params?: any) => api.get('/admin/ledger', { params }).then(r => r.data),
   createAdmin: (data: { email: string; password: string; role: string }) =>
-    api.post('/admin/admins', data).then(r => r.data)
+    api.post('/admin/admins', data).then(r => r.data),
+  kycQueue: () => api.get('/admin/kyc/queue').then(r => r.data),
+  approveKyc: (userId: string, tier: string) =>
+    api.post(`/admin/kyc/${userId}/approve`, { tier }).then(r => r.data),
+  rejectKyc: (userId: string, reason: string) =>
+    api.post(`/admin/kyc/${userId}/reject`, { reason }).then(r => r.data),
 };
