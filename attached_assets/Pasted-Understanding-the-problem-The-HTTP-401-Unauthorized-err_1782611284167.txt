@@ -1,0 +1,45 @@
+Understanding the problem
+The HTTP 401 Unauthorized error indicates that the request has not been applied because it lacks valid authentication credentials for the target resource. Unlike a 403 Forbidden error (where the server understands who you are but refuses access), a 401 error means the server doesn't know who you are or your session has expired.
+
+Common causes include:
+
+Missing Authorization header in the request.
+An expired or invalid Access Token (JWT) or Session Cookie.
+Incorrect API keys.
+How to verify
+Open Chrome DevTools and go to the Network tab.
+Refresh the page and click on the red failed request.
+Check the Headers sub-tab:
+Request Headers: Look for an Authorization header. If it's missing, the client isn't sending credentials.
+Response Headers: Look for a WWW-Authenticate header. This often tells you what type of authentication the server expects (e.g., Bearer, Basic).
+Check the Response tab to see if the server provided a specific error message (e.g., "Token expired").
+Suggested fix
+Ensure you are passing the correct credentials in your request. If you are using a Bearer token, your code should look like this:
+
+js
+
+const token = 'your_encoded_token_here';
+
+fetch('https://api.example.com/resource', {
+  method: 'GET',
+  headers: {
+    // Ensure the header name and format (Bearer) are correct
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  }
+})
+.then(response => {
+  if (response.status === 401) {
+    console.error('Token expired or invalid. Redirecting to login...');
+  }
+});
+Use code snippets with caution
+
+If the error persists:
+
+Clear site data: In DevTools, go to Application > Storage > Clear site data to remove stale cookies or local storage tokens.
+Check Token Expiration: Decode your JWT (e.g., via jwt.io) to ensure the exp (expiration) claim hasn't passed.
+Summary
+401 means you are unauthenticated.
+Check headers: Verify that the Authorization header is present and correctly formatted.
+Session status: Ensure your login token or session cookie is still valid and not expired.

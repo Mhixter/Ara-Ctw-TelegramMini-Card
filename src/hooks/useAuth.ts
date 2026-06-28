@@ -8,7 +8,7 @@ export interface User {
   username?: string;
   firstName?: string;
   email?: string;
-  kycStatus: 'PENDING' | 'TIER_1' | 'TIER_2' | 'BANNED';
+  kycStatus: 'PENDING' | 'PENDING_REVIEW' | 'TIER_1' | 'TIER_2' | 'BANNED';
   isActive: boolean;
 }
 
