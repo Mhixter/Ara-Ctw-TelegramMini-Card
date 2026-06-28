@@ -8,13 +8,12 @@ import AdminPage from './pages/AdminPage';
 import AdminLoginPage from './pages/AdminLoginPage';
 import AuthPage from './components/AuthPage';
 import { useAuth } from './hooks/useAuth';
-import { API_BASE } from './lib/api';
 import { BoorderPayIcon } from './components/BoorderPayLogo';
 
 type Tab = 'home' | 'cards' | 'kyc' | 'profile' | 'admin';
 
 export default function App() {
-  const { user, loading, error, isInTelegram, authenticate, logout, refreshUser } = useAuth();
+  const { user, loading, error, needsConnect, isInTelegram, authenticate, logout, refreshUser } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>('home');
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [adminRole, setAdminRole] = useState<string | null>(null);
@@ -44,7 +43,7 @@ export default function App() {
         <div style={{ textAlign: 'center' }}>
           <p style={{ fontWeight: 700, fontSize: '18px' }}>BoorderPay</p>
           <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)', marginTop: '4px' }}>
-            {isInTelegram ? 'Signing you in…' : 'Initializing…'}
+            Signing you in…
           </p>
         </div>
         <div className="spinner" style={{ width: '24px', height: '24px', borderRadius: '50%', border: '2px solid rgba(108,99,255,0.2)', borderTopColor: 'var(--accent)' }} />
@@ -56,28 +55,10 @@ export default function App() {
     return (
       <AuthPage
         isInTelegram={isInTelegram}
+        needsConnect={needsConnect}
         error={error}
-        onRetry={authenticate}
+        onConnect={authenticate}
       />
-    );
-  }
-
-  if (error && !user) {
-    const isNoConnection = error.includes('reach the server');
-    return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px', textAlign: 'center', gap: '12px' }}>
-        <div style={{ fontSize: '48px' }}>⚠️</div>
-        <h2 style={{ fontWeight: 700 }}>Connection Error</h2>
-        <p style={{ color: 'var(--tg-theme-hint-color)', fontSize: '14px', maxWidth: '300px' }}>{error}</p>
-        {isNoConnection && (
-          <p style={{ color: '#f59e0b', fontSize: '12px', maxWidth: '300px', lineHeight: '1.5' }}>
-            Trying to reach: <strong style={{ wordBreak: 'break-all' }}>{API_BASE}</strong>
-          </p>
-        )}
-        <button className="btn-primary" onClick={authenticate} style={{ maxWidth: '200px', marginTop: '8px' }}>
-          Retry
-        </button>
-      </div>
     );
   }
 

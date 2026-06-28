@@ -26,11 +26,9 @@ export function useAuth() {
   const [user, setUser] = useState<User | null>(() => {
     try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
   });
-  const [loading, setLoading] = useState(() => {
-    const hasSession = !!(localStorage.getItem('user') && localStorage.getItem('token'));
-    return !hasSession;
-  });
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [needsConnect, setNeedsConnect] = useState(false);
 
   useEffect(() => {
     function handleSignout() {
@@ -38,7 +36,8 @@ export function useAuth() {
       localStorage.removeItem('user');
       setUser(null);
       setLoading(false);
-      setError('Your session expired. Tap Retry to reconnect.');
+      setNeedsConnect(true);
+      setError('Your session expired. Tap Connect to sign in again.');
     }
     window.addEventListener('auth:signout', handleSignout);
     return () => window.removeEventListener('auth:signout', handleSignout);
@@ -47,16 +46,15 @@ export function useAuth() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
-    const hasSession = !!(token && savedUser);
+    const hasValidSession = !!(token && savedUser && !isTokenExpired(token));
 
-    if (hasSession && token && isTokenExpired(token)) {
+    if (hasValidSession) {
+      setLoading(false);
+    } else {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      authenticateTelegram();
-    } else if (!hasSession) {
-      authenticateTelegram();
-    } else {
-      setLoading(false);
+      setUser(null);
+      setNeedsConnect(true);
     }
   }, []);
 
@@ -68,6 +66,7 @@ export function useAuth() {
 
     setLoading(true);
     setError(null);
+    setNeedsConnect(false);
 
     try {
       let body: Record<string, any>;
@@ -77,29 +76,28 @@ export function useAuth() {
         body = { telegramId, username, firstName };
       } else {
         setLoading(false);
+        setNeedsConnect(true);
         return;
       }
 
       const data = await authApi.telegram(body);
 
-      if (localStorage.getItem('token')) return;
-
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       setUser(data.user);
+      setNeedsConnect(false);
     } catch (e: any) {
-      if (localStorage.getItem('token')) return;
-
       const status = e.response?.status;
       const serverMsg = e.response?.data?.error;
 
       if (!e.response) {
-        setError('Cannot reach the server. Check your internet connection.');
+        setError('Cannot reach the server. Check your connection.');
       } else if (status === 500) {
-        setError('Server error. Please try again in a moment.');
+        setError('Server error. Please try again.');
       } else {
         setError(serverMsg || 'Authentication failed. Please try again.');
       }
+      setNeedsConnect(true);
     } finally {
       setLoading(false);
     }
@@ -110,7 +108,7 @@ export function useAuth() {
     localStorage.removeItem('user');
     setUser(null);
     setError(null);
-    authenticateTelegram();
+    setNeedsConnect(true);
   }
 
   function refreshUser(updated: Partial<User>) {
@@ -124,6 +122,7 @@ export function useAuth() {
     user,
     loading,
     error,
+    needsConnect,
     isInTelegram,
     authenticate: authenticateTelegram,
     logout,
