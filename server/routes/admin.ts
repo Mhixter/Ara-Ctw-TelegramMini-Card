@@ -2,6 +2,7 @@ import { Router, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import pool from '../db';
 import { requireAdmin, requireRole, AuthRequest } from '../middleware/auth';
+import { sendTelegramMessage, buildKycApprovalMessage, buildKycRejectionMessage } from '../services/telegramNotify';
 
 async function provisionVirtualAccount(userId: string, client: any): Promise<void> {
   const walletResult = await client.query(
@@ -131,6 +132,15 @@ router.post('/kyc/:userId/approve', requireAdmin, requireRole('SUPER_ADMIN', 'CO
     }
 
     await client.query('COMMIT');
+
+    // Fire-and-forget Telegram notification
+    pool.query('SELECT telegram_id FROM users WHERE id = $1', [userId])
+      .then(r => {
+        const tgId = r.rows[0]?.telegram_id;
+        if (tgId) sendTelegramMessage(tgId, buildKycApprovalMessage(tier));
+      })
+      .catch(() => {});
+
     res.json({ success: true, message: `User approved as ${tier}`, kycStatus: tier });
   } catch (err) {
     await client.query('ROLLBACK');
@@ -152,6 +162,15 @@ router.post('/kyc/:userId/reject', requireAdmin, requireRole('SUPER_ADMIN', 'COM
       [reason, userId]
     );
     if (!result.rows.length) return res.status(404).json({ error: 'User not found' });
+
+    // Fire-and-forget Telegram notification
+    pool.query('SELECT telegram_id FROM users WHERE id = $1', [userId])
+      .then(r => {
+        const tgId = r.rows[0]?.telegram_id;
+        if (tgId) sendTelegramMessage(tgId, buildKycRejectionMessage(reason));
+      })
+      .catch(() => {});
+
     res.json({ success: true, message: 'KYC rejected', user: result.rows[0] });
   } catch {
     res.status(500).json({ error: 'Server error' });

@@ -1,0 +1,687 @@
+horizontalMenu.ts:91 Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'classList')
+    at zM (horizontalMenu.ts:91:13)
+selectTarget @ horizontalMenu.ts:91
+borderpay.saidumuhammed664.workers.dev/api/wallet/transactions:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/wallet/transactions:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/wallet:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/wallet:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/wallet/transactions:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/wallet/transactions:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/wallet:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/wallet:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/kyc/status:1  Failed to load resource: the server responded with a status of 500 ()
+status:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/kyc/status:1  Failed to load resource: the server responded with a status of 500 ()
+status:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/kyc/tier1:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/kyc/tier1:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/kyc/tier1:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/kyc/tier1:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/kyc/tier1:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/kyc/tier1:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/kyc/tier1:1  Failed to load resource: the server responded with a status of 500 ()
+borderpay.saidumuhammed664.workers.dev/api/kyc/tier1:1  Failed to load resource: the server responded with a status of 500 ()
+index-DWTwaH-V.js:11  GET https://borderpay.saidumuhammed664.workers.dev/api/kyc/status 500 (Internal Server Error)
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:11
+xhr @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:11
+Ea @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:13
+Promise.then
+_request @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+request @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:13
+Ma.<computed> @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+status @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+i @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+m @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+start @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+fetch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+#h @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+fetch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+refetch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+onFocus @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+batch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+onFocus @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+await in (anonymous)
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+onFocus @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+t @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+  GET https://borderpay.saidumuhammed664.workers.dev/api/kyc/status 500 (Internal Server Error)
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:11
+xhr @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:11
+Ea @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:13
+Promise.then
+_request @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+request @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:13
+Ma.<computed> @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+status @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+i @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+m @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+start @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+fetch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+#h @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+fetch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+refetch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+onFocus @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+batch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+onFocus @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+await in (anonymous)
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+onFocus @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+t @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+index-DWTwaH-V.js:11  GET https://borderpay.saidumuhammed664.workers.dev/api/kyc/status 500 (Internal Server Error)
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:11
+xhr @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:11
+Ea @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:13
+Promise.then
+_request @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+request @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:13
+Ma.<computed> @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+status @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+i @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+m @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+Promise.then
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+Promise.catch
+m @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+start @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+fetch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+#h @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+fetch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+refetch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+onFocus @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+batch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+onFocus @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+await in (anonymous)
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+onFocus @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+t @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+  GET https://borderpay.saidumuhammed664.workers.dev/api/kyc/status 500 (Internal Server Error)
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:11
+xhr @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:11
+Ea @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:13
+Promise.then
+_request @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+request @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:13
+Ma.<computed> @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+status @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+i @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+m @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+Promise.then
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+Promise.catch
+m @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+start @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+fetch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+#h @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+fetch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+refetch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+onFocus @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+batch @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+onFocus @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+await in (anonymous)
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+onFocus @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+t @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+index-DWTwaH-V.js:11  POST https://borderpay.saidumuhammed664.workers.dev/api/kyc/tier1 500 (Internal Server Error)
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:11
+xhr @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:11
+Ea @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:13
+Promise.then
+_request @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+request @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:13
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+tier1 @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+mutationFn @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+fn @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+m @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+start @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+execute @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+await in execute
+mutate @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+onClick @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+yd @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:8
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:8
+ln @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:8
+wd @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:8
+up @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+cp @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+  POST https://borderpay.saidumuhammed664.workers.dev/api/kyc/tier1 500 (Internal Server Error)
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:11
+xhr @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:11
+Ea @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:13
+Promise.then
+_request @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+request @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:13
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+tier1 @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+mutationFn @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+fn @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+m @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+start @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+execute @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+await in execute
+mutate @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+onClick @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:17
+yd @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:8
+(anonymous) @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:8
+ln @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:8
+wd @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:8
+up @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+cp @ borderpay.saidumuhammed664.workers.dev/assets/index-DWTwaH-V.js:9
+index-DWTwaH-V.js:11  GET https://borderpay.saidumuhammed664.workers.dev/api/wallet/transactions 500 (Internal Server Error)
+(anonymous) @ index-DWTwaH-V.js:11
+xhr @ index-DWTwaH-V.js:11
+Ea @ index-DWTwaH-V.js:13
+Promise.then
+_request @ index-DWTwaH-V.js:17
+request @ index-DWTwaH-V.js:13
+Ma.<computed> @ index-DWTwaH-V.js:17
+(anonymous) @ index-DWTwaH-V.js:9
+transactions @ index-DWTwaH-V.js:17
+i @ index-DWTwaH-V.js:9
+m @ index-DWTwaH-V.js:9
+start @ index-DWTwaH-V.js:9
+fetch @ index-DWTwaH-V.js:9
+#h @ index-DWTwaH-V.js:9
+onSubscribe @ index-DWTwaH-V.js:9
+subscribe @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+Ho @ index-DWTwaH-V.js:8
+Vc @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Uu @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+D @ index-DWTwaH-V.js:1
+postMessage
+O @ index-DWTwaH-V.js:1
+D @ index-DWTwaH-V.js:1
+postMessage
+O @ index-DWTwaH-V.js:1
+e.unstable_scheduleCallback @ index-DWTwaH-V.js:1
+sd @ index-DWTwaH-V.js:8
+od @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+index-DWTwaH-V.js:11  GET https://borderpay.saidumuhammed664.workers.dev/api/wallet 500 (Internal Server Error)
+(anonymous) @ index-DWTwaH-V.js:11
+xhr @ index-DWTwaH-V.js:11
+Ea @ index-DWTwaH-V.js:13
+Promise.then
+_request @ index-DWTwaH-V.js:17
+request @ index-DWTwaH-V.js:13
+Ma.<computed> @ index-DWTwaH-V.js:17
+(anonymous) @ index-DWTwaH-V.js:9
+list @ index-DWTwaH-V.js:17
+i @ index-DWTwaH-V.js:9
+m @ index-DWTwaH-V.js:9
+start @ index-DWTwaH-V.js:9
+fetch @ index-DWTwaH-V.js:9
+#h @ index-DWTwaH-V.js:9
+onSubscribe @ index-DWTwaH-V.js:9
+subscribe @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+Ho @ index-DWTwaH-V.js:8
+Vc @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Uu @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+D @ index-DWTwaH-V.js:1
+postMessage
+O @ index-DWTwaH-V.js:1
+D @ index-DWTwaH-V.js:1
+postMessage
+O @ index-DWTwaH-V.js:1
+e.unstable_scheduleCallback @ index-DWTwaH-V.js:1
+sd @ index-DWTwaH-V.js:8
+od @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+index-DWTwaH-V.js:11  GET https://borderpay.saidumuhammed664.workers.dev/api/wallet/transactions 500 (Internal Server Error)
+(anonymous) @ index-DWTwaH-V.js:11
+xhr @ index-DWTwaH-V.js:11
+Ea @ index-DWTwaH-V.js:13
+Promise.then
+_request @ index-DWTwaH-V.js:17
+request @ index-DWTwaH-V.js:13
+Ma.<computed> @ index-DWTwaH-V.js:17
+(anonymous) @ index-DWTwaH-V.js:9
+transactions @ index-DWTwaH-V.js:17
+i @ index-DWTwaH-V.js:9
+m @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+Promise.then
+(anonymous) @ index-DWTwaH-V.js:9
+Promise.catch
+m @ index-DWTwaH-V.js:9
+start @ index-DWTwaH-V.js:9
+fetch @ index-DWTwaH-V.js:9
+#h @ index-DWTwaH-V.js:9
+onSubscribe @ index-DWTwaH-V.js:9
+subscribe @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+Ho @ index-DWTwaH-V.js:8
+Vc @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Uu @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+D @ index-DWTwaH-V.js:1
+postMessage
+O @ index-DWTwaH-V.js:1
+D @ index-DWTwaH-V.js:1
+postMessage
+O @ index-DWTwaH-V.js:1
+e.unstable_scheduleCallback @ index-DWTwaH-V.js:1
+sd @ index-DWTwaH-V.js:8
+od @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+index-DWTwaH-V.js:11  GET https://borderpay.saidumuhammed664.workers.dev/api/wallet 500 (Internal Server Error)
+(anonymous) @ index-DWTwaH-V.js:11
+xhr @ index-DWTwaH-V.js:11
+Ea @ index-DWTwaH-V.js:13
+Promise.then
+_request @ index-DWTwaH-V.js:17
+request @ index-DWTwaH-V.js:13
+Ma.<computed> @ index-DWTwaH-V.js:17
+(anonymous) @ index-DWTwaH-V.js:9
+list @ index-DWTwaH-V.js:17
+i @ index-DWTwaH-V.js:9
+m @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+Promise.then
+(anonymous) @ index-DWTwaH-V.js:9
+Promise.catch
+m @ index-DWTwaH-V.js:9
+start @ index-DWTwaH-V.js:9
+fetch @ index-DWTwaH-V.js:9
+#h @ index-DWTwaH-V.js:9
+onSubscribe @ index-DWTwaH-V.js:9
+subscribe @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+Ho @ index-DWTwaH-V.js:8
+Vc @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Uu @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+D @ index-DWTwaH-V.js:1
+postMessage
+O @ index-DWTwaH-V.js:1
+D @ index-DWTwaH-V.js:1
+postMessage
+O @ index-DWTwaH-V.js:1
+e.unstable_scheduleCallback @ index-DWTwaH-V.js:1
+sd @ index-DWTwaH-V.js:8
+od @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+index-DWTwaH-V.js:11  GET https://borderpay.saidumuhammed664.workers.dev/api/kyc/status 500 (Internal Server Error)
+(anonymous) @ index-DWTwaH-V.js:11
+xhr @ index-DWTwaH-V.js:11
+Ea @ index-DWTwaH-V.js:13
+Promise.then
+_request @ index-DWTwaH-V.js:17
+request @ index-DWTwaH-V.js:13
+Ma.<computed> @ index-DWTwaH-V.js:17
+(anonymous) @ index-DWTwaH-V.js:9
+status @ index-DWTwaH-V.js:17
+i @ index-DWTwaH-V.js:9
+m @ index-DWTwaH-V.js:9
+start @ index-DWTwaH-V.js:9
+fetch @ index-DWTwaH-V.js:9
+#h @ index-DWTwaH-V.js:9
+onSubscribe @ index-DWTwaH-V.js:9
+subscribe @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+Ho @ index-DWTwaH-V.js:8
+Vc @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Uu @ index-DWTwaH-V.js:8
+Hu @ index-DWTwaH-V.js:8
+Bu @ index-DWTwaH-V.js:8
+Lu @ index-DWTwaH-V.js:8
+_u @ index-DWTwaH-V.js:8
+gu @ index-DWTwaH-V.js:8
+ld @ index-DWTwaH-V.js:8
+id @ index-DWTwaH-V.js:8
+od @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+index-DWTwaH-V.js:11  GET https://borderpay.saidumuhammed664.workers.dev/api/kyc/status 500 (Internal Server Error)
+(anonymous) @ index-DWTwaH-V.js:11
+xhr @ index-DWTwaH-V.js:11
+Ea @ index-DWTwaH-V.js:13
+Promise.then
+_request @ index-DWTwaH-V.js:17
+request @ index-DWTwaH-V.js:13
+Ma.<computed> @ index-DWTwaH-V.js:17
+(anonymous) @ index-DWTwaH-V.js:9
+status @ index-DWTwaH-V.js:17
+i @ index-DWTwaH-V.js:9
+m @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+Promise.then
+(anonymous) @ index-DWTwaH-V.js:9
+Promise.catch
+m @ index-DWTwaH-V.js:9
+start @ index-DWTwaH-V.js:9
+fetch @ index-DWTwaH-V.js:9
+#h @ index-DWTwaH-V.js:9
+onSubscribe @ index-DWTwaH-V.js:9
+subscribe @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+Ho @ index-DWTwaH-V.js:8
+Vc @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Tl @ index-DWTwaH-V.js:8
+El @ index-DWTwaH-V.js:8
+Uu @ index-DWTwaH-V.js:8
+Hu @ index-DWTwaH-V.js:8
+Bu @ index-DWTwaH-V.js:8
+Lu @ index-DWTwaH-V.js:8
+_u @ index-DWTwaH-V.js:8
+gu @ index-DWTwaH-V.js:8
+ld @ index-DWTwaH-V.js:8
+id @ index-DWTwaH-V.js:8
+od @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+index-DWTwaH-V.js:11  POST https://borderpay.saidumuhammed664.workers.dev/api/kyc/tier1 400 (Bad Request)
+(anonymous) @ index-DWTwaH-V.js:11
+xhr @ index-DWTwaH-V.js:11
+Ea @ index-DWTwaH-V.js:13
+Promise.then
+_request @ index-DWTwaH-V.js:17
+request @ index-DWTwaH-V.js:13
+(anonymous) @ index-DWTwaH-V.js:17
+(anonymous) @ index-DWTwaH-V.js:9
+tier1 @ index-DWTwaH-V.js:17
+mutationFn @ index-DWTwaH-V.js:17
+fn @ index-DWTwaH-V.js:9
+m @ index-DWTwaH-V.js:9
+start @ index-DWTwaH-V.js:9
+execute @ index-DWTwaH-V.js:9
+await in execute
+mutate @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+onClick @ index-DWTwaH-V.js:17
+yd @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+ln @ index-DWTwaH-V.js:8
+wd @ index-DWTwaH-V.js:8
+up @ index-DWTwaH-V.js:9
+cp @ index-DWTwaH-V.js:9
+index-DWTwaH-V.js:11  POST https://borderpay.saidumuhammed664.workers.dev/api/kyc/tier1 400 (Bad Request)
+(anonymous) @ index-DWTwaH-V.js:11
+xhr @ index-DWTwaH-V.js:11
+Ea @ index-DWTwaH-V.js:13
+Promise.then
+_request @ index-DWTwaH-V.js:17
+request @ index-DWTwaH-V.js:13
+(anonymous) @ index-DWTwaH-V.js:17
+(anonymous) @ index-DWTwaH-V.js:9
+tier1 @ index-DWTwaH-V.js:17
+mutationFn @ index-DWTwaH-V.js:17
+fn @ index-DWTwaH-V.js:9
+m @ index-DWTwaH-V.js:9
+start @ index-DWTwaH-V.js:9
+execute @ index-DWTwaH-V.js:9
+await in execute
+mutate @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+onClick @ index-DWTwaH-V.js:17
+yd @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+ln @ index-DWTwaH-V.js:8
+wd @ index-DWTwaH-V.js:8
+up @ index-DWTwaH-V.js:9
+cp @ index-DWTwaH-V.js:9
+index-DWTwaH-V.js:11  POST https://borderpay.saidumuhammed664.workers.dev/api/kyc/tier1 500 (Internal Server Error)
+(anonymous) @ index-DWTwaH-V.js:11
+xhr @ index-DWTwaH-V.js:11
+Ea @ index-DWTwaH-V.js:13
+Promise.then
+_request @ index-DWTwaH-V.js:17
+request @ index-DWTwaH-V.js:13
+(anonymous) @ index-DWTwaH-V.js:17
+(anonymous) @ index-DWTwaH-V.js:9
+tier1 @ index-DWTwaH-V.js:17
+mutationFn @ index-DWTwaH-V.js:17
+fn @ index-DWTwaH-V.js:9
+m @ index-DWTwaH-V.js:9
+start @ index-DWTwaH-V.js:9
+execute @ index-DWTwaH-V.js:9
+await in execute
+mutate @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+onClick @ index-DWTwaH-V.js:17
+yd @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+ln @ index-DWTwaH-V.js:8
+wd @ index-DWTwaH-V.js:8
+up @ index-DWTwaH-V.js:9
+cp @ index-DWTwaH-V.js:9
+index-DWTwaH-V.js:11  POST https://borderpay.saidumuhammed664.workers.dev/api/kyc/tier1 500 (Internal Server Error)
+(anonymous) @ index-DWTwaH-V.js:11
+xhr @ index-DWTwaH-V.js:11
+Ea @ index-DWTwaH-V.js:13
+Promise.then
+_request @ index-DWTwaH-V.js:17
+request @ index-DWTwaH-V.js:13
+(anonymous) @ index-DWTwaH-V.js:17
+(anonymous) @ index-DWTwaH-V.js:9
+tier1 @ index-DWTwaH-V.js:17
+mutationFn @ index-DWTwaH-V.js:17
+fn @ index-DWTwaH-V.js:9
+m @ index-DWTwaH-V.js:9
+start @ index-DWTwaH-V.js:9
+execute @ index-DWTwaH-V.js:9
+await in execute
+mutate @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+onClick @ index-DWTwaH-V.js:17
+yd @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+ln @ index-DWTwaH-V.js:8
+wd @ index-DWTwaH-V.js:8
+up @ index-DWTwaH-V.js:9
+cp @ index-DWTwaH-V.js:9
+index-DWTwaH-V.js:11  POST https://borderpay.saidumuhammed664.workers.dev/api/kyc/tier1 400 (Bad Request)
+(anonymous) @ index-DWTwaH-V.js:11
+xhr @ index-DWTwaH-V.js:11
+Ea @ index-DWTwaH-V.js:13
+Promise.then
+_request @ index-DWTwaH-V.js:17
+request @ index-DWTwaH-V.js:13
+(anonymous) @ index-DWTwaH-V.js:17
+(anonymous) @ index-DWTwaH-V.js:9
+tier1 @ index-DWTwaH-V.js:17
+mutationFn @ index-DWTwaH-V.js:17
+fn @ index-DWTwaH-V.js:9
+m @ index-DWTwaH-V.js:9
+start @ index-DWTwaH-V.js:9
+execute @ index-DWTwaH-V.js:9
+await in execute
+mutate @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+onClick @ index-DWTwaH-V.js:17
+yd @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+ln @ index-DWTwaH-V.js:8
+wd @ index-DWTwaH-V.js:8
+up @ index-DWTwaH-V.js:9
+cp @ index-DWTwaH-V.js:9
+index-DWTwaH-V.js:11  POST https://borderpay.saidumuhammed664.workers.dev/api/kyc/tier1 400 (Bad Request)
+(anonymous) @ index-DWTwaH-V.js:11
+xhr @ index-DWTwaH-V.js:11
+Ea @ index-DWTwaH-V.js:13
+Promise.then
+_request @ index-DWTwaH-V.js:17
+request @ index-DWTwaH-V.js:13
+(anonymous) @ index-DWTwaH-V.js:17
+(anonymous) @ index-DWTwaH-V.js:9
+tier1 @ index-DWTwaH-V.js:17
+mutationFn @ index-DWTwaH-V.js:17
+fn @ index-DWTwaH-V.js:9
+m @ index-DWTwaH-V.js:9
+start @ index-DWTwaH-V.js:9
+execute @ index-DWTwaH-V.js:9
+await in execute
+mutate @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+onClick @ index-DWTwaH-V.js:17
+yd @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+ln @ index-DWTwaH-V.js:8
+wd @ index-DWTwaH-V.js:8
+up @ index-DWTwaH-V.js:9
+cp @ index-DWTwaH-V.js:9
+index-DWTwaH-V.js:11  POST https://borderpay.saidumuhammed664.workers.dev/api/kyc/tier1 400 (Bad Request)
+(anonymous) @ index-DWTwaH-V.js:11
+xhr @ index-DWTwaH-V.js:11
+Ea @ index-DWTwaH-V.js:13
+Promise.then
+_request @ index-DWTwaH-V.js:17
+request @ index-DWTwaH-V.js:13
+(anonymous) @ index-DWTwaH-V.js:17
+(anonymous) @ index-DWTwaH-V.js:9
+tier1 @ index-DWTwaH-V.js:17
+mutationFn @ index-DWTwaH-V.js:17
+fn @ index-DWTwaH-V.js:9
+m @ index-DWTwaH-V.js:9
+start @ index-DWTwaH-V.js:9
+execute @ index-DWTwaH-V.js:9
+await in execute
+mutate @ index-DWTwaH-V.js:9
+(anonymous) @ index-DWTwaH-V.js:9
+onClick @ index-DWTwaH-V.js:17
+yd @ index-DWTwaH-V.js:8
+(anonymous) @ index-DWTwaH-V.js:8
+ln @ index-DWTwaH-V.js:8
+wd @ index-DWTwaH-V.js:8
+up @ index-DWTwaH-V.js:9
+cp @ index-DWTwaH-V.js:9

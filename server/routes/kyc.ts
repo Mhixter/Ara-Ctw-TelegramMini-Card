@@ -2,6 +2,7 @@ import { Router, Response } from 'express';
 import crypto from 'crypto';
 import pool from '../db';
 import { requireAuth, requireUUID, AuthRequest } from '../middleware/auth';
+import { sendTelegramMessage, buildKycApprovalMessage, buildKycRejectionMessage } from '../services/telegramNotify';
 
 const router = Router();
 
@@ -127,6 +128,16 @@ router.post('/tier1', requireAuth, requireUUID, async (req: AuthRequest, res: Re
     }
 
     await client.query('COMMIT');
+
+    // Fire-and-forget Telegram notification
+    if (AUTO_APPROVE) {
+      pool.query('SELECT telegram_id FROM users WHERE id = $1', [req.user!.userId])
+        .then(r => {
+          const tgId = r.rows[0]?.telegram_id;
+          if (tgId) sendTelegramMessage(tgId, buildKycApprovalMessage('TIER_1'));
+        })
+        .catch(() => {});
+    }
 
     const message = AUTO_APPROVE
       ? 'Identity verified! Gold Card tier unlocked. Your virtual account is ready.'

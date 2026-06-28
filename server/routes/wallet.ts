@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import pool from '../db';
 import { requireAuth, requireUUID, AuthRequest } from '../middleware/auth';
 import { fetchProviderBalance, verifyProviderWebhookSignature } from '../services/providerBalance';
+import { sendTelegramMessage, buildCreditMessage } from '../services/telegramNotify';
 
 const router = Router();
 
@@ -206,6 +207,26 @@ router.post('/fund', requireAuth, requireUUID, async (req: AuthRequest, res: Res
     );
 
     await client.query('COMMIT');
+
+    // Fire-and-forget Telegram notification
+    const newBalance = Number(wallet.balance) + Number(amount);
+    pool.query('SELECT telegram_id FROM users WHERE id = $1', [req.user!.userId])
+      .then(r => {
+        const tgId = r.rows[0]?.telegram_id;
+        if (tgId) {
+          sendTelegramMessage(tgId, buildCreditMessage({
+            amount: Number(amount),
+            currency,
+            newBalance,
+            reference,
+            source: 'Manual / Sandbox',
+            accountNumber: wallet.virtual_account_number,
+            bankName: wallet.virtual_bank_name,
+          }));
+        }
+      })
+      .catch(() => {});
+
     res.json({ success: true, message: 'Wallet funded successfully' });
   } catch (err) {
     await client.query('ROLLBACK');
@@ -325,6 +346,26 @@ router.post('/webhook/funding', async (req: Request, res: Response) => {
 
     await client.query('COMMIT');
     console.log(`[webhook] Credited ₦${amount} to wallet ${wallet.id} (ref: ${reference})`);
+
+    // Fire-and-forget Telegram notification
+    const newBalance = Number(wallet.balance) + Number(amount);
+    pool.query('SELECT telegram_id FROM users WHERE id = $1', [wallet.user_id])
+      .then(r => {
+        const tgId = r.rows[0]?.telegram_id;
+        if (tgId) {
+          sendTelegramMessage(tgId, buildCreditMessage({
+            amount,
+            currency,
+            newBalance,
+            reference,
+            source: `${provider.charAt(0).toUpperCase() + provider.slice(1)} webhook`,
+            accountNumber: wallet.virtual_account_number,
+            bankName: wallet.virtual_bank_name,
+          }));
+        }
+      })
+      .catch(() => {});
+
     res.json({ success: true });
   } catch (err) {
     await client.query('ROLLBACK');
