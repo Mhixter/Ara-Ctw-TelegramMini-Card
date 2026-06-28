@@ -2,6 +2,15 @@ import { useState, useEffect } from 'react';
 import { authApi } from '../lib/api';
 import { useTelegram } from './useTelegram';
 
+function isTokenExpired(token: string): boolean {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return (payload.exp * 1000) < Date.now();
+  } catch {
+    return true;
+  }
+}
+
 export interface User {
   id: string;
   telegramId?: number;
@@ -36,8 +45,15 @@ export function useAuth() {
   }, []);
 
   useEffect(() => {
-    const hasSession = !!(localStorage.getItem('user') && localStorage.getItem('token'));
-    if (!hasSession) {
+    const token = localStorage.getItem('token');
+    const savedUser = localStorage.getItem('user');
+    const hasSession = !!(token && savedUser);
+
+    if (hasSession && token && isTokenExpired(token)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      authenticateTelegram();
+    } else if (!hasSession) {
       authenticateTelegram();
     } else {
       setLoading(false);
