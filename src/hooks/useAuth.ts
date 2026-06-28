@@ -82,10 +82,13 @@ export function useAuth() {
 
       const data = await authApi.telegram(body);
 
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      setUser(data.user);
-      setNeedsConnect(false);
+console.log('✅ Login response:', data);
+localStorage.setItem('token', data.token);
+console.log('✅ Token saved:', data.token);
+localStorage.setItem('user', JSON.stringify(data.user));
+console.log('✅ User saved:', data.user);
+setUser(data.user);
+setNeedsConnect(false);
     } catch (e: any) {
       const status = e.response?.status;
       const serverMsg = e.response?.data?.error;
