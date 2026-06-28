@@ -66,7 +66,7 @@ router.post('/telegram', async (req: Request, res: Response) => {
     }
 
     const user = await upsertTelegramUser(telegramUser.telegramId, telegramUser.username, telegramUser.firstName);
-    const token = generateJWT(telegramUser.telegramId, user.id);
+    const token = generateJWT(telegramUser.telegramId, String(user.id));
 
     res.json({
       token,
@@ -102,7 +102,7 @@ router.post('/admin/login', async (req: Request, res: Response) => {
     const valid = await bcrypt.compare(password, admin.password_hash);
     if (!valid) return res.status(401).json({ error: 'Invalid credentials.' });
 
-    const token = generateJWT(0, admin.id, admin.role);
+    const token = generateJWT(0, String(admin.id), admin.role);
     res.json({ token, admin: { id: admin.id, email: admin.email, role: admin.role } });
   } catch (err) {
     console.error('[auth] Admin login error:', err);
