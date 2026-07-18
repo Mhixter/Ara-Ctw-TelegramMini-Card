@@ -6,11 +6,12 @@ import KYCPage from './pages/KYCPage';
 import ProfilePage from './pages/ProfilePage';
 import AdminPage from './pages/AdminPage';
 import AdminLoginPage from './pages/AdminLoginPage';
+import SendPage from './pages/SendPage';
 import AuthPage from './components/AuthPage';
 import { useAuth } from './hooks/useAuth';
 import { BoorderPayIcon } from './components/BoorderPayLogo';
 
-type Tab = 'home' | 'cards' | 'kyc' | 'profile' | 'admin';
+type Tab = 'home' | 'send' | 'cards' | 'kyc' | 'profile' | 'admin';
 
 export default function App() {
   const { user, loading, error, needsConnect, isInTelegram, authenticate, logout, refreshUser } = useAuth();
@@ -68,6 +69,7 @@ export default function App() {
     <Layout activeTab={activeTab} onTabChange={setActiveTab} isAdmin={isAdmin}>
       <div className="fade-in-up" key={activeTab}>
         {activeTab === 'home'    && <HomePage user={user} />}
+        {activeTab === 'send'    && <SendPage user={user} />}
         {activeTab === 'cards'   && <CardsPage user={user} />}
         {activeTab === 'kyc'     && (
           <KYCPage

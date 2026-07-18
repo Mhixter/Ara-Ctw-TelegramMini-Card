@@ -10,13 +10,14 @@ const IS_PRODUCTION = !!BOT_TOKEN;
 // ── Helper: upsert Telegram user + wallet ─────────────────────────────────────
 async function upsertTelegramUser(telegramId: number, username?: string, firstName?: string) {
   const result = await pool.query(
-    `INSERT INTO users (telegram_id, first_name, kyc_status, is_active)
-     VALUES ($1, $2, 'PENDING', true)
+    `INSERT INTO users (telegram_id, username, first_name, kyc_status, is_active)
+     VALUES ($1, $2, $3, 'PENDING', true)
      ON CONFLICT (telegram_id) DO UPDATE
        SET first_name = COALESCE(EXCLUDED.first_name, users.first_name),
+           username   = COALESCE(EXCLUDED.username, users.username),
            updated_at = NOW()
      RETURNING *`,
-    [telegramId, firstName || username || null]
+    [telegramId, username || null, firstName || username || null]
   );
   const user = result.rows[0];
 
@@ -71,12 +72,12 @@ router.post('/telegram', async (req: Request, res: Response) => {
     res.json({
       token,
       user: {
-        id: user.id,
+        id:        user.id,
         telegramId: telegramUser.telegramId,
-        username: telegramUser.username,
-        firstName: telegramUser.firstName || user.first_name,
-        kycStatus: user.kyc_status,
-        isActive: user.is_active,
+        username:   telegramUser.username || user.username,
+        firstName:  telegramUser.firstName || user.first_name,
+        kycStatus:  user.kyc_status,
+        isActive:   user.is_active,
       },
     });
   } catch (err) {

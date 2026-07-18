@@ -3,7 +3,6 @@ import axios from 'axios';
 const _apiUrl = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
 
 export const API_BASE = _apiUrl ? `${_apiUrl}/api` : '/api';
-
 export const API_TARGET_HOST = _apiUrl || window.location.origin;
 
 const api = axios.create({ baseURL: API_BASE });
@@ -49,7 +48,13 @@ export const walletApi = {
   fund: (amount: number, currency: string) => {
     const reference = `FUND-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     return api.post('/wallet/fund', { amount, currency, reference }).then(r => r.data);
-  }
+  },
+  /** Search a BorderPay user by Telegram username */
+  searchUser: (query: string) =>
+    api.get('/wallet/users/search', { params: { q: query } }).then(r => r.data),
+  /** Send NGN to another BorderPay user (Telegram-to-Telegram, P2P) */
+  send: (data: { recipientUserId: string; amount: number; note?: string }) =>
+    api.post('/wallet/send', data).then(r => r.data),
 };
 
 export const kycApi = {
@@ -73,7 +78,7 @@ export const cardsApi = {
   updateLimits: (cardId: string, dailyLimit: number, monthlyLimit: number) =>
     api.patch(`/cards/${cardId}/limits`, { dailyLimit, monthlyLimit }).then(r => r.data),
   spend: (cardId: string, amount: number, merchant: string) =>
-    api.post(`/cards/${cardId}/spend`, { amount, merchant }).then(r => r.data)
+    api.post(`/cards/${cardId}/spend`, { amount, merchant }).then(r => r.data),
 };
 
 export const adminApi = {
