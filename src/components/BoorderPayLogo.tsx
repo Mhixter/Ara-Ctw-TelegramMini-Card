@@ -12,12 +12,12 @@ export function BoorderPayIcon({ size = 56 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="bp-grad-a" x1="0" y1="0" x2="56" y2="56" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#6c63ff" />
-          <stop offset="100%" stopColor="#3b82f6" />
+          <stop offset="0%" stopColor="#6C5CE7" />
+          <stop offset="100%" stopColor="#8b5cf6" />
         </linearGradient>
         <linearGradient id="bp-grad-b" x1="0" y1="0" x2="56" y2="56" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#8b5cf6" />
-          <stop offset="100%" stopColor="#6c63ff" />
+          <stop offset="0%" stopColor="#a78bfa" />
+          <stop offset="100%" stopColor="#6C5CE7" />
         </linearGradient>
         <clipPath id="bp-clip">
           <rect width="56" height="56" rx="16" />
@@ -69,11 +69,11 @@ export function BoorderPayIcon({ size = 56 }: { size?: number }) {
 
 export function BoorderPayWordmark({ size = 24 }: { size?: number }) {
   return (
-    <svg width={size * 5.2} height={size} viewBox="0 0 260 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width={size * 4.8} height={size} viewBox="0 0 240 48" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="bp-text-grad" x1="0" y1="0" x2="260" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#6c63ff" />
-          <stop offset="60%" stopColor="#3b82f6" />
+        <linearGradient id="bp-text-grad" x1="0" y1="0" x2="240" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#6C5CE7" />
+          <stop offset="100%" stopColor="#8b5cf6" />
         </linearGradient>
       </defs>
       <text
@@ -85,10 +85,10 @@ export function BoorderPayWordmark({ size = 24 }: { size?: number }) {
         letterSpacing="-1"
         fill="url(#bp-text-grad)"
       >
-        Boorder
+        Border
       </text>
       <text
-        x="167"
+        x="147"
         y="37"
         fontFamily="-apple-system, BlinkMacSystemFont, 'Inter', sans-serif"
         fontWeight="800"

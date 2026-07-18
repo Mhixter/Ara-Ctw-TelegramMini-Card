@@ -36,17 +36,17 @@ export default function App() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-        <div style={{ animation: 'pulse-glow 2s infinite' }}>
-          <BoorderPayIcon size={56} />
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '18px' }}>
+        <div style={{ animation: 'pulse-glow 2s infinite', borderRadius: '20px' }}>
+          <BoorderPayIcon size={60} />
         </div>
         <div style={{ textAlign: 'center' }}>
-          <p style={{ fontWeight: 700, fontSize: '18px' }}>BoorderPay</p>
-          <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)', marginTop: '4px' }}>
+          <p style={{ fontWeight: 800, fontSize: '20px', letterSpacing: '-0.4px' }}>BorderPay</p>
+          <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)', marginTop: '5px' }}>
             Signing you in…
           </p>
         </div>
-        <div className="spinner" style={{ width: '24px', height: '24px', borderRadius: '50%', border: '2px solid rgba(108,99,255,0.2)', borderTopColor: 'var(--accent)' }} />
+        <div className="spinner" style={{ width: '24px', height: '24px', borderRadius: '50%', border: '2px solid rgba(108,92,231,0.2)', borderTopColor: 'var(--accent)' }} />
       </div>
     );
   }

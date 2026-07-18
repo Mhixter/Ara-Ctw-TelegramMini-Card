@@ -126,13 +126,14 @@ export default function KYCPage({ user, onKycUpdated }: Props) {
       <div className="page" style={{ paddingTop: '20px' }}>
         <button
           onClick={() => setStep('overview')}
-          style={{ background: 'none', border: 'none', color: 'var(--accent)', fontSize: '14px', cursor: 'pointer', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '4px', padding: 0 }}
+          style={{ background: 'none', border: 'none', color: 'var(--accent)', fontSize: '14px', fontWeight: 600, cursor: 'pointer', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '5px', padding: 0 }}
         >
           ← Back
         </button>
-        <div style={{ marginBottom: '24px' }}>
-          <h1 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '6px' }}>Identity Verification</h1>
-          <p style={{ fontSize: '14px', color: 'var(--tg-theme-hint-color)' }}>Tier 1 · Gold Card Unlocked ($500/day)</p>
+        <div style={{ marginBottom: '22px' }}>
+          <p style={{ fontSize: '13px', color: 'var(--gold)', fontWeight: 700, marginBottom: '4px' }}>🥇 Tier 1 · Gold</p>
+          <h1 style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '4px' }}>Identity Verification</h1>
+          <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)' }}>Unlock Gold card · $500/day spending limit</p>
         </div>
 
         <div style={{ marginBottom: '16px' }}>
@@ -349,70 +350,111 @@ export default function KYCPage({ user, onKycUpdated }: Props) {
 
   const tiers = [
     {
-      id: 'tier1', label: 'Tier 1 · Gold', desc: 'Identity Verification (worldwide)',
+      id: 'tier1', label: 'Tier 1 · Personal Info', desc: 'Identity Verification (worldwide)',
       limit: '$500/day · $5,000/month',
       done: user.kycStatus === 'TIER_1' || user.kycStatus === 'TIER_2',
       locked: false, color: 'var(--gold)',
+      icon: '👤',
     },
     {
-      id: 'tier2', label: 'Tier 2 · Platinum', desc: 'Document + Liveness Check',
+      id: 'tier2', label: 'Tier 2 · Document Upload', desc: 'Passport, National ID, Driver License',
       limit: '$5,000/day · $50,000/month',
       done: user.kycStatus === 'TIER_2',
-      locked: !['TIER_1'].includes(user.kycStatus),
+      locked: !['TIER_1', 'TIER_2'].includes(user.kycStatus),
       color: 'var(--platinum)',
+      icon: '🪪',
+    },
+    {
+      id: 'tier3', label: 'Tier 3 · Face Liveness', desc: 'AI-powered selfie & biometric check',
+      limit: 'Unlimited · Global access',
+      done: false,
+      locked: true, color: 'var(--accent)',
+      icon: '🤳',
+    },
+    {
+      id: 'tier4', label: 'Tier 4 · Address Proof', desc: 'Utility bill or bank statement',
+      limit: 'Enterprise limits',
+      done: false,
+      locked: true, color: 'var(--success)',
+      icon: '🏠',
     },
   ];
 
+  // Progress: count completed tiers
+  const completedCount = user.kycStatus === 'TIER_2' ? 2 : user.kycStatus === 'TIER_1' ? 1 : 0;
+  const progressPct = (completedCount / 4) * 100;
+
   return (
     <div className="page" style={{ paddingTop: '20px' }}>
-      <div style={{ marginBottom: '28px' }}>
-        <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)' }}>Identity Verification</p>
-        <h1 style={{ fontSize: '22px', fontWeight: 800 }}>KYC Levels</h1>
+      <div style={{ marginBottom: '24px' }}>
+        <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)', marginBottom: '2px' }}>Identity Verification</p>
+        <h1 style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '-0.5px' }}>KYC Levels</h1>
       </div>
 
-      {/* Current Status */}
+      {/* Progress Overview */}
       <div className="glass" style={{
-        padding: '20px', marginBottom: '20px', textAlign: 'center',
+        padding: '20px', marginBottom: '20px',
+        borderRadius: '24px',
         borderColor: isPendingReview
-          ? 'rgba(108,99,255,0.3)'
+          ? 'rgba(108,92,231,0.3)'
           : user.kycStatus === 'TIER_2' ? 'rgba(168,178,200,0.3)'
-          : user.kycStatus === 'TIER_1' ? 'rgba(245,185,66,0.3)' : 'rgba(245,158,11,0.3)',
+          : user.kycStatus === 'TIER_1' ? 'rgba(244,180,0,0.3)' : 'rgba(245,158,11,0.2)',
         background: isPendingReview
-          ? 'rgba(108,99,255,0.06)'
+          ? 'rgba(108,92,231,0.06)'
           : user.kycStatus === 'TIER_2' ? 'rgba(168,178,200,0.06)'
-          : user.kycStatus === 'TIER_1' ? 'rgba(245,185,66,0.06)' : 'rgba(245,158,11,0.06)',
+          : user.kycStatus === 'TIER_1' ? 'rgba(244,180,0,0.06)' : 'rgba(245,158,11,0.05)',
       }}>
-        {isPendingReview
-          ? <Clock size={36} style={{ margin: '0 auto 10px', color: 'var(--accent)' }} />
-          : <Shield size={36} style={{
-              margin: '0 auto 10px',
-              color: user.kycStatus === 'TIER_2' ? 'var(--platinum)'
-                : user.kycStatus === 'TIER_1' ? 'var(--gold)' : 'var(--warning)',
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+          <div style={{
+            width: '52px', height: '52px', borderRadius: '16px', flexShrink: 0,
+            background: isPendingReview ? 'rgba(108,92,231,0.12)' : user.kycStatus === 'TIER_2' ? 'rgba(168,178,200,0.12)' : user.kycStatus === 'TIER_1' ? 'rgba(244,180,0,0.12)' : 'rgba(245,158,11,0.1)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px',
+          }}>
+            {isPendingReview ? '⏳' : user.kycStatus === 'TIER_2' ? '🏆' : user.kycStatus === 'TIER_1' ? '🥇' : '🔓'}
+          </div>
+          <div style={{ flex: 1 }}>
+            <p style={{ fontWeight: 800, fontSize: '16px', marginBottom: '3px', letterSpacing: '-0.3px' }}>
+              {isPendingReview ? 'Under Review' :
+                user.kycStatus === 'PENDING' ? 'Not Verified' :
+                user.kycStatus === 'TIER_1' ? 'Gold Verified ✓' :
+                user.kycStatus === 'TIER_2' ? 'Platinum Verified ✓' : 'Account Suspended'}
+            </p>
+            <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', lineHeight: 1.4 }}>
+              {isPendingReview
+                ? 'Your documents are being reviewed. Usually within 24 hours.'
+                : kycData?.kyc?.full_name
+                  ? `Verified as ${kycData.kyc.full_name}`
+                  : 'Complete verification to unlock virtual cards'}
+            </p>
+          </div>
+        </div>
+
+        {/* Progress bar */}
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+            <span style={{ fontSize: '11px', color: 'var(--tg-theme-hint-color)', fontWeight: 600 }}>Verification Progress</span>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent)' }}>{completedCount}/4 tiers</span>
+          </div>
+          <div style={{ height: '6px', borderRadius: '3px', background: 'var(--glass-border)', overflow: 'hidden' }}>
+            <div style={{
+              height: '100%', borderRadius: '3px',
+              background: user.kycStatus === 'TIER_2'
+                ? 'linear-gradient(90deg, var(--gold), var(--platinum))'
+                : user.kycStatus === 'TIER_1'
+                  ? 'linear-gradient(90deg, var(--gold-dark), var(--gold))'
+                  : 'linear-gradient(90deg, var(--accent), var(--accent-2))',
+              width: `${progressPct}%`,
+              transition: 'width 0.8s cubic-bezier(0.2, 0, 0, 1)',
             }} />
-        }
-        <p style={{ fontWeight: 700, fontSize: '16px', marginBottom: '4px' }}>
-          {isPendingReview ? 'Under Review' :
-            user.kycStatus === 'PENDING' ? 'Unverified' :
-            user.kycStatus === 'TIER_1' ? 'Gold Verified' :
-            user.kycStatus === 'TIER_2' ? 'Platinum Verified' : 'Account Suspended'}
-        </p>
-        <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)' }}>
-          {isPendingReview
-            ? 'Your documents are being reviewed. Usually within 24 hours.'
-            : kycData?.kyc?.full_name || 'Complete verification to unlock cards'}
-        </p>
-        {isPendingReview && kycData?.kyc?.country && (
-          <span style={{ marginTop: '8px', display: 'inline-block', fontSize: '11px', color: 'var(--accent)', fontWeight: 600 }}>
-            {COUNTRIES.find(c => c.code === kycData.kyc.country)?.name || kycData.kyc.country}
-          </span>
-        )}
+          </div>
+        </div>
       </div>
 
       {/* Rejection notice */}
       {rejectionReason && user.kycStatus === 'PENDING' && (
-        <div className="glass" style={{ padding: '14px', marginBottom: '16px', borderColor: 'rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.06)' }}>
+        <div className="glass" style={{ padding: '14px', marginBottom: '16px', borderColor: 'rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.06)', borderRadius: '16px' }}>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-            <AlertCircle size={14} color="var(--danger)" style={{ flexShrink: 0, marginTop: '1px' }} />
+            <AlertCircle size={14} color="var(--danger)" style={{ flexShrink: 0, marginTop: '2px' }} />
             <div>
               <p style={{ fontSize: '12px', fontWeight: 700, color: 'var(--danger)', marginBottom: '4px' }}>Verification Not Approved</p>
               <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', lineHeight: 1.5 }}>{rejectionReason}</p>
@@ -421,49 +463,91 @@ export default function KYCPage({ user, onKycUpdated }: Props) {
         </div>
       )}
 
-      {/* Tiers */}
-      {!isPendingReview && tiers.map(tier => (
-        <div key={tier.id} className="glass" style={{
-          marginBottom: '12px', padding: '18px 16px',
-          borderColor: tier.done ? `${tier.color}40` : 'var(--glass-border)',
-          background: tier.done ? `${tier.color}08` : 'var(--glass-bg)',
-          opacity: tier.locked ? 0.5 : 1,
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div style={{
-              width: '44px', height: '44px', borderRadius: '50%', flexShrink: 0,
-              background: tier.done ? `${tier.color}20` : 'rgba(255,255,255,0.06)',
-              border: `2px solid ${tier.done ? tier.color : 'rgba(255,255,255,0.1)'}`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              {tier.done
-                ? <CheckCircle size={22} color={tier.color} />
-                : <Shield size={22} color={tier.locked ? 'var(--tg-theme-hint-color)' : tier.color} strokeWidth={1.5} />}
-            </div>
-            <div style={{ flex: 1 }}>
-              <p style={{ fontWeight: 700, fontSize: '14px', marginBottom: '2px', color: tier.done ? tier.color : 'var(--tg-theme-text-color)' }}>
-                {tier.label}
-              </p>
-              <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)' }}>{tier.desc}</p>
-              <p style={{ fontSize: '11px', fontWeight: 600, color: tier.color, marginTop: '4px' }}>{tier.limit}</p>
-            </div>
-            {!tier.done && !tier.locked && (
-              <button
-                onClick={() => setStep(tier.id as 'tier1' | 'tier2')}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: tier.color, padding: '8px' }}
-              >
-                <ChevronRight size={20} />
-              </button>
-            )}
-          </div>
-        </div>
-      ))}
+      {/* Tier Timeline */}
+      {!isPendingReview && (
+        <div style={{ position: 'relative' }}>
+          {/* Vertical line */}
+          <div style={{
+            position: 'absolute', left: '21px', top: '28px', bottom: '28px',
+            width: '2px', background: 'var(--glass-border)', borderRadius: '1px',
+          }} />
 
-      {/* Info box */}
-      <div className="glass" style={{ padding: '16px', marginTop: '8px', background: 'rgba(108,99,255,0.06)', borderColor: 'rgba(108,99,255,0.2)' }}>
-        <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', lineHeight: 1.6 }}>
-          🌍 <strong>Global verification.</strong> We accept government-issued ID from 180+ countries. Your data is encrypted with AES-256-GCM and ID numbers are stored only as irreversible hashes.
-        </p>
+          {tiers.map((tier, index) => (
+            <div key={tier.id} style={{ display: 'flex', gap: '14px', marginBottom: '12px', alignItems: 'flex-start' }}>
+              {/* Timeline dot */}
+              <div style={{
+                width: '44px', height: '44px', borderRadius: '50%', flexShrink: 0,
+                background: tier.done ? `${tier.color}20` : tier.locked ? 'rgba(255,255,255,0.04)' : `${tier.color}10`,
+                border: `2px solid ${tier.done ? tier.color : tier.locked ? 'var(--glass-border)' : tier.color}`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: tier.locked ? '16px' : '18px',
+                zIndex: 1, position: 'relative',
+                transition: 'all 0.2s',
+                opacity: tier.locked ? 0.55 : 1,
+              }}>
+                {tier.done ? '✓' : tier.locked ? '🔒' : tier.icon}
+              </div>
+
+              {/* Tier card */}
+              <div
+                className="glass"
+                style={{
+                  flex: 1, padding: '14px 16px',
+                  borderColor: tier.done ? `${tier.color}35` : tier.locked ? 'var(--glass-border)' : `${tier.color}25`,
+                  background: tier.done ? `${tier.color}06` : 'var(--glass-bg)',
+                  opacity: tier.locked ? 0.6 : 1,
+                  borderRadius: '18px',
+                  transition: 'all 0.2s',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontWeight: 700, fontSize: '14px', marginBottom: '2px', color: tier.done ? tier.color : 'var(--tg-theme-text-color)', letterSpacing: '-0.2px' }}>
+                      {tier.label}
+                      {tier.done && <span style={{ marginLeft: '6px', fontSize: '12px' }}>✓</span>}
+                    </p>
+                    <p style={{ fontSize: '11px', color: 'var(--tg-theme-hint-color)', marginBottom: '5px' }}>{tier.desc}</p>
+                    <span style={{
+                      fontSize: '10px', fontWeight: 700, color: tier.color,
+                      background: `${tier.color}12`, padding: '2px 8px', borderRadius: '8px',
+                      border: `1px solid ${tier.color}20`,
+                    }}>
+                      {tier.limit}
+                    </span>
+                  </div>
+                  {!tier.done && !tier.locked && (
+                    <button
+                      onClick={() => setStep(tier.id as 'tier1' | 'tier2')}
+                      style={{
+                        padding: '8px 14px', borderRadius: '10px', border: `1px solid ${tier.color}40`,
+                        background: `${tier.color}10`, color: tier.color,
+                        fontSize: '12px', fontWeight: 700, cursor: 'pointer', flexShrink: 0, marginLeft: '10px',
+                        display: 'flex', alignItems: 'center', gap: '4px',
+                      }}
+                    >
+                      Start <ChevronRight size={14} />
+                    </button>
+                  )}
+                  {tier.done && (
+                    <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: `${tier.color}20`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: '10px' }}>
+                      <CheckCircle size={16} color={tier.color} />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Encryption notice */}
+      <div className="glass" style={{ padding: '14px 16px', marginTop: '8px', background: 'rgba(108,92,231,0.05)', borderColor: 'rgba(108,92,231,0.18)', borderRadius: '16px' }}>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+          <span style={{ fontSize: '16px', flexShrink: 0 }}>🔐</span>
+          <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', lineHeight: 1.6 }}>
+            <strong style={{ color: 'var(--tg-theme-text-color)' }}>End-to-end encrypted.</strong> We accept government-issued ID from 180+ countries. Data is encrypted with AES-256-GCM and ID numbers are stored only as irreversible SHA-256 hashes.
+          </p>
+        </div>
       </div>
     </div>
   );
