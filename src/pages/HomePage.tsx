@@ -1,367 +1,459 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  ArrowDownCircle, ArrowUpCircle, RefreshCw, Plus,
-  AlertCircle, Wallet, ChevronRight, Copy, CheckCircle2
+  Eye, EyeOff, Copy, CheckCircle2, ArrowDownCircle, ArrowUpCircle,
+  ChevronRight, Bell, Menu, Wallet, RefreshCw, QrCode, Building2,
+  Send, CreditCard, BarChart2, ArrowRightLeft
 } from 'lucide-react';
 import { walletApi } from '../lib/api';
 import { User } from '../hooks/useAuth';
 import { useTelegram } from '../hooks/useTelegram';
 import TransactionReceipt from '../components/TransactionReceipt';
 
-interface Props { user: User; }
+type Tab = 'home' | 'send' | 'cards' | 'kyc' | 'profile' | 'admin';
+interface Props { user: User; onNavigate?: (tab: Tab) => void; }
 
-export default function HomePage({ user }: Props) {
+type View = 'home' | 'fund';
+
+export default function HomePage({ user, onNavigate }: Props) {
   const qc = useQueryClient();
   const { haptic } = useTelegram();
-  const [fundModal, setFundModal]   = useState(false);
-  const [fundAmount, setFundAmount] = useState('');
-  const [receiptTx, setReceiptTx]   = useState<any | null>(null);
-  const [copied, setCopied]         = useState(false);
+  const [view, setView]           = useState<View>('home');
+  const [balanceHidden, setBalanceHidden] = useState(false);
+  const [copied, setCopied]       = useState(false);
+  const [receiptTx, setReceiptTx] = useState<any | null>(null);
 
   const { data: wallets = [], isLoading: walletsLoading } = useQuery({
-    queryKey: ['wallets'],
-    queryFn: walletApi.list,
-    refetchInterval: 30_000,
+    queryKey: ['wallets'], queryFn: walletApi.list, refetchInterval: 30_000,
   });
-
   const { data: transactions = [], isLoading: txLoading } = useQuery({
-    queryKey: ['transactions'],
-    queryFn: walletApi.transactions,
-    refetchInterval: 30_000,
-  });
-
-  const fundMutation = useMutation({
-    mutationFn: () => walletApi.fund(parseFloat(fundAmount), 'NGN'),
-    onSuccess: () => {
-      haptic('success');
-      setFundModal(false);
-      setFundAmount('');
-      qc.invalidateQueries({ queryKey: ['wallets'] });
-      qc.invalidateQueries({ queryKey: ['transactions'] });
-    },
+    queryKey: ['transactions'], queryFn: walletApi.transactions, refetchInterval: 30_000,
   });
 
   const ngnWallet = wallets.find((w: any) => w.currency === 'NGN');
-  const kycBanner = user.kycStatus === 'PENDING';
   const balance   = Number(ngnWallet?.balance || 0);
 
   function copyAccount() {
     if (!ngnWallet?.virtual_account_number) return;
     navigator.clipboard.writeText(ngnWallet.virtual_account_number).then(() => {
-      setCopied(true);
-      haptic('success');
-      setTimeout(() => setCopied(false), 2000);
+      setCopied(true); haptic('success'); setTimeout(() => setCopied(false), 2000);
     });
   }
 
   function purposeLabel(p: string) {
     const map: Record<string, string> = {
-      WALLET_FUNDING:    'Wallet Funded',
-      CARD_ISSUANCE:     'Card Issued',
-      CARD_SPEND:        'Card Purchase',
-      CARD_FUNDING:      'Card Funded',
-      MERCHANT_PURCHASE: 'Purchase',
-      FEE_CHARGE:        'Fee',
-      P2P_SEND:          'Sent to User',
-      P2P_RECEIVE:       'Received',
+      WALLET_FUNDING: 'Wallet Funded', CARD_ISSUANCE: 'Card Issued',
+      CARD_SPEND: 'Card Purchase', CARD_FUNDING: 'Card Funded',
+      MERCHANT_PURCHASE: 'Purchase', FEE_CHARGE: 'Fee',
+      P2P_SEND: 'Sent to User', P2P_RECEIVE: 'Received',
     };
     return map[p] || p;
   }
 
-  function txColor(tx: any) {
-    if (tx.credit_wallet_id) return 'var(--emerald)';
-    if (tx.purpose === 'FEE_CHARGE') return 'var(--danger)';
-    return 'var(--danger)';
-  }
-
   const greet = (() => {
     const h = new Date().getHours();
-    if (h < 12) return 'Good morning';
-    if (h < 17) return 'Good afternoon';
-    return 'Good evening';
+    if (h < 12) return 'Good morning'; if (h < 17) return 'Good afternoon'; return 'Good evening';
   })();
 
-  return (
-    <div className="page" style={{ paddingTop: '20px' }}>
-
-      {/* ── Header ── */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <div>
-          <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)', fontWeight: 600 }}>{greet} 👋</p>
-          <h1 style={{ fontSize: '22px', fontWeight: 900, letterSpacing: '-0.5px', marginTop: '2px' }}>
-            {user.firstName || user.username || 'Welcome'}
-          </h1>
-        </div>
-        <div className="avatar">
-          {(user.firstName?.[0] || user.username?.[0] || 'B').toUpperCase()}
-        </div>
-      </div>
-
-      {/* ── KYC Banner ── */}
-      {kycBanner && (
-        <div className="glass fade-in-up" style={{
-          padding: '14px 16px', marginBottom: '18px',
-          display: 'flex', gap: '12px', alignItems: 'center',
-          borderColor: 'rgba(245,158,11,0.3)', background: 'rgba(245,158,11,0.06)',
-          borderRadius: '18px',
-        }}>
-          <AlertCircle size={20} color="var(--warning)" style={{ flexShrink: 0 }} />
-          <div>
-            <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--warning)' }}>Identity not verified</p>
-            <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', marginTop: '2px' }}>
-              Verify your identity to unlock cards &amp; higher limits
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* ── Balance card ── */}
-      <div className="glass" style={{
-        padding: '24px',
-        marginBottom: '14px',
-        background: 'linear-gradient(135deg, rgba(108,92,231,0.12), rgba(34,197,94,0.06))',
-        borderColor: 'rgba(108,92,231,0.2)',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
-        {/* Glow blob */}
+  // ── Fund Wallet sub-view ─────────────────────────────────────────────────
+  if (view === 'fund') {
+    const fundingTxs = transactions.filter((t: any) => t.purpose === 'WALLET_FUNDING');
+    return (
+      <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingBottom: '100px' }}>
+        {/* Header */}
         <div style={{
-          position: 'absolute', top: '-30px', right: '-20px',
-          width: '120px', height: '120px', borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(108,92,231,0.2), transparent 70%)',
-          pointerEvents: 'none',
-        }} />
-
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{
-              width: '32px', height: '32px', borderRadius: '10px',
-              background: 'rgba(34,197,94,0.18)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <Wallet size={15} color="var(--emerald)" />
-            </div>
-            <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--tg-theme-hint-color)', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-              NGN Wallet
-            </span>
+          padding: '20px 20px 0', display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px',
+        }}>
+          <button onClick={() => setView('home')} className="icon-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M19 12H5M12 19l-7-7 7-7" stroke="var(--text)" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </button>
+          <div>
+            <h1 style={{ fontSize: '20px', fontWeight: 900, color: 'var(--text)' }}>Fund Wallet</h1>
+            <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Add money to your wallet</p>
           </div>
-          {ngnWallet && <span className="badge badge-success" style={{ fontSize: '10px' }}>Active</span>}
         </div>
 
-        {walletsLoading ? (
-          <div className="skeleton" style={{ height: '48px', borderRadius: '10px', marginBottom: '16px' }} />
-        ) : (
-          <>
-            <p style={{
-              fontSize: '38px', fontWeight: 900, lineHeight: 1,
-              color: 'var(--tg-theme-text-color)', marginBottom: '14px',
-              letterSpacing: '-2px',
-            }}>
-              <span style={{ fontSize: '22px', fontWeight: 700, opacity: 0.7, letterSpacing: 0 }}>₦</span>
-              {balance.toLocaleString('en-NG', { minimumFractionDigits: 2 })}
-            </p>
+        {/* Balance card */}
+        <div style={{ padding: '0 20px', marginBottom: '20px' }}>
+          <div style={{
+            borderRadius: '24px', padding: '24px',
+            background: 'linear-gradient(135deg, #6C5CE7 0%, #8B5CF6 60%, #A78BFA 100%)',
+            color: '#fff', position: 'relative', overflow: 'hidden',
+            boxShadow: '0 12px 40px rgba(108,92,231,0.4)',
+          }}>
+            <div style={{ position: 'absolute', top: -40, right: -40, width: 180, height: 180, borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
+            <div style={{ position: 'absolute', bottom: -30, left: -20, width: 140, height: 140, borderRadius: '50%', background: 'rgba(255,255,255,0.04)' }} />
+            <p style={{ fontSize: '13px', opacity: 0.8, marginBottom: '6px' }}>Your Wallet Balance</p>
+            <h2 style={{ fontSize: '36px', fontWeight: 900, letterSpacing: '-1.5px' }}>
+              {balanceHidden ? '₦ ••••••' : `₦${balance.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`}
+            </h2>
+          </div>
+        </div>
 
-            {/* Virtual account row */}
-            {ngnWallet?.virtual_account_number ? (
-              <div style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                padding: '10px 14px', borderRadius: '14px',
-                background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)',
-              }}>
+        <div style={{ padding: '0 20px' }}>
+          {/* Virtual Account Details */}
+          {ngnWallet?.virtual_account_number ? (
+            <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '20px', marginBottom: '16px', boxShadow: 'var(--shadow-sm)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <h3 style={{ fontSize: '15px', fontWeight: 800 }}>Virtual Account Details</h3>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--emerald)', background: 'rgba(34,197,94,0.1)', padding: '3px 10px', borderRadius: '20px' }}>● Active</span>
+              </div>
+              <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '12px' }}>Fund your wallet using your unique virtual account</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <p style={{ fontSize: '10px', color: 'var(--tg-theme-hint-color)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '2px' }}>
-                    {ngnWallet.virtual_bank_name || 'Virtual Account'}
-                  </p>
-                  <p style={{ fontSize: '15px', fontWeight: 800, letterSpacing: '1px', fontFamily: 'monospace' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Building2 size={18} color="var(--purple)" />
+                    </div>
+                    <div>
+                      <p style={{ fontSize: '13px', fontWeight: 800 }}>{ngnWallet.virtual_bank_name || 'Your Bank'}</p>
+                      <span style={{ fontSize: '10px', background: 'rgba(108,92,231,0.1)', color: 'var(--purple)', padding: '1px 6px', borderRadius: '6px', fontWeight: 700 }}>Recommended</span>
+                    </div>
+                  </div>
+                  <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>Account Number</p>
+                  <p style={{ fontSize: '22px', fontWeight: 900, letterSpacing: '2px', color: 'var(--text)' }}>
                     {ngnWallet.virtual_account_number}
                   </p>
+                  <button onClick={copyAccount} style={{
+                    display: 'flex', alignItems: 'center', gap: '4px', marginTop: '8px',
+                    background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit',
+                    color: copied ? 'var(--emerald)' : 'var(--purple)', fontSize: '13px', fontWeight: 700, padding: 0,
+                  }}>
+                    {copied ? <><CheckCircle2 size={14} /> Copied!</> : <><Copy size={14} /> Copy account number</>}
+                  </button>
                 </div>
-                <button
-                  onClick={copyAccount}
-                  style={{
-                    background: copied ? 'rgba(34,197,94,0.15)' : 'rgba(255,255,255,0.07)',
-                    border: copied ? '1px solid rgba(34,197,94,0.3)' : '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '10px', padding: '8px 12px',
-                    cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px',
-                    color: copied ? 'var(--emerald)' : 'var(--tg-theme-hint-color)',
-                    fontSize: '12px', fontWeight: 700, fontFamily: 'inherit',
-                    transition: 'all 0.2s',
-                  }}
-                >
-                  {copied
-                    ? <><CheckCircle2 size={13} /> Copied!</>
-                    : <><Copy size={13} /> Copy</>
-                  }
-                </button>
-              </div>
-            ) : (
-              <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', marginTop: '4px' }}>
-                Complete KYC to receive a dedicated bank account number
-              </p>
-            )}
-          </>
-        )}
-      </div>
-
-      {/* ── Quick actions ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '28px' }}>
-        <button className="btn-primary" style={{ padding: '14px', fontSize: '14px' }} onClick={() => setFundModal(true)}>
-          <Plus size={16} /> Add Money
-        </button>
-        <button className="btn-ghost" style={{ padding: '14px', fontSize: '14px' }} onClick={() => qc.invalidateQueries()}>
-          <RefreshCw size={16} /> Refresh
-        </button>
-      </div>
-
-      {/* ── Recent transactions ── */}
-      <div className="section-header">
-        <h2 className="section-title">Recent Activity</h2>
-        <span style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', fontWeight: 600 }}>{transactions.length} txns</span>
-      </div>
-
-      {txLoading ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {[...Array(4)].map((_, i) => <div key={i} className="skeleton" style={{ height: '64px', borderRadius: '18px' }} />)}
-        </div>
-      ) : transactions.length === 0 ? (
-        <div className="glass" style={{ padding: '36px 24px', textAlign: 'center', borderRadius: '24px' }}>
-          <div style={{ fontSize: '40px', marginBottom: '12px' }}>💸</div>
-          <p style={{ fontWeight: 700, marginBottom: '4px' }}>No transactions yet</p>
-          <p style={{ color: 'var(--tg-theme-hint-color)', fontSize: '13px' }}>Add money to get started</p>
-        </div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {transactions.slice(0, 20).map((tx: any) => {
-            const isCredit = !!tx.credit_wallet_id;
-            const meta = (() => { try { return JSON.parse(tx.metadata || '{}'); } catch { return {}; } })();
-            const color = txColor(tx);
-            return (
-              <div
-                key={tx.id}
-                className="glass"
-                onClick={() => setReceiptTx(tx)}
-                style={{
-                  padding: '14px 16px', display: 'flex', alignItems: 'center',
-                  gap: '12px', cursor: 'pointer', borderRadius: '20px',
-                  transition: 'opacity 0.15s, transform 0.15s',
-                }}
-                onPointerDown={e => (e.currentTarget.style.opacity = '0.65')}
-                onPointerUp={e => (e.currentTarget.style.opacity = '1')}
-                onPointerLeave={e => (e.currentTarget.style.opacity = '1')}
-              >
-                <div style={{
-                  width: '40px', height: '40px', borderRadius: '50%', flexShrink: 0,
-                  background: isCredit ? 'rgba(34,197,94,0.12)' : 'rgba(239,68,68,0.10)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  {isCredit
-                    ? <ArrowDownCircle size={17} color="var(--emerald)" />
-                    : <ArrowUpCircle  size={17} color="var(--danger)"  />
-                  }
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: '13px', fontWeight: 700, marginBottom: '2px', letterSpacing: '-0.1px' }}>
-                    {purposeLabel(tx.purpose)}
-                  </p>
-                  <p style={{ fontSize: '11px', color: 'var(--tg-theme-hint-color)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {meta.merchant
-                      ? `${meta.merchant}${meta.mask_pan ? ` · ${meta.mask_pan}` : ''}`
-                      : meta.recipientName
-                        ? `To ${meta.recipientName}`
-                        : meta.senderName
-                          ? `From ${meta.senderName}`
-                          : new Date(tx.created_at).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
-                    }
-                  </p>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-                  <p style={{ fontSize: '14px', fontWeight: 800, color, letterSpacing: '-0.3px' }}>
-                    {isCredit ? '+' : '-'}₦{Number(tx.amount).toLocaleString('en-NG')}
-                  </p>
-                  <ChevronRight size={14} color="var(--tg-theme-hint-color)" />
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ width: '72px', height: '72px', background: 'var(--surface-2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <QrCode size={36} color="var(--text-muted)" />
+                  </div>
+                  <p style={{ fontSize: '10px', color: 'var(--text-hint)', marginTop: '4px' }}>Scan to pay</p>
                 </div>
               </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* ── Transaction receipt modal ── */}
-      {receiptTx && <TransactionReceipt tx={receiptTx} onClose={() => setReceiptTx(null)} />}
-
-      {/* ── Fund wallet modal ── */}
-      {fundModal && (
-        <div style={{
-          position: 'fixed', inset: 0,
-          background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(12px)',
-          display: 'flex', alignItems: 'flex-end', justifyContent: 'center', zIndex: 200,
-        }}>
-          <div className="glass-strong slide-up" style={{
-            width: '100%', maxWidth: '480px',
-            padding: '28px 24px 40px',
-            borderBottomLeftRadius: 0, borderBottomRightRadius: 0,
-          }}>
-            {/* Drag handle */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-              <div style={{ width: '40px', height: '4px', borderRadius: '2px', background: 'rgba(255,255,255,0.15)' }} />
+              <div style={{ marginTop: '12px', padding: '10px 14px', background: 'rgba(34,197,94,0.06)', borderRadius: '12px', border: '1px solid rgba(34,197,94,0.15)' }}>
+                <p style={{ fontSize: '12px', color: 'var(--emerald)', fontWeight: 600 }}>
+                  ✓ Transfer only from your registered bank account — funds credited automatically
+                </p>
+              </div>
             </div>
+          ) : (
+            <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '20px', marginBottom: '16px', textAlign: 'center' }}>
+              <p style={{ fontSize: '14px', fontWeight: 700, marginBottom: '8px' }}>No Virtual Account Yet</p>
+              <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Complete KYC verification to receive your dedicated bank account number.</p>
+            </div>
+          )}
 
-            <h3 style={{ fontSize: '20px', fontWeight: 900, marginBottom: '6px', letterSpacing: '-0.4px' }}>Add Money</h3>
-            <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)', marginBottom: '22px' }}>
-              {ngnWallet?.virtual_account_number
-                ? `Transfer to ${ngnWallet.virtual_bank_name} · ${ngnWallet.virtual_account_number}`
-                : 'Enter an amount to add to your wallet'}
-            </p>
-
-            <input
-              className="input-field"
-              type="number"
-              placeholder="Amount in ₦ (e.g. 10,000)"
-              value={fundAmount}
-              onChange={e => setFundAmount(e.target.value)}
-              style={{ marginBottom: '16px', fontSize: '20px', fontWeight: 800 }}
-              autoFocus
-            />
-
-            {/* Quick chips */}
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '22px', flexWrap: 'wrap' }}>
-              {[5000, 10000, 20000, 50000].map(amt => (
-                <button key={amt} onClick={() => setFundAmount(String(amt))} style={{
-                  flex: 1, minWidth: '60px',
-                  padding: '8px 6px', borderRadius: '12px', border: '1px solid',
-                  borderColor: fundAmount === String(amt) ? 'var(--emerald)' : 'var(--glass-border)',
-                  background:  fundAmount === String(amt) ? 'rgba(34,197,94,0.12)' : 'transparent',
-                  color:       fundAmount === String(amt) ? 'var(--emerald)' : 'var(--tg-theme-hint-color)',
-                  fontSize: '12px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
-                }}>
-                  ₦{amt.toLocaleString()}
-                </button>
+          {/* Other funding methods */}
+          <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '20px', marginBottom: '16px', boxShadow: 'var(--shadow-sm)' }}>
+            <p style={{ fontSize: '15px', fontWeight: 800, marginBottom: '16px' }}>Other Funding Methods</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px' }}>
+              {[
+                { icon: '🏦', label: 'Bank Transfer', sub: 'Popular' },
+                { icon: '💳', label: 'Card Deposit', sub: null },
+                { icon: '₿', label: 'Crypto', sub: null },
+                { icon: '  ', label: 'Apple Pay', sub: null },
+                { icon: 'G', label: 'Google Pay', sub: null },
+              ].map(m => (
+                <div key={m.label} style={{ textAlign: 'center' }}>
+                  <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'var(--surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 6px', fontSize: '20px', boxShadow: 'var(--shadow-xs)' }}>
+                    {m.icon}
+                  </div>
+                  <p style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', lineHeight: 1.2 }}>{m.label}</p>
+                  {m.sub && <span style={{ fontSize: '9px', color: 'var(--purple)', fontWeight: 700 }}>{m.sub}</span>}
+                </div>
               ))}
             </div>
+          </div>
 
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button className="btn-ghost" onClick={() => { setFundModal(false); setFundAmount(''); }} style={{ flex: 1 }}>
-                Cancel
+          {/* Recent funding transactions */}
+          {fundingTxs.length > 0 && (
+            <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '20px', boxShadow: 'var(--shadow-sm)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <p style={{ fontSize: '15px', fontWeight: 800 }}>Recent Funding</p>
+                <span style={{ fontSize: '12px', color: 'var(--purple)', fontWeight: 700 }}>View All →</span>
+              </div>
+              {fundingTxs.slice(0, 5).map((tx: any) => (
+                <div key={tx.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: '1px solid var(--border-sm)' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(34,197,94,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Building2 size={18} color="var(--emerald)" />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontSize: '13px', fontWeight: 700 }}>Bank Transfer</p>
+                    <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{new Date(tx.created_at).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</p>
+                  </div>
+                  <p style={{ fontSize: '14px', fontWeight: 800, color: 'var(--emerald)' }}>+₦{Number(tx.amount).toLocaleString('en-NG')}</p>
+                  <span style={{ fontSize: '11px', color: 'var(--emerald)', background: 'rgba(34,197,94,0.1)', padding: '2px 8px', borderRadius: '8px', fontWeight: 700 }}>Completed</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-hint)', marginTop: '20px' }}>
+            🔒 All transactions are encrypted and secure
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Main home view ───────────────────────────────────────────────────────
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingBottom: '100px' }}>
+      {/* Header */}
+      <div style={{ padding: '20px 20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div className="avatar" style={{ width: 44, height: 44, fontSize: 16 }}>
+            {(user.firstName?.[0] || user.username?.[0] || 'B').toUpperCase()}
+          </div>
+          <div>
+            <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{greet} 👋</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <h1 style={{ fontSize: '17px', fontWeight: 900, color: 'var(--text)' }}>
+                {user.firstName || user.username || 'Welcome'}
+              </h1>
+              {user.kycStatus !== 'PENDING' && (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" fill="#6C5CE7"/>
+                  <path d="M8 12l3 3 5-5" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              )}
+            </div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button className="icon-btn" style={{ position: 'relative' }} onClick={() => qc.invalidateQueries()}>
+            <Bell size={18} color="var(--text-muted)" />
+          </button>
+          <button className="icon-btn">
+            <Menu size={18} color="var(--text-muted)" />
+          </button>
+        </div>
+      </div>
+
+      {/* Balance Card */}
+      <div style={{ padding: '0 20px', marginBottom: '20px' }}>
+        <div style={{
+          borderRadius: '24px', padding: '24px',
+          background: 'linear-gradient(135deg, #5548c8 0%, #6C5CE7 45%, #8B5CF6 100%)',
+          color: '#fff', position: 'relative', overflow: 'hidden',
+          boxShadow: '0 16px 48px rgba(108,92,231,0.45)',
+        }}>
+          {/* Background circles */}
+          <div style={{ position: 'absolute', top: -60, right: -40, width: 220, height: 220, borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
+          <div style={{ position: 'absolute', bottom: -40, left: -30, width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.04)' }} />
+          {/* Globe icon */}
+          <div style={{ position: 'absolute', right: 24, top: '50%', transform: 'translateY(-50%)', opacity: 0.12 }}>
+            <svg width="100" height="100" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="1"/>
+              <ellipse cx="12" cy="12" rx="4" ry="10" stroke="white" strokeWidth="1"/>
+              <path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20" stroke="white" strokeWidth="1"/>
+            </svg>
+          </div>
+
+          <div style={{ position: 'relative' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
+              <p style={{ fontSize: '12px', opacity: 0.8, fontWeight: 600 }}>Total Wallet Balance</p>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <button onClick={() => setBalanceHidden(!balanceHidden)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'white', opacity: 0.8, padding: 0 }}>
+                  {balanceHidden ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+                <span style={{ fontSize: '11px', fontWeight: 700, background: 'rgba(34,197,94,0.25)', color: '#7fffc4', padding: '2px 10px', borderRadius: '20px' }}>● Active</span>
+              </div>
+            </div>
+            <h2 style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '4px' }}>
+              {balanceHidden ? '₦ ••••••' : `₦${balance.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`}
+            </h2>
+
+            {/* CTA buttons */}
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '16px', marginTop: '16px' }}>
+              <button
+                onClick={() => setView('fund')}
+                style={{
+                  flex: 1, padding: '10px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+                  background: 'rgba(255,255,255,0.2)', color: '#fff', fontWeight: 700, fontSize: '13px',
+                  fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                  transition: 'background 0.18s',
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" strokeWidth="2.5" strokeLinecap="round"/></svg>
+                Add Funds
               </button>
               <button
-                className="btn-primary"
-                style={{ flex: 1 }}
-                onClick={() => fundMutation.mutate()}
-                disabled={!fundAmount || parseFloat(fundAmount) <= 0 || fundMutation.isPending}
+                onClick={() => onNavigate?.('send')}
+                style={{
+                  flex: 1, padding: '10px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+                  background: 'rgba(255,255,255,0.2)', color: '#fff', fontWeight: 700, fontSize: '13px',
+                  fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                  transition: 'background 0.18s',
+                }}
               >
-                {fundMutation.isPending ? 'Processing…' : 'Fund Now'}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                Send Money
               </button>
             </div>
 
-            {fundMutation.isError && (
-              <p style={{ color: 'var(--danger)', fontSize: '12px', marginTop: '12px', textAlign: 'center', fontWeight: 600 }}>
-                {(fundMutation.error as any)?.response?.data?.error || 'Failed. Please try again.'}
-              </p>
+            {/* Virtual account */}
+            {ngnWallet?.virtual_account_number && (
+              <div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: '14px', padding: '12px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Building2 size={16} color="white" />
+                  </div>
+                  <div>
+                    <p style={{ fontSize: '10px', opacity: 0.7, marginBottom: '1px' }}>Linked Virtual Account</p>
+                    <p style={{ fontSize: '13px', fontWeight: 800 }}>{ngnWallet.virtual_bank_name || 'Your Bank'}</p>
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <p style={{ fontSize: '10px', opacity: 0.7, marginBottom: '1px' }}>Account Number</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <p style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '0.5px' }}>{ngnWallet.virtual_account_number}</p>
+                    <button onClick={copyAccount} style={{ background: 'none', border: 'none', cursor: 'pointer', color: copied ? '#7fffc4' : 'rgba(255,255,255,0.7)', padding: 0 }}>
+                      {copied ? <CheckCircle2 size={14} /> : <Copy size={14} />}
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>
-      )}
+      </div>
+
+      {/* Quick Actions */}
+      <div style={{ padding: '0 20px', marginBottom: '24px' }}>
+        <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '20px', boxShadow: 'var(--shadow-sm)' }}>
+          <div className="quick-grid">
+            {[
+              { icon: <Wallet size={20} color="var(--purple)" />, label: 'Fund\nWallet', action: () => setView('fund'), bg: 'rgba(108,92,231,0.1)' },
+              { icon: <ArrowUpCircle size={20} color="#EF4444" />, label: 'With-\ndraw', action: () => {}, bg: 'rgba(239,68,68,0.1)' },
+              { icon: <Send size={20} color="var(--purple)" />, label: 'Send\nMoney', action: () => onNavigate?.('send'), bg: 'rgba(108,92,231,0.1)' },
+              { icon: <ArrowRightLeft size={20} color="var(--gold-dark)" />, label: 'Exchange\nCurrency', action: () => {}, bg: 'rgba(244,180,0,0.1)' },
+              { icon: <CreditCard size={20} color="var(--emerald)" />, label: 'Virtual\nCards', action: () => onNavigate?.('cards'), bg: 'rgba(34,197,94,0.1)' },
+              { icon: <BarChart2 size={20} color="#8B5CF6" />, label: 'Trans-\nactions', action: () => {}, bg: 'rgba(139,92,246,0.1)' },
+            ].map((qa, i) => (
+              <div key={i} className="quick-action" onClick={qa.action}>
+                <div className="quick-icon" style={{ background: qa.bg }}>
+                  {qa.icon}
+                </div>
+                <span className="quick-label">{qa.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Analytics Overview */}
+      <div style={{ padding: '0 20px', marginBottom: '20px' }}>
+        <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '20px', boxShadow: 'var(--shadow-sm)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <p style={{ fontSize: '15px', fontWeight: 800 }}>Analytics Overview</p>
+            <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600 }}>This Month ▾</span>
+          </div>
+          <div style={{ display: 'flex', gap: '24px', marginBottom: '16px' }}>
+            {(() => {
+              const income = transactions.filter((t: any) => t.credit_wallet_id).reduce((s: number, t: any) => s + Number(t.amount), 0);
+              const expense = transactions.filter((t: any) => !t.credit_wallet_id).reduce((s: number, t: any) => s + Number(t.amount), 0);
+              return [
+                { dot: 'var(--emerald)', label: 'Total Income', value: `₦${income.toLocaleString('en-NG', { minimumFractionDigits: 0 })}`, change: '+18.6%', up: true },
+                { dot: 'var(--purple)', label: 'Total Expenses', value: `₦${expense.toLocaleString('en-NG', { minimumFractionDigits: 0 })}`, change: '-7.3%', up: false },
+              ].map(s => (
+                <div key={s.label}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: s.dot }} />
+                    <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600 }}>{s.label}</span>
+                  </div>
+                  <p style={{ fontSize: '18px', fontWeight: 900, color: 'var(--text)' }}>{s.value}</p>
+                  <p style={{ fontSize: '11px', color: s.up ? 'var(--emerald)' : 'var(--danger)', fontWeight: 700 }}>{s.change} vs last month</p>
+                </div>
+              ));
+            })()}
+          </div>
+          {/* Mini chart */}
+          <div style={{ height: '64px', position: 'relative', overflow: 'hidden' }}>
+            <svg width="100%" height="64" viewBox="0 0 300 64" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#6C5CE7" stopOpacity="0.15"/>
+                  <stop offset="100%" stopColor="#6C5CE7" stopOpacity="0"/>
+                </linearGradient>
+              </defs>
+              <path d="M0 50 C30 45 50 30 80 35 C110 40 130 20 160 18 C190 16 210 28 240 22 C270 16 290 8 300 5" fill="none" stroke="#6C5CE7" strokeWidth="2.5"/>
+              <path d="M0 50 C30 45 50 30 80 35 C110 40 130 20 160 18 C190 16 210 28 240 22 C270 16 290 8 300 5 L300 64 L0 64 Z" fill="url(#chartGrad)"/>
+              <path d="M0 40 C30 42 50 45 80 42 C110 39 130 38 160 40 C190 42 210 38 240 36 C270 34 290 35 300 33" fill="none" stroke="var(--emerald)" strokeWidth="2" strokeDasharray="4 2" opacity="0.6"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Transactions */}
+      <div style={{ padding: '0 20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+          <h2 className="section-title">Recent Transactions</h2>
+          <span style={{ fontSize: '12px', color: 'var(--purple)', fontWeight: 700 }}>View All →</span>
+        </div>
+
+        {txLoading ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {[...Array(4)].map((_, i) => <div key={i} className="skeleton" style={{ height: '68px', borderRadius: '16px' }} />)}
+          </div>
+        ) : transactions.length === 0 ? (
+          <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '40px 24px', textAlign: 'center', boxShadow: 'var(--shadow-sm)' }}>
+            <div style={{ fontSize: '40px', marginBottom: '12px' }}>💸</div>
+            <p style={{ fontWeight: 700, marginBottom: '4px' }}>No transactions yet</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>Add money to get started</p>
+          </div>
+        ) : (
+          <div style={{ background: 'var(--surface)', borderRadius: '20px', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
+            {transactions.slice(0, 8).map((tx: any, idx: number) => {
+              const isCredit = !!tx.credit_wallet_id;
+              const meta = (() => { try { return JSON.parse(tx.metadata || '{}'); } catch { return {}; } })();
+              return (
+                <div
+                  key={tx.id}
+                  onClick={() => setReceiptTx(tx)}
+                  style={{
+                    padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px',
+                    cursor: 'pointer', borderBottom: idx < Math.min(transactions.length, 8) - 1 ? '1px solid var(--border-sm)' : 'none',
+                    transition: 'background 0.15s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface-2)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                >
+                  <div style={{
+                    width: '44px', height: '44px', borderRadius: '14px', flexShrink: 0,
+                    background: isCredit ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.08)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    {isCredit
+                      ? <ArrowDownCircle size={20} color="var(--emerald)" />
+                      : <ArrowUpCircle  size={20} color="var(--danger)" />}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: '14px', fontWeight: 700, marginBottom: '3px' }}>{purposeLabel(tx.purpose)}</p>
+                    <p style={{ fontSize: '12px', color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {meta.merchant || meta.recipientName ? `To ${meta.recipientName}` : meta.senderName ? `From ${meta.senderName}` : new Date(tx.created_at).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                  <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                    <p style={{ fontSize: '14px', fontWeight: 800, color: isCredit ? 'var(--emerald)' : 'var(--danger)' }}>
+                      {isCredit ? '+' : '-'}₦{Number(tx.amount).toLocaleString('en-NG')}
+                    </p>
+                    <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--emerald)', background: 'rgba(34,197,94,0.1)', padding: '1px 7px', borderRadius: '8px' }}>Completed</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-hint)', marginTop: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4M12 2L3 6.5V12c0 5 3.8 9.7 9 11 5.2-1.3 9-6 9-11V6.5L12 2z" stroke="#22C55E" strokeWidth="2"/></svg>
+          All transactions are encrypted and secure
+        </p>
+      </div>
+
+      {receiptTx && <TransactionReceipt tx={receiptTx} onClose={() => setReceiptTx(null)} />}
     </div>
   );
 }

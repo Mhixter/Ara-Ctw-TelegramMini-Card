@@ -1,42 +1,115 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Snowflake, Zap, SlidersHorizontal, AlertCircle, ShoppingBag, Eye, EyeOff, Copy, CheckCircle2 } from 'lucide-react';
+import {
+  Plus, Snowflake, Zap, SlidersHorizontal, AlertCircle, ShoppingBag,
+  Eye, EyeOff, Copy, CheckCircle2, ChevronRight, MoreVertical,
+  Wallet, Trash2, Tag, Bell
+} from 'lucide-react';
 import { cardsApi } from '../lib/api';
 import { User } from '../hooks/useAuth';
 import { useTelegram } from '../hooks/useTelegram';
-import VirtualCard from '../components/VirtualCard';
 
 interface Props { user: User; }
 
-const SAMPLE_MERCHANTS = [
-  'Netflix', 'Spotify', 'Amazon', 'Apple', 'Google Play',
-  'Jumia', 'Konga', 'Shopify Store', 'Uber', 'Bolt'
-];
+const SAMPLE_MERCHANTS = ['Netflix', 'Spotify', 'Amazon', 'Apple', 'Google Play', 'Jumia', 'Konga', 'Uber'];
+
+function VirtualCardVisual({ card, masked = true }: { card: any; masked?: boolean }) {
+  const pan: string = card.masked_pan || card.pan || '•••• •••• •••• 0000';
+  const last4 = pan.replace(/\D/g, '').slice(-4) || '0000';
+  const cardholder = card.cardholder_name || 'CARDHOLDER';
+  const expiry = card.expiry || '00/00';
+  const brand = (card.brand || card.card_brand || 'VISA').toUpperCase();
+  const isActive = card.status === 'ACTIVE';
+
+  const gradients: Record<string, string> = {
+    VISA: 'linear-gradient(135deg, #3730A3 0%, #6C5CE7 55%, #8B5CF6 100%)',
+    MASTERCARD: 'linear-gradient(135deg, #1a1a2e 0%, #2d2d4a 55%, #4a4a6a 100%)',
+    GOLD: 'linear-gradient(135deg, #92400e 0%, #d97706 50%, #f59e0b 100%)',
+  };
+  const gradient = card.card_tier === 'GOLD' ? gradients.GOLD : gradients[brand] || gradients.VISA;
+
+  return (
+    <div style={{
+      width: '100%', height: '180px', borderRadius: '20px',
+      background: gradient, position: 'relative', overflow: 'hidden',
+      padding: '20px', color: '#fff', boxShadow: '0 12px 40px rgba(0,0,0,0.3)',
+      cursor: 'pointer', transition: 'transform 0.2s',
+    }}>
+      {/* Background circles */}
+      <div style={{ position: 'absolute', top: -50, right: -50, width: 180, height: 180, borderRadius: '50%', background: 'rgba(255,255,255,0.07)' }} />
+      <div style={{ position: 'absolute', bottom: -30, left: -20, width: 140, height: 140, borderRadius: '50%', background: 'rgba(255,255,255,0.04)' }} />
+      <div style={{ position: 'relative', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        {/* Top row */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', fontWeight: 900, letterSpacing: '-0.5px' }}>B</div>
+            <span style={{ fontSize: '13px', fontWeight: 800, letterSpacing: '-0.2px' }}>BorderPay</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '11px', fontWeight: 700, background: isActive ? 'rgba(34,197,94,0.25)' : 'rgba(239,68,68,0.25)', color: isActive ? '#7fffc4' : '#ffaaaa', padding: '2px 8px', borderRadius: '10px' }}>
+              ● {card.status || 'ACTIVE'}
+            </span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M1 4C1 3 2 2 3 2h18c1 0 2 1 2 2v16c0 1-1 2-2 2H3c-1 0-2-1-2-2V4z" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5"/><circle cx="6" cy="12" r="2" fill="rgba(255,255,255,0.4)"/><circle cx="12" cy="12" r="2" fill="rgba(255,255,255,0.4)"/></svg>
+          </div>
+        </div>
+        {/* Chip */}
+        <div style={{ width: '36px', height: '28px', borderRadius: '6px', background: 'linear-gradient(135deg, #d4a843, #f4c842)', border: '1px solid rgba(255,255,255,0.3)' }} />
+        {/* PAN */}
+        <div>
+          <p style={{ fontSize: '17px', fontWeight: 800, letterSpacing: '3px', marginBottom: '8px', fontFamily: 'monospace' }}>
+            {masked ? `•••• •••• •••• ${last4}` : pan}
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+            <div>
+              <p style={{ fontSize: '9px', opacity: 0.7, marginBottom: '2px', letterSpacing: '0.5px' }}>VALID THRU</p>
+              <p style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '1px' }}>{expiry}</p>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <p style={{ fontSize: '9px', opacity: 0.7, marginBottom: '2px' }}>CARDHOLDER</p>
+              <p style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{cardholder}</p>
+            </div>
+            <div>
+              {brand === 'VISA' ? (
+                <p style={{ fontSize: '22px', fontWeight: 900, fontStyle: 'italic', letterSpacing: '-1px' }}>VISA</p>
+              ) : brand === 'MASTERCARD' ? (
+                <div style={{ display: 'flex' }}>
+                  <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#EB001B', opacity: 0.9 }} />
+                  <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#F79E1B', opacity: 0.9, marginLeft: -8 }} />
+                </div>
+              ) : (
+                <p style={{ fontSize: '14px', fontWeight: 900 }}>{brand}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function CardsPage({ user }: Props) {
   const qc = useQueryClient();
   const { haptic } = useTelegram();
+  const [filter, setFilter]       = useState<'all' | 'active' | 'frozen'>('all');
   const [issueModal, setIssueModal] = useState(false);
   const [limitModal, setLimitModal] = useState<string | null>(null);
   const [spendModal, setSpendModal] = useState<any | null>(null);
-  const [detailsCardId, setDetailsCardId] = useState<string | null>(null);
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
   const [issueBrand, setIssueBrand] = useState<'VISA' | 'MASTERCARD'>('VISA');
+  const [issueType, setIssueType]   = useState<'Virtual' | 'Premium' | 'Business'>('Virtual');
   const [dailyLimit, setDailyLimit] = useState('');
   const [monthlyLimit, setMonthlyLimit] = useState('');
   const [spendAmount, setSpendAmount] = useState('');
   const [spendMerchant, setSpendMerchant] = useState(SAMPLE_MERCHANTS[0]);
-  const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [issueSuccess, setIssueSuccess] = useState<any | null>(null);
 
-  const { data: cards = [], isLoading } = useQuery({
-    queryKey: ['cards'],
-    queryFn: cardsApi.list
-  });
+  const { data: cards = [], isLoading } = useQuery({ queryKey: ['cards'], queryFn: cardsApi.list });
 
   const issueMutation = useMutation({
     mutationFn: () => cardsApi.issue('NGN', issueBrand),
-    onSuccess: () => {
-      haptic('success');
-      setIssueModal(false);
+    onSuccess: (data) => {
+      haptic('success'); setIssueModal(false);
+      setIssueSuccess(data);
       qc.invalidateQueries({ queryKey: ['cards'] });
       qc.invalidateQueries({ queryKey: ['wallets'] });
       qc.invalidateQueries({ queryKey: ['transactions'] });
@@ -56,9 +129,7 @@ export default function CardsPage({ user }: Props) {
   const spendMutation = useMutation({
     mutationFn: () => cardsApi.spend(spendModal!.id, parseFloat(spendAmount), spendMerchant),
     onSuccess: () => {
-      haptic('success');
-      setSpendModal(null);
-      setSpendAmount('');
+      haptic('success'); setSpendModal(null); setSpendAmount('');
       qc.invalidateQueries({ queryKey: ['cards'] });
       qc.invalidateQueries({ queryKey: ['wallets'] });
       qc.invalidateQueries({ queryKey: ['transactions'] });
@@ -66,331 +137,310 @@ export default function CardsPage({ user }: Props) {
   });
 
   const canIssue = user.kycStatus !== 'PENDING' && user.kycStatus !== 'BANNED';
-  const maxTier = user.kycStatus === 'TIER_2' ? 'PLATINUM' : user.kycStatus === 'TIER_1' ? 'GOLD' : null;
 
-  const { data: cardDetails, isLoading: detailsLoading, error: detailsError } = useQuery({
-    queryKey: ['card-details', detailsCardId],
-    queryFn: () => cardsApi.details(detailsCardId!),
-    enabled: !!detailsCardId,
-    staleTime: 0,
-    retry: false,
+  const filtered = cards.filter((c: any) => {
+    if (filter === 'active')  return c.status === 'ACTIVE';
+    if (filter === 'frozen')  return c.status === 'FROZEN';
+    return true;
   });
 
-  function copyField(value: string, field: string) {
-    navigator.clipboard.writeText(value).then(() => {
-      setCopiedField(field);
-      setTimeout(() => setCopiedField(null), 1800);
-    });
-  }
+  const activeCard = cards.find((c: any) => c.id === selectedCard) || cards[0];
 
-  function fmtNGN(n: number) {
-    return `₦${Number(n).toLocaleString('en-NG', { minimumFractionDigits: 0 })}`;
-  }
+  function fmtNGN(n: number) { return `₦${Number(n).toLocaleString('en-NG', { minimumFractionDigits: 0 })}`; }
 
   return (
-    <div className="page" style={{ paddingTop: '20px' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingBottom: '100px' }}>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+      <div style={{ padding: '20px 20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <div>
-          <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)' }}>Virtual Cards</p>
-          <h1 style={{ fontSize: '22px', fontWeight: 800 }}>My Cards</h1>
+          <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Manage your virtual cards</p>
+          <h1 style={{ fontSize: '22px', fontWeight: 900 }}>Virtual Cards</h1>
         </div>
-        {maxTier && (
-          <span className={`badge ${maxTier === 'PLATINUM' ? 'badge-platinum' : 'badge-gold'}`}>
-            {maxTier}
-          </span>
-        )}
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button className="icon-btn"><Bell size={18} color="var(--text-muted)" /></button>
+          <button className="icon-btn"><MoreVertical size={18} color="var(--text-muted)" /></button>
+        </div>
+      </div>
+
+      {/* Filter tabs */}
+      <div style={{ padding: '0 20px', marginBottom: '16px' }}>
+        <div className="filter-tabs">
+          {(['all', 'active', 'frozen'] as const).map(f => (
+            <button key={f} className={`tab-pill ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
+              {f === 'all' ? '🗂 All Cards' : f === 'active' ? '● Active' : '❄ Frozen'}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Not verified */}
       {!canIssue && (
-        <div className="glass" style={{ padding: '20px', marginBottom: '20px', borderColor: 'rgba(245,158,11,0.3)', background: 'rgba(245,158,11,0.06)', textAlign: 'center' }}>
-          <AlertCircle size={32} color="var(--warning)" style={{ margin: '0 auto 10px' }} />
-          <p style={{ fontWeight: 600, marginBottom: '4px' }}>KYC Required</p>
-          <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)' }}>
-            Complete identity verification to issue virtual cards
-          </p>
+        <div style={{ margin: '0 20px 16px', padding: '16px', background: 'var(--surface)', borderRadius: '16px', display: 'flex', gap: '12px', alignItems: 'center', boxShadow: 'var(--shadow-sm)' }}>
+          <AlertCircle size={28} color="var(--warning)" style={{ flexShrink: 0 }} />
+          <div>
+            <p style={{ fontWeight: 700, marginBottom: '2px' }}>KYC Required</p>
+            <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Complete identity verification to issue virtual cards</p>
+          </div>
         </div>
       )}
 
-      {/* Cards List */}
+      {/* Card carousel */}
       {isLoading ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {[...Array(2)].map((_, i) => <div key={i} className="skeleton" style={{ height: '200px', borderRadius: '20px' }} />)}
+        <div style={{ padding: '0 20px', marginBottom: '16px' }}>
+          <div className="skeleton" style={{ height: '180px', borderRadius: '20px' }} />
         </div>
       ) : cards.length === 0 ? (
-        <div className="glass" style={{ padding: '40px 24px', textAlign: 'center', marginBottom: '20px' }}>
+        <div style={{ margin: '0 20px 16px', padding: '40px 24px', background: 'var(--surface)', borderRadius: '20px', textAlign: 'center', boxShadow: 'var(--shadow-sm)' }}>
           <div style={{ fontSize: '48px', marginBottom: '12px' }}>💳</div>
-          <p style={{ fontWeight: 600, marginBottom: '4px' }}>No cards yet</p>
-          <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)' }}>
-            Issue your first virtual card to start spending
-          </p>
+          <p style={{ fontWeight: 700, marginBottom: '4px' }}>No cards yet</p>
+          <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Issue your first virtual card to start spending</p>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {cards.map((card: any) => {
-            const spentToday = Number(card.amount_spent_today || 0);
-            const daily = Number(card.daily_limit);
-            const pct = Math.min(100, daily > 0 ? (spentToday / daily) * 100 : 0);
-            const remaining = daily - spentToday;
+        <>
+          {/* Carousel */}
+          <div style={{ paddingLeft: '20px', marginBottom: '16px' }}>
+            <div className="card-carousel">
+              {filtered.map((card: any) => (
+                <div key={card.id} className="card-carousel-item" onClick={() => setSelectedCard(card.id)}>
+                  <VirtualCardVisual card={card} />
+                </div>
+              ))}
+            </div>
+            {/* Dots */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginTop: '12px' }}>
+              {filtered.map((card: any, i: number) => (
+                <div key={card.id} style={{ width: i === 0 ? '20px' : '6px', height: '6px', borderRadius: '3px', background: i === 0 ? 'var(--purple)' : 'var(--border)', transition: 'width 0.2s' }} />
+              ))}
+            </div>
+          </div>
 
-            return (
-              <div key={card.id}>
-                <VirtualCard card={card} />
-
-                {/* Card Info */}
-                <div className="glass" style={{ marginTop: '12px', padding: '16px' }}>
-                  {/* Limits row */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '14px' }}>
-                    <div>
-                      <p style={{ fontSize: '11px', color: 'var(--tg-theme-hint-color)', marginBottom: '2px' }}>Daily Limit</p>
-                      <p style={{ fontSize: '15px', fontWeight: 700 }}>{fmtNGN(daily)}</p>
-                      <p style={{ fontSize: '10px', color: 'var(--tg-theme-hint-color)' }}>{fmtNGN(spentToday)} used today</p>
+          {/* Active card info */}
+          {activeCard && (
+            <div style={{ padding: '0 20px' }}>
+              {/* Balance + status row */}
+              <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '20px', marginBottom: '12px', boxShadow: 'var(--shadow-sm)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                  <div>
+                    <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>Card Balance</p>
+                    <p style={{ fontSize: '28px', fontWeight: 900, color: 'var(--text)', letterSpacing: '-1px' }}>{fmtNGN(Number(activeCard.balance || 0))}</p>
+                  </div>
+                  <span className="badge badge-success">● {activeCard.status}</span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+                  <div>
+                    <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '2px' }}>Spending Limit</p>
+                    <p style={{ fontSize: '13px', fontWeight: 700 }}>{fmtNGN(Number(activeCard.monthly_limit || 0))}</p>
+                    <div style={{ marginTop: '4px', height: '3px', borderRadius: '2px', background: 'var(--surface-2)' }}>
+                      <div style={{ height: '100%', borderRadius: '2px', background: 'var(--purple)', width: `${Math.min(100, (Number(activeCard.amount_spent_today) / Number(activeCard.daily_limit || 1)) * 100)}%` }} />
                     </div>
-                    <div>
-                      <p style={{ fontSize: '11px', color: 'var(--tg-theme-hint-color)', marginBottom: '2px' }}>Monthly Limit</p>
-                      <p style={{ fontSize: '15px', fontWeight: 700 }}>{fmtNGN(Number(card.monthly_limit))}</p>
-                      <span className={`badge ${card.status === 'ACTIVE' ? 'badge-success' : 'badge-danger'}`}>{card.status}</span>
+                    <p style={{ fontSize: '10px', color: 'var(--text-hint)', marginTop: '2px' }}>49% used</p>
+                  </div>
+                  <div>
+                    <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '2px' }}>Currency</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span style={{ fontSize: '13px' }}>🇳🇬</span>
+                      <p style={{ fontSize: '13px', fontWeight: 700 }}>NGN ▾</p>
                     </div>
                   </div>
-
-                  {/* Daily spend progress */}
-                  <div style={{ marginBottom: '14px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                      <span style={{ fontSize: '11px', color: 'var(--tg-theme-hint-color)' }}>Daily spending</span>
-                      <span style={{ fontSize: '11px', color: pct > 80 ? 'var(--danger)' : 'var(--tg-theme-hint-color)' }}>
-                        {Math.round(pct)}% · {fmtNGN(remaining)} left
-                      </span>
+                  <div>
+                    <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '2px' }}>Status</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: activeCard.status === 'ACTIVE' ? 'var(--emerald)' : 'var(--danger)' }} />
+                      <p style={{ fontSize: '13px', fontWeight: 700, color: activeCard.status === 'ACTIVE' ? 'var(--emerald)' : 'var(--danger)' }}>{activeCard.status}</p>
                     </div>
-                    <div style={{ height: '5px', borderRadius: '3px', background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
-                      <div style={{
-                        height: '100%', borderRadius: '3px',
-                        background: pct > 80
-                          ? 'var(--danger)'
-                          : card.card_tier === 'GOLD'
-                            ? 'linear-gradient(90deg, var(--gold-dark), var(--gold))'
-                            : 'linear-gradient(90deg, var(--accent), #8b5cf6)',
-                        width: `${pct}%`,
-                        transition: 'width 0.5s ease'
-                      }} />
-                    </div>
-                  </div>
-
-                  {/* Card Actions */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '8px' }}>
-                    <button
-                      className="btn-ghost"
-                      style={{ padding: '10px', fontSize: '12px', gap: '6px' }}
-                      onClick={() => statusMutation.mutate({ id: card.id, status: card.status === 'ACTIVE' ? 'FROZEN' : 'ACTIVE' })}
-                      disabled={statusMutation.isPending}
-                    >
-                      {card.status === 'ACTIVE' ? <><Snowflake size={14} /> Freeze</> : <><Zap size={14} /> Unfreeze</>}
-                    </button>
-                    <button
-                      className="btn-ghost"
-                      style={{ padding: '10px', fontSize: '12px', gap: '6px' }}
-                      onClick={() => { setLimitModal(card.id); setDailyLimit(String(card.daily_limit)); setMonthlyLimit(String(card.monthly_limit)); }}
-                    >
-                      <SlidersHorizontal size={14} /> Limits
-                    </button>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                    <button
-                      className="btn-ghost"
-                      style={{ padding: '10px', fontSize: '12px', gap: '6px', borderColor: 'rgba(108,99,255,0.35)', opacity: card.status !== 'ACTIVE' ? 0.4 : 1 }}
-                      onClick={() => { setSpendModal(card); setSpendAmount(''); setSpendMerchant(SAMPLE_MERCHANTS[0]); }}
-                      disabled={card.status !== 'ACTIVE'}
-                    >
-                      <ShoppingBag size={14} /> Spend
-                    </button>
-                    <button
-                      className="btn-ghost"
-                      style={{ padding: '10px', fontSize: '12px', gap: '6px', borderColor: 'rgba(245,185,66,0.35)' }}
-                      onClick={() => setDetailsCardId(card.id)}
-                    >
-                      <Eye size={14} /> View Details
-                    </button>
                   </div>
                 </div>
               </div>
-            );
-          })}
+
+              {/* Card actions grid */}
+              <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '20px', marginBottom: '12px', boxShadow: 'var(--shadow-sm)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+                  {[
+                    { icon: <Snowflake size={18} color={activeCard.status === 'ACTIVE' ? '#6C5CE7' : '#EF4444'} />, label: activeCard.status === 'ACTIVE' ? 'Freeze' : 'Unfreeze', bg: 'rgba(108,92,231,0.08)', action: () => statusMutation.mutate({ id: activeCard.id, status: activeCard.status === 'ACTIVE' ? 'FROZEN' : 'ACTIVE' }) },
+                    { icon: <Copy size={18} color="#22C55E" />, label: 'Copy Details', bg: 'rgba(34,197,94,0.08)', action: () => {} },
+                    { icon: <Wallet size={18} color="#F4B400" />, label: 'Fund Card', bg: 'rgba(244,180,0,0.08)', action: () => {} },
+                    { icon: <ShoppingBag size={18} color="#8B5CF6" />, label: 'Spend', bg: 'rgba(139,92,246,0.08)', action: () => { setSpendModal(activeCard); setSpendAmount(''); } },
+                    { icon: <Tag size={18} color="#6C5CE7" />, label: 'Rename', bg: 'rgba(108,92,231,0.08)', action: () => {} },
+                    { icon: <SlidersHorizontal size={18} color="#F59E0B" />, label: 'Card Limits', bg: 'rgba(245,158,11,0.08)', action: () => { setLimitModal(activeCard.id); setDailyLimit(String(activeCard.daily_limit)); setMonthlyLimit(String(activeCard.monthly_limit)); } },
+                    { icon: <Eye size={18} color="#22C55E" />, label: 'View PIN', bg: 'rgba(34,197,94,0.08)', action: () => {} },
+                    { icon: <Trash2 size={18} color="#EF4444" />, label: 'Delete', bg: 'rgba(239,68,68,0.08)', action: () => {} },
+                  ].map(a => (
+                    <div key={a.label} onClick={a.action} style={{ textAlign: 'center', cursor: 'pointer' }}>
+                      <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: a.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 6px', boxShadow: 'var(--shadow-xs)' }}>{a.icon}</div>
+                      <p style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', lineHeight: 1.3 }}>{a.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* My Cards list */}
+      {cards.length > 0 && (
+        <div style={{ padding: '0 20px', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <h2 style={{ fontSize: '16px', fontWeight: 800 }}>My Cards</h2>
+            <span style={{ fontSize: '12px', color: 'var(--purple)', fontWeight: 700 }}>Manage All →</span>
+          </div>
+          <div style={{ background: 'var(--surface)', borderRadius: '20px', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
+            {cards.map((card: any, i: number) => {
+              const pan = card.masked_pan || '•••• •••• •••• 0000';
+              const last4 = pan.replace(/\D/g, '').slice(-4) || '0000';
+              return (
+                <div key={card.id} style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '14px', borderBottom: i < cards.length - 1 ? '1px solid var(--border-sm)' : 'none', cursor: 'pointer' }} onClick={() => setSelectedCard(card.id)}>
+                  <div style={{ width: '52px', height: '34px', borderRadius: '8px', background: 'linear-gradient(135deg, #3730A3, #6C5CE7)', display: 'flex', alignItems: 'flex-end', padding: '4px 6px' }}>
+                    <p style={{ fontSize: '8px', fontWeight: 700, color: 'white', fontFamily: 'monospace', letterSpacing: '0.5px' }}>•••• {last4}</p>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontSize: '13px', fontWeight: 700 }}>BorderPay {(card.brand || 'VISA').toUpperCase()}</p>
+                    <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>•••• •••• •••• {last4} · {card.expiry || '00/00'}</p>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <p style={{ fontSize: '13px', fontWeight: 800 }}>{fmtNGN(Number(card.balance || 0))}</p>
+                    <span className={`badge ${card.status === 'ACTIVE' ? 'badge-success' : 'badge-danger'}`} style={{ fontSize: '10px' }}>● {card.status}</span>
+                  </div>
+                  <MoreVertical size={16} color="var(--text-hint)" />
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
 
-      {/* Issue Card Button */}
+      {/* Create new card FAB */}
       {canIssue && (
-        <button className="btn-gold" style={{ marginTop: '24px' }} onClick={() => setIssueModal(true)}>
-          <Plus size={18} /> Issue New Card
+        <button
+          onClick={() => setIssueModal(true)}
+          style={{
+            position: 'fixed', bottom: '90px', right: '20px',
+            padding: '14px 20px', borderRadius: '28px', border: 'none',
+            background: 'linear-gradient(135deg, var(--purple), var(--purple-dark))',
+            color: '#fff', fontWeight: 800, fontSize: '14px', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'inherit',
+            boxShadow: '0 8px 28px rgba(108,92,231,0.4)',
+            zIndex: 90,
+          }}
+        >
+          <Plus size={18} /> Create New Card
         </button>
       )}
 
-      {/* ── Card Details Modal ── */}
-      {detailsCardId && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.82)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', zIndex: 300 }}
-          onClick={() => setDetailsCardId(null)}>
-          <div className="glass-strong" style={{ width: '100%', maxWidth: '480px', padding: '28px 24px 40px', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}
-            onClick={e => e.stopPropagation()}>
-            {/* Drag handle */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 18 }}>
-              <div style={{ width: 40, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.15)' }} />
-            </div>
-            <h3 style={{ fontSize: '17px', fontWeight: 700, marginBottom: 4 }}>Card Details</h3>
-            <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', marginBottom: 20 }}>
-              Sensitive — do not share with anyone
-            </p>
+      {/* Issue Card modal */}
+      {issueModal && (
+        <div className="modal-overlay">
+          <div className="modal-sheet">
+            <div className="modal-drag" />
+            <h3 style={{ fontSize: '20px', fontWeight: 900, marginBottom: '6px' }}>Issue New Card</h3>
+            <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '20px' }}>Create a card tailored to your needs</p>
 
-            {detailsLoading && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {[...Array(4)].map((_, i) => <div key={i} className="skeleton" style={{ height: 44, borderRadius: 10 }} />)}
-              </div>
-            )}
-            {detailsError && (
-              <div className="glass" style={{ padding: '14px 16px', borderColor: 'rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.05)' }}>
-                <p style={{ fontSize: 13, color: 'var(--danger)' }}>
-                  {(detailsError as any)?.response?.data?.error || 'Failed to load card details.'}
+            <p style={{ fontSize: '13px', fontWeight: 700, marginBottom: '10px' }}>Card Network</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
+              {(['VISA', 'MASTERCARD'] as const).map(b => (
+                <button key={b} onClick={() => setIssueBrand(b)} style={{
+                  padding: '14px', borderRadius: '14px', border: `1.5px solid ${issueBrand === b ? 'var(--purple)' : 'var(--border)'}`,
+                  background: issueBrand === b ? 'rgba(108,92,231,0.08)' : 'var(--surface-2)',
+                  cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                }}>
+                  {b === 'VISA' ? <span style={{ fontStyle: 'italic', fontWeight: 900, fontSize: '20px', color: issueBrand === 'VISA' ? 'var(--purple)' : 'var(--text)' }}>VISA</span> : (
+                    <div style={{ display: 'flex' }}>
+                      <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#EB001B' }} />
+                      <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#F79E1B', marginLeft: -8 }} />
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            <p style={{ fontSize: '13px', fontWeight: 700, marginBottom: '10px' }}>Card Type</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '20px' }}>
+              {(['Virtual', 'Premium', 'Business'] as const).map(t => (
+                <button key={t} onClick={() => setIssueType(t)} style={{
+                  padding: '12px 8px', borderRadius: '12px', border: `1.5px solid ${issueType === t ? 'var(--purple)' : 'var(--border)'}`,
+                  background: issueType === t ? 'rgba(108,92,231,0.08)' : 'var(--surface-2)',
+                  cursor: 'pointer', fontFamily: 'inherit', textAlign: 'center',
+                }}>
+                  <p style={{ fontSize: '12px', fontWeight: 800, color: issueType === t ? 'var(--purple)' : 'var(--text)' }}>{t}</p>
+                  <p style={{ fontSize: '10px', color: 'var(--text-hint)' }}>{t === 'Virtual' ? 'Online use only' : t === 'Premium' ? 'Higher limits' : 'Expense control'}</p>
+                </button>
+              ))}
+            </div>
+
+            {issueMutation.isError && (
+              <div style={{ padding: '10px 14px', borderRadius: '12px', background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.18)', marginBottom: '12px' }}>
+                <p style={{ fontSize: '13px', color: 'var(--danger)', fontWeight: 600 }}>
+                  {(issueMutation.error as any)?.response?.data?.error || 'Failed to issue card. Check your wallet balance.'}
                 </p>
               </div>
             )}
-            {cardDetails && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {[
-                  { label: 'Card Number', field: 'pan', value: cardDetails.maskPan },
-                  { label: 'CVV', field: 'cvv', value: cardDetails.cvv || '***' },
-                  { label: 'Expiry', field: 'expiry', value: cardDetails.expiry },
-                  { label: 'Network', field: 'brand', value: cardDetails.brand },
-                  { label: 'Tier', field: 'tier', value: cardDetails.tier },
-                  ...(cardDetails.billingAddress ? [{ label: 'Billing Address', field: 'billing', value: cardDetails.billingAddress }] : []),
-                ].map(({ label, field, value }) => (
-                  <div key={field} className="glass" style={{ padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: 12, color: 'var(--tg-theme-hint-color)' }}>{label}</span>
-                    <button
-                      onClick={() => copyField(value, field)}
-                      style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: copiedField === field ? 'var(--success)' : 'var(--tg-theme-text-color)', fontSize: 13, fontWeight: 600, padding: 0 }}
-                    >
-                      <span style={{ fontFamily: field === 'pan' || field === 'cvv' ? 'monospace' : 'inherit', letterSpacing: field === 'pan' ? '1px' : 'normal' }}>{value}</span>
-                      {copiedField === field ? <CheckCircle2 size={13} color="var(--success)" /> : <Copy size={12} color="var(--tg-theme-hint-color)" />}
-                    </button>
-                  </div>
-                ))}
-
-                <div style={{ marginTop: 6, padding: '10px 14px', borderRadius: 10, background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)' }}>
-                  <p style={{ fontSize: 11, color: 'var(--warning)' }}>⚠️ CVV is shown once and never stored. Screenshot this page if needed.</p>
-                </div>
-              </div>
-            )}
-            <button className="btn-ghost" style={{ marginTop: 20 }} onClick={() => setDetailsCardId(null)}>Close</button>
+            <button className="btn-primary" onClick={() => issueMutation.mutate()} disabled={issueMutation.isPending}>
+              {issueMutation.isPending ? <><span className="spinner" style={{ width: 16, height: 16 }} /> Issuing…</> : 'Issue Card · ₦200'}
+            </button>
+            <button className="btn-ghost" onClick={() => setIssueModal(false)} style={{ marginTop: '10px' }}>Cancel</button>
           </div>
         </div>
       )}
 
-      {/* ── Issue Modal ── */}
-      {issueModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', zIndex: 200 }}>
-          <div className="glass-strong" style={{ width: '100%', maxWidth: '480px', padding: '28px 24px 36px', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '6px' }}>Issue Virtual Card</h3>
-            <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)', marginBottom: '20px' }}>
-              NGN card · Issuance fee: ₦5,000 · Tier: <strong style={{ color: maxTier === 'PLATINUM' ? 'var(--platinum)' : 'var(--gold)' }}>{maxTier}</strong>
-            </p>
-            <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', marginBottom: '8px' }}>Network</p>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
-              {(['VISA', 'MASTERCARD'] as const).map(b => (
-                <button key={b} onClick={() => setIssueBrand(b)} style={{
-                  flex: 1, padding: '10px', borderRadius: '10px', border: '1px solid',
-                  borderColor: issueBrand === b ? 'var(--gold)' : 'var(--glass-border)',
-                  background: issueBrand === b ? 'rgba(245,185,66,0.1)' : 'transparent',
-                  color: 'var(--tg-theme-text-color)', fontSize: '13px', fontWeight: 600, cursor: 'pointer'
-                }}>{b}</button>
-              ))}
+      {/* Card Issued success modal */}
+      {issueSuccess && (
+        <div className="modal-centre">
+          <div className="modal-centre-card">
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(34,197,94,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+              <CheckCircle2 size={32} color="var(--emerald)" />
             </div>
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button className="btn-ghost" onClick={() => setIssueModal(false)} style={{ flex: 1 }}>Cancel</button>
-              <button className="btn-gold" style={{ flex: 1 }} onClick={() => issueMutation.mutate()} disabled={issueMutation.isPending}>
-                {issueMutation.isPending ? 'Issuing...' : 'Issue Card'}
-              </button>
+            <h3 style={{ fontSize: '20px', fontWeight: 900, marginBottom: '8px' }}>Card Issued Successfully!</h3>
+            <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '24px' }}>Your virtual card is ready to use</p>
+            <div style={{ background: 'var(--surface-2)', borderRadius: '14px', padding: '14px', marginBottom: '20px' }}>
+              <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Virtual {issueBrand} Card</p>
+              <p style={{ fontSize: '13px', fontWeight: 700, marginTop: '4px' }}>•••• •••• •••• {Math.floor(Math.random() * 9000 + 1000)}</p>
             </div>
-            {issueMutation.isError && (
-              <p style={{ color: 'var(--danger)', fontSize: '12px', marginTop: '10px', textAlign: 'center' }}>
-                {(issueMutation.error as any)?.response?.data?.error || 'Failed. Try again.'}
-              </p>
-            )}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+              <button className="btn-ghost" style={{ fontSize: '13px' }} onClick={() => setIssueSuccess(null)}>View Card Details</button>
+              <button className="btn-primary" style={{ fontSize: '13px' }} onClick={() => setIssueSuccess(null)}>Done</button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* ── Spend Simulation Modal ── */}
+      {/* Spend modal */}
       {spendModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', zIndex: 200 }}>
-          <div className="glass-strong" style={{ width: '100%', maxWidth: '480px', padding: '28px 24px 36px', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '4px' }}>Simulate Card Spend</h3>
-            <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', marginBottom: '20px' }}>
-              {spendModal.mask_pan} · {spendModal.card_tier} · {fmtNGN(Number(spendModal.daily_limit) - Number(spendModal.amount_spent_today || 0))} remaining today
-            </p>
-
-            <label style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', marginBottom: '6px', display: 'block' }}>Merchant</label>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '16px' }}>
-              {SAMPLE_MERCHANTS.map(m => (
-                <button key={m} onClick={() => setSpendMerchant(m)} style={{
-                  padding: '6px 12px', borderRadius: '20px', border: '1px solid',
-                  borderColor: spendMerchant === m ? 'var(--accent)' : 'var(--glass-border)',
-                  background: spendMerchant === m ? 'rgba(108,99,255,0.15)' : 'transparent',
-                  color: 'var(--tg-theme-text-color)', fontSize: '12px', cursor: 'pointer', fontWeight: spendMerchant === m ? 700 : 400
-                }}>{m}</button>
-              ))}
-            </div>
-
-            <label style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', marginBottom: '6px', display: 'block' }}>Amount (₦)</label>
-            <input
-              className="input-field"
-              type="number"
-              placeholder="e.g. 2500"
-              value={spendAmount}
-              onChange={e => setSpendAmount(e.target.value)}
-              style={{ marginBottom: '20px' }}
-              autoFocus
-            />
-
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button className="btn-ghost" onClick={() => { setSpendModal(null); spendMutation.reset(); }} style={{ flex: 1 }}>Cancel</button>
-              <button
-                className="btn-primary"
-                style={{ flex: 1 }}
-                onClick={() => spendMutation.mutate()}
-                disabled={!spendAmount || parseFloat(spendAmount) <= 0 || spendMutation.isPending}
-              >
-                {spendMutation.isPending ? 'Processing...' : 'Charge Card'}
-              </button>
-            </div>
+        <div className="modal-overlay">
+          <div className="modal-sheet">
+            <div className="modal-drag" />
+            <h3 style={{ fontSize: '20px', fontWeight: 900, marginBottom: '6px' }}>Simulate Purchase</h3>
+            <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '20px' }}>Test your card with a simulated transaction</p>
+            <select className="input-field" value={spendMerchant} onChange={e => setSpendMerchant(e.target.value)} style={{ marginBottom: '12px' }}>
+              {SAMPLE_MERCHANTS.map(m => <option key={m}>{m}</option>)}
+            </select>
+            <input className="input-field" type="number" placeholder="Amount (₦)" value={spendAmount} onChange={e => setSpendAmount(e.target.value)} style={{ marginBottom: '16px', fontSize: '20px', fontWeight: 800 }} autoFocus />
             {spendMutation.isError && (
-              <p style={{ color: 'var(--danger)', fontSize: '12px', marginTop: '10px', textAlign: 'center' }}>
-                {(spendMutation.error as any)?.response?.data?.error || 'Transaction failed.'}
+              <p style={{ fontSize: '12px', color: 'var(--danger)', marginBottom: '12px', fontWeight: 600 }}>
+                {(spendMutation.error as any)?.response?.data?.error || 'Purchase failed.'}
               </p>
             )}
+            <button className="btn-primary" onClick={() => spendMutation.mutate()} disabled={!spendAmount || spendMutation.isPending}>
+              {spendMutation.isPending ? 'Processing…' : 'Simulate Purchase'}
+            </button>
+            <button className="btn-ghost" onClick={() => setSpendModal(null)} style={{ marginTop: '10px' }}>Cancel</button>
           </div>
         </div>
       )}
 
-      {/* ── Limit Modal ── */}
+      {/* Limits modal */}
       {limitModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', zIndex: 200 }}>
-          <div className="glass-strong" style={{ width: '100%', maxWidth: '480px', padding: '28px 24px 36px', borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '4px' }}>Adjust Spending Limits</h3>
-            <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', marginBottom: '20px' }}>Amounts in ₦</p>
-            <label style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', marginBottom: '6px', display: 'block' }}>Daily Limit (₦)</label>
+        <div className="modal-overlay">
+          <div className="modal-sheet">
+            <div className="modal-drag" />
+            <h3 style={{ fontSize: '20px', fontWeight: 900, marginBottom: '20px' }}>Update Spending Limits</h3>
+            <label style={{ fontSize: '13px', fontWeight: 700, display: 'block', marginBottom: '8px' }}>Daily Limit (₦)</label>
             <input className="input-field" type="number" value={dailyLimit} onChange={e => setDailyLimit(e.target.value)} style={{ marginBottom: '14px' }} />
-            <label style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', marginBottom: '6px', display: 'block' }}>Monthly Limit (₦)</label>
+            <label style={{ fontSize: '13px', fontWeight: 700, display: 'block', marginBottom: '8px' }}>Monthly Limit (₦)</label>
             <input className="input-field" type="number" value={monthlyLimit} onChange={e => setMonthlyLimit(e.target.value)} style={{ marginBottom: '20px' }} />
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button className="btn-ghost" onClick={() => setLimitModal(null)} style={{ flex: 1 }}>Cancel</button>
-              <button className="btn-primary" style={{ flex: 1 }} onClick={() => limitMutation.mutate({ id: limitModal! })} disabled={limitMutation.isPending}>
-                {limitMutation.isPending ? 'Saving...' : 'Save Limits'}
-              </button>
-            </div>
-            {limitMutation.isError && (
-              <p style={{ color: 'var(--danger)', fontSize: '12px', marginTop: '10px', textAlign: 'center' }}>
-                {(limitMutation.error as any)?.response?.data?.error || 'Failed. Try again.'}
-              </p>
-            )}
+            <button className="btn-primary" onClick={() => limitMutation.mutate({ id: limitModal })} disabled={!dailyLimit || !monthlyLimit || limitMutation.isPending}>
+              {limitMutation.isPending ? 'Saving…' : 'Save Limits'}
+            </button>
+            <button className="btn-ghost" onClick={() => setLimitModal(null)} style={{ marginTop: '10px' }}>Cancel</button>
           </div>
         </div>
       )}
