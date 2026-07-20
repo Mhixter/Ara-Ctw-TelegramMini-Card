@@ -102,6 +102,9 @@ export default function CardsPage({ user }: Props) {
   const [spendAmount, setSpendAmount] = useState('');
   const [spendMerchant, setSpendMerchant] = useState(SAMPLE_MERCHANTS[0]);
   const [issueSuccess, setIssueSuccess] = useState<any | null>(null);
+  const [topupModal, setTopupModal]   = useState<string | null>(null);
+  const [topupAmount, setTopupAmount] = useState('');
+  const [topupResult, setTopupResult] = useState<string | null>(null);
 
   const { data: cards = [], isLoading } = useQuery({ queryKey: ['cards'], queryFn: cardsApi.list });
 
@@ -134,6 +137,17 @@ export default function CardsPage({ user }: Props) {
       qc.invalidateQueries({ queryKey: ['wallets'] });
       qc.invalidateQueries({ queryKey: ['transactions'] });
     }
+  });
+
+  const topupMutation = useMutation({
+    mutationFn: () => cardsApi.topup(topupModal!, parseFloat(topupAmount)),
+    onSuccess: (data) => {
+      haptic('success');
+      setTopupResult(data.message || 'Top-up successful');
+      setTopupAmount('');
+      qc.invalidateQueries({ queryKey: ['wallets'] });
+      qc.invalidateQueries({ queryKey: ['transactions'] });
+    },
   });
 
   const canIssue = user.kycStatus !== 'PENDING' && user.kycStatus !== 'BANNED';
@@ -258,7 +272,7 @@ export default function CardsPage({ user }: Props) {
                   {[
                     { icon: <Snowflake size={18} color={activeCard.status === 'ACTIVE' ? '#6C5CE7' : '#EF4444'} />, label: activeCard.status === 'ACTIVE' ? 'Freeze' : 'Unfreeze', bg: 'rgba(108,92,231,0.08)', action: () => statusMutation.mutate({ id: activeCard.id, status: activeCard.status === 'ACTIVE' ? 'FROZEN' : 'ACTIVE' }) },
                     { icon: <Copy size={18} color="#22C55E" />, label: 'Copy Details', bg: 'rgba(34,197,94,0.08)', action: () => {} },
-                    { icon: <Wallet size={18} color="#F4B400" />, label: 'Fund Card', bg: 'rgba(244,180,0,0.08)', action: () => {} },
+                    { icon: <Wallet size={18} color="#F4B400" />, label: 'Fund Card', bg: 'rgba(244,180,0,0.08)', action: () => { setTopupModal(activeCard.id); setTopupAmount(''); setTopupResult(null); topupMutation.reset(); } },
                     { icon: <ShoppingBag size={18} color="#8B5CF6" />, label: 'Spend', bg: 'rgba(139,92,246,0.08)', action: () => { setSpendModal(activeCard); setSpendAmount(''); } },
                     { icon: <Tag size={18} color="#6C5CE7" />, label: 'Rename', bg: 'rgba(108,92,231,0.08)', action: () => {} },
                     { icon: <SlidersHorizontal size={18} color="#F59E0B" />, label: 'Card Limits', bg: 'rgba(245,158,11,0.08)', action: () => { setLimitModal(activeCard.id); setDailyLimit(String(activeCard.daily_limit)); setMonthlyLimit(String(activeCard.monthly_limit)); } },
@@ -441,6 +455,55 @@ export default function CardsPage({ user }: Props) {
               {limitMutation.isPending ? 'Saving…' : 'Save Limits'}
             </button>
             <button className="btn-ghost" onClick={() => setLimitModal(null)} style={{ marginTop: '10px' }}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {/* Fund Card (top-up) modal */}
+      {topupModal && (
+        <div className="modal-overlay">
+          <div className="modal-sheet">
+            <div className="modal-drag" />
+            {topupResult ? (
+              <>
+                <div style={{ textAlign: 'center', padding: '16px 0 8px' }}>
+                  <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(34,197,94,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+                    <CheckCircle2 size={28} color="var(--emerald)" />
+                  </div>
+                  <h3 style={{ fontSize: '20px', fontWeight: 900, marginBottom: '6px' }}>Card Funded!</h3>
+                  <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{topupResult}</p>
+                </div>
+                <button className="btn-primary" style={{ marginTop: '20px' }} onClick={() => { setTopupModal(null); setTopupResult(null); }}>Done</button>
+              </>
+            ) : (
+              <>
+                <h3 style={{ fontSize: '20px', fontWeight: 900, marginBottom: '6px' }}>Fund Card</h3>
+                <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '20px' }}>Add money from your wallet to this card</p>
+                <input
+                  className="input-field"
+                  type="number"
+                  placeholder="Amount (₦)"
+                  value={topupAmount}
+                  onChange={e => setTopupAmount(e.target.value)}
+                  style={{ marginBottom: '8px', fontSize: '20px', fontWeight: 800 }}
+                  autoFocus
+                />
+                <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '16px' }}>Minimum ₦100 · Debited instantly from your wallet</p>
+                {topupMutation.isError && (
+                  <p style={{ fontSize: '12px', color: 'var(--danger)', marginBottom: '12px', fontWeight: 600 }}>
+                    {(topupMutation.error as any)?.response?.data?.error || 'Top-up failed. Please try again.'}
+                  </p>
+                )}
+                <button
+                  className="btn-primary"
+                  onClick={() => topupMutation.mutate()}
+                  disabled={!topupAmount || parseFloat(topupAmount) < 100 || topupMutation.isPending}
+                >
+                  {topupMutation.isPending ? 'Processing…' : `Fund ₦${parseFloat(topupAmount || '0').toLocaleString('en-NG')}`}
+                </button>
+                <button className="btn-ghost" onClick={() => setTopupModal(null)} style={{ marginTop: '10px' }}>Cancel</button>
+              </>
+            )}
           </div>
         </div>
       )}

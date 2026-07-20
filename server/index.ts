@@ -252,8 +252,38 @@ async function ensureSuperAdmin() {
 }
 
 // ─── Startup ──────────────────────────────────────────────────────────────────
+function logProductionWarnings(): void {
+  if (process.env.NODE_ENV !== 'production') return;
+  const required: Record<string, string | undefined> = {
+    TELEGRAM_BOT_TOKEN:   process.env.TELEGRAM_BOT_TOKEN,
+    CARD_ISSUER_API_KEY:  process.env.CARD_ISSUER_API_KEY,
+    SUDO_CUSTOMER_ID:     process.env.SUDO_CUSTOMER_ID,
+    SUDO_FUND_ACCOUNT_ID: process.env.SUDO_FUND_ACCOUNT_ID,
+    PAYPOINT_API_KEY:     process.env.PAYPOINT_API_KEY,
+    WEBHOOK_SECRET:       process.env.WEBHOOK_SECRET,
+    JWT_SECRET:           process.env.JWT_SECRET,
+  };
+  const optional: Record<string, string | undefined> = {
+    SUDO_COLLECTION_ACCOUNT_NUMBER: process.env.SUDO_COLLECTION_ACCOUNT_NUMBER,
+    SUDO_COLLECTION_BANK_CODE:      process.env.SUDO_COLLECTION_BANK_CODE,
+    PAYPOINT_WEBHOOK_SECRET:        process.env.PAYPOINT_WEBHOOK_SECRET,
+  };
+  const missing = Object.entries(required).filter(([, v]) => !v).map(([k]) => k);
+  const missingOpt = Object.entries(optional).filter(([, v]) => !v).map(([k]) => k);
+  if (missing.length) {
+    console.warn(`[startup] ⚠️  PRODUCTION — missing required env vars: ${missing.join(', ')}`);
+    console.warn('[startup]    Card issuance and virtual accounts will return 503 until these are set.');
+  } else {
+    console.log('[startup] ✅ All required production env vars present.');
+  }
+  if (missingOpt.length) {
+    console.warn(`[startup] ℹ️  Optional env vars not set (sweeps disabled): ${missingOpt.join(', ')}`);
+  }
+}
+
 app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
+  logProductionWarnings();
   try {
     await runMigrations();
     await ensureSuperAdmin();

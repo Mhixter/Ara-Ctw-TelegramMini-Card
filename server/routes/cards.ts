@@ -2,7 +2,7 @@ import { Router, Response, Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import pool from '../db';
 import { requireAuth, requireUUID, AuthRequest } from '../middleware/auth';
-import { issueCard, getCardDetails, updateCardStatus, verifyWebhookSignature } from '../services/sudoAfrica';
+import { issueCard, getCardDetails, updateCardStatus, verifyWebhookSignature, fundCard, assertSudoProductionReady } from '../services/sudoAfrica';
 
 const router = Router();
 
@@ -54,6 +54,12 @@ router.get('/:cardId/details', requireAuth, requireUUID, async (req: AuthRequest
 router.post('/issue', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
   const client = await pool.connect();
   try {
+    // Guard: fail fast in production when Sudo keys are not set
+    try { assertSudoProductionReady(); } catch (e: any) {
+      client.release();
+      return res.status(e.statusCode || 503).json({ error: e.message });
+    }
+
     const { currency = 'NGN', brand = 'VISA' } = req.body;
     if (!['VISA', 'MASTERCARD'].includes(brand)) {
       return res.status(400).json({ error: 'Only VISA and MASTERCARD are supported' });
@@ -386,6 +392,87 @@ router.patch('/:cardId/limits', requireAuth, requireUUID, async (req: AuthReques
     res.json({ success: true, card: result.rows[0] });
   } catch {
     res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// ── Top up a card from wallet balance ─────────────────────────────────────────
+router.post('/:cardId/topup', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
+  const client = await pool.connect();
+  try {
+    const cardId  = String(req.params.cardId);
+    const amount  = Number(req.body.amount);
+
+    if (!amount || amount < 100) {
+      client.release();
+      return res.status(400).json({ error: 'Minimum top-up is ₦100' });
+    }
+
+    // Verify card ownership and state
+    const cardResult = await pool.query(
+      'SELECT id, provider_card_id, mask_pan, status FROM cards WHERE id = $1 AND user_id = $2',
+      [cardId, req.user!.userId]
+    );
+    const card = cardResult.rows[0];
+    if (!card)                   { client.release(); return res.status(404).json({ error: 'Card not found' }); }
+    if (card.status !== 'ACTIVE') { client.release(); return res.status(400).json({ error: 'Card must be active to top up' }); }
+
+    await client.query('BEGIN');
+
+    // Lock wallet and check balance
+    const walletResult = await client.query(
+      "SELECT * FROM wallets WHERE user_id = $1 AND currency = 'NGN' FOR UPDATE",
+      [req.user!.userId]
+    );
+    const wallet = walletResult.rows[0];
+    if (!wallet) { await client.query('ROLLBACK'); client.release(); return res.status(404).json({ error: 'NGN wallet not found' }); }
+
+    if (Number(wallet.balance) < amount) {
+      await client.query('ROLLBACK'); client.release();
+      return res.status(400).json({
+        error: `Insufficient balance. Available: ₦${Number(wallet.balance).toLocaleString('en-NG', { minimumFractionDigits: 2 })}`,
+      });
+    }
+
+    // Debit wallet
+    await client.query(
+      'UPDATE wallets SET balance = balance - $1, updated_at = NOW() WHERE id = $2',
+      [amount, wallet.id]
+    );
+
+    const ref = `CARD-TOPUP-${uuidv4()}`;
+
+    // Ledger entry
+    await client.query(
+      `INSERT INTO ledger_entries (id, debit_wallet_id, amount, currency, purpose, transaction_reference, metadata, created_at)
+       VALUES (gen_random_uuid(), $1, $2, 'NGN', 'CARD_FUNDING', $3, $4, NOW())`,
+      [wallet.id, amount, ref, JSON.stringify({ cardId: card.id, maskPan: card.mask_pan })]
+    );
+
+    await client.query('COMMIT');
+    client.release();
+
+    // Fund card via Sudo — after commit so wallet is already debited atomically
+    try {
+      await fundCard(card.provider_card_id, amount);
+    } catch (sudoErr: any) {
+      console.error('[cards/topup] Sudo fundCard failed after wallet debit:', sudoErr.message);
+      return res.status(207).json({
+        success: true,
+        warning: 'Wallet debited. Card funding is queued — contact support if it does not reflect shortly.',
+        reference: ref,
+      });
+    }
+
+    res.json({
+      success: true,
+      message: `₦${amount.toLocaleString('en-NG', { minimumFractionDigits: 2 })} added to card`,
+      reference: ref,
+    });
+  } catch (err: any) {
+    await client.query('ROLLBACK').catch(() => {});
+    client.release();
+    console.error('[cards/topup]', err);
+    res.status(500).json({ error: err.message || 'Server error' });
   }
 });
 

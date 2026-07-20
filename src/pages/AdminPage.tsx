@@ -47,10 +47,11 @@ export default function AdminPage({ adminRole }: Props) {
   const canCreateAdmin = adminRole === 'SUPER_ADMIN';
 
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: BarChart2 },
-    { id: 'users',    label: 'Users',    icon: Users },
-    ...(canManageKyc ? [{ id: 'kycqueue', label: 'KYC Queue', icon: Clock }] : []),
-    ...(canSeeFinance ? [{ id: 'ledger', label: 'Ledger', icon: BookOpen }] : []),
+    { id: 'overview',  label: 'Overview',  icon: BarChart2 },
+    { id: 'users',     label: 'Users',     icon: Users },
+    ...(canManageKyc  ? [{ id: 'kycqueue',  label: 'KYC Queue', icon: Clock   }] : []),
+    ...(canSeeFinance ? [{ id: 'ledger',    label: 'Ledger',    icon: BookOpen }] : []),
+    ...(canSeeFinance ? [{ id: 'treasury',  label: 'Treasury',  icon: Shield   }] : []),
   ];
 
   const [activeSection, setActiveSection] = useState<string>('overview');
@@ -120,6 +121,23 @@ export default function AdminPage({ adminRole }: Props) {
   });
 
   const [rejectState, setRejectState] = useState<{ userId: string; reason: string } | null>(null);
+  const [sweepAmount, setSweepAmount] = useState('');
+
+  const { data: treasuryData, isLoading: treasuryLoading, refetch: refetchTreasury } = useQuery({
+    queryKey: ['admin-treasury'],
+    queryFn: adminApi.treasury,
+    enabled: activeSection === 'treasury' && canSeeFinance,
+    refetchInterval: 60_000,
+  });
+
+  const sweepMutation = useMutation({
+    mutationFn: () => adminApi.sweep(parseFloat(sweepAmount)),
+    onSuccess: () => {
+      haptic('success');
+      setSweepAmount('');
+      refetchTreasury();
+    },
+  });
 
   const approveKycMutation = useMutation({
     mutationFn: ({ userId, tier }: { userId: string; tier: string }) =>
@@ -646,6 +664,114 @@ export default function AdminPage({ adminRole }: Props) {
               </div>
             )}
           </div>
+        </div>
+      )}
+      {/* ── TREASURY (finance roles only) ── */}
+      {activeSection === 'treasury' && canSeeFinance && (
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <h3 style={{ fontWeight: 700 }}>Treasury Overview</h3>
+            <button onClick={() => refetchTreasury()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--accent)' }}>
+              <RefreshCw size={16} />
+            </button>
+          </div>
+
+          {treasuryLoading ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {[...Array(4)].map((_, i) => <div key={i} className="skeleton" style={{ height: '72px', borderRadius: '14px' }} />)}
+            </div>
+          ) : treasuryData ? (
+            <>
+              {/* Status badges */}
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 10px', borderRadius: '20px', background: treasuryData.sudoConfigured ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.12)', color: treasuryData.sudoConfigured ? 'var(--success)' : 'var(--danger)' }}>
+                  {treasuryData.sudoConfigured ? '✓ Sudo Africa live' : '✗ Sudo not configured'}
+                </span>
+                <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 10px', borderRadius: '20px', background: treasuryData.paypointConfigured ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.12)', color: treasuryData.paypointConfigured ? 'var(--success)' : 'var(--danger)' }}>
+                  {treasuryData.paypointConfigured ? '✓ PayPoint live' : '✗ PayPoint not configured'}
+                </span>
+                <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 10px', borderRadius: '20px', background: treasuryData.sweepConfigured ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.12)', color: treasuryData.sweepConfigured ? 'var(--success)' : 'var(--danger)' }}>
+                  {treasuryData.sweepConfigured ? '✓ Sweep configured' : '✗ Sweep not configured'}
+                </span>
+              </div>
+
+              {/* Metric cards */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
+                <div className="glass" style={{ padding: '16px' }}>
+                  <p style={{ fontSize: '10px', color: 'var(--tg-theme-hint-color)', marginBottom: '6px', fontWeight: 700, letterSpacing: '0.4px' }}>SUDO FUND ACCOUNT</p>
+                  {treasuryData.sudoFundAccount ? (
+                    <>
+                      <p style={{ fontSize: '18px', fontWeight: 900, color: 'var(--success)' }}>{fmtNGN(treasuryData.sudoFundAccount.available)}</p>
+                      <p style={{ fontSize: '10px', color: 'var(--tg-theme-hint-color)', marginTop: '2px' }}>Ledger: {fmtNGN(treasuryData.sudoFundAccount.ledger)}</p>
+                    </>
+                  ) : (
+                    <p style={{ fontSize: '13px', color: 'var(--tg-theme-hint-color)', fontStyle: 'italic' }}>—  sandbox / not connected</p>
+                  )}
+                </div>
+                <div className="glass" style={{ padding: '16px' }}>
+                  <p style={{ fontSize: '10px', color: 'var(--tg-theme-hint-color)', marginBottom: '6px', fontWeight: 700, letterSpacing: '0.4px' }}>TOTAL WALLET BALANCES</p>
+                  <p style={{ fontSize: '18px', fontWeight: 900, color: 'var(--gold)' }}>{fmtNGN(treasuryData.walletExposure)}</p>
+                  <p style={{ fontSize: '10px', color: 'var(--tg-theme-hint-color)', marginTop: '2px' }}>User-held NGN</p>
+                </div>
+                <div className="glass" style={{ padding: '16px' }}>
+                  <p style={{ fontSize: '10px', color: 'var(--tg-theme-hint-color)', marginBottom: '6px', fontWeight: 700, letterSpacing: '0.4px' }}>ACTIVE CARDS</p>
+                  <p style={{ fontSize: '18px', fontWeight: 900 }}>{treasuryData.activeCards}</p>
+                  <p style={{ fontSize: '10px', color: 'var(--tg-theme-hint-color)', marginTop: '2px' }}>Live virtual cards</p>
+                </div>
+                <div className="glass" style={{ padding: '16px' }}>
+                  <p style={{ fontSize: '10px', color: 'var(--tg-theme-hint-color)', marginBottom: '6px', fontWeight: 700, letterSpacing: '0.4px' }}>MONTHLY CARD EXPOSURE</p>
+                  <p style={{ fontSize: '18px', fontWeight: 900, color: 'var(--accent)' }}>{fmtNGN(treasuryData.cardMonthlyExposure)}</p>
+                  <p style={{ fontSize: '10px', color: 'var(--tg-theme-hint-color)', marginTop: '2px' }}>Sum of monthly limits</p>
+                </div>
+              </div>
+
+              {/* Sweep section */}
+              {adminRole === 'SUPER_ADMIN' && (
+                <div className="glass" style={{ padding: '18px', borderRadius: '16px' }}>
+                  <p style={{ fontWeight: 800, fontSize: '14px', marginBottom: '4px' }}>Sweep PayPoint → Sudo</p>
+                  <p style={{ fontSize: '12px', color: 'var(--tg-theme-hint-color)', marginBottom: '14px' }}>
+                    Transfer collected NGN from PayPoint to your Sudo fund account to top up card backing.
+                  </p>
+                  {!treasuryData.sweepConfigured && (
+                    <div style={{ padding: '10px 12px', borderRadius: '10px', background: 'rgba(244,180,0,0.1)', border: '1px solid rgba(244,180,0,0.25)', marginBottom: '12px' }}>
+                      <p style={{ fontSize: '12px', color: 'var(--gold)', fontWeight: 600 }}>
+                        Set SUDO_COLLECTION_ACCOUNT_NUMBER + SUDO_COLLECTION_BANK_CODE to enable live sweeps.
+                      </p>
+                    </div>
+                  )}
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <input
+                      className="input-field"
+                      type="number"
+                      placeholder="Amount (₦)"
+                      value={sweepAmount}
+                      onChange={e => setSweepAmount(e.target.value)}
+                      style={{ flex: 1, margin: 0 }}
+                    />
+                    <button
+                      onClick={() => sweepMutation.mutate()}
+                      disabled={!sweepAmount || parseFloat(sweepAmount) <= 0 || sweepMutation.isPending}
+                      style={{ padding: '0 18px', borderRadius: '12px', border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: '13px', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                    >
+                      {sweepMutation.isPending ? 'Sending…' : 'Sweep'}
+                    </button>
+                  </div>
+                  {sweepMutation.isSuccess && (
+                    <p style={{ fontSize: '12px', color: 'var(--success)', marginTop: '10px', fontWeight: 600 }}>
+                      ✓ Sweep initiated — ref: {sweepMutation.data?.result?.reference}
+                    </p>
+                  )}
+                  {sweepMutation.isError && (
+                    <p style={{ fontSize: '12px', color: 'var(--danger)', marginTop: '10px', fontWeight: 600 }}>
+                      {(sweepMutation.error as any)?.response?.data?.error || 'Sweep failed. Check server logs.'}
+                    </p>
+                  )}
+                </div>
+              )}
+            </>
+          ) : (
+            <p style={{ color: 'var(--tg-theme-hint-color)', fontSize: '14px' }}>No treasury data available.</p>
+          )}
         </div>
       )}
     </div>

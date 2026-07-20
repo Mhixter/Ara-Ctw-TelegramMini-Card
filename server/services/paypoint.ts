@@ -142,6 +142,71 @@ export interface PayPointTransferEvent {
   senderName?: string;
 }
 
+// ─── Production-mode guard ────────────────────────────────────────────────────
+export function assertPayPointProductionReady(): void {
+  if (process.env.NODE_ENV === 'production' && isSandbox()) {
+    const err: any = new Error(
+      'Virtual account service not configured for production. Missing: PAYPOINT_API_KEY'
+    );
+    err.statusCode = 503;
+    throw err;
+  }
+}
+
+// ─── Outbound transfer — sweep collected NGN to Sudo's collection account ─────
+export interface SweepResult {
+  reference: string;
+  status: string;
+  amount: number;
+}
+
+export async function initiateTransferToSudo(opts: {
+  amountNaira: number;
+  reference: string;
+  narration?: string;
+}): Promise<SweepResult> {
+  if (isSandbox()) {
+    console.log(`[paypoint] SANDBOX sweep simulated: ₦${opts.amountNaira} ref=${opts.reference}`);
+    return { reference: opts.reference, status: 'MOCK_PENDING', amount: opts.amountNaira };
+  }
+
+  const accountNumber = process.env.SUDO_COLLECTION_ACCOUNT_NUMBER;
+  const bankCode      = process.env.SUDO_COLLECTION_BANK_CODE;
+
+  if (!accountNumber || !bankCode) {
+    throw new Error(
+      'Sweep not configured. Set SUDO_COLLECTION_ACCOUNT_NUMBER and SUDO_COLLECTION_BANK_CODE.'
+    );
+  }
+
+  const body = {
+    amount: Math.round(opts.amountNaira * 100), // kobo
+    destination: { account_number: accountNumber, bank_code: bankCode },
+    reference: opts.reference,
+    narration: opts.narration || 'BorderPay → Sudo fund sweep',
+  };
+
+  const res = await fetch(`${BASE_URL}/transfers`, {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    const err: any = await res.json().catch(() => ({}));
+    throw new Error(
+      `PayPoint transfer failed ${res.status}: ${err?.message || res.statusText}`
+    );
+  }
+
+  const data: any = await res.json();
+  return {
+    reference: data?.data?.reference || opts.reference,
+    status:    data?.data?.status    || 'PENDING',
+    amount:    opts.amountNaira,
+  };
+}
+
 export function parsePayPointWebhook(body: any): PayPointTransferEvent | null {
   try {
     const data = body?.data || body;

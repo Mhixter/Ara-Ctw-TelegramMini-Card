@@ -79,6 +79,8 @@ export const cardsApi = {
     api.patch(`/cards/${cardId}/limits`, { dailyLimit, monthlyLimit }).then(r => r.data),
   spend: (cardId: string, amount: number, merchant: string) =>
     api.post(`/cards/${cardId}/spend`, { amount, merchant }).then(r => r.data),
+  topup: (cardId: string, amount: number) =>
+    api.post(`/cards/${cardId}/topup`, { amount }).then(r => r.data),
 };
 
 export const adminApi = {
@@ -97,4 +99,6 @@ export const adminApi = {
     api.post(`/admin/kyc/${userId}/approve`, { tier }).then(r => r.data),
   rejectKyc: (userId: string, reason: string) =>
     api.post(`/admin/kyc/${userId}/reject`, { reason }).then(r => r.data),
+  treasury: () => api.get('/admin/treasury').then(r => r.data),
+  sweep: (amountNaira: number) => api.post('/admin/treasury/sweep', { amountNaira }).then(r => r.data),
 };

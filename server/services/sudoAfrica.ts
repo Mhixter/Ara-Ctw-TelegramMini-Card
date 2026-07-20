@@ -161,6 +161,64 @@ export async function updateCardStatus(
   });
 }
 
+// ─── Production-mode guard ────────────────────────────────────────────────────
+export function assertSudoProductionReady(): void {
+  if (process.env.NODE_ENV === 'production' && !canIssueRealCard()) {
+    const missing = [
+      !process.env.CARD_ISSUER_API_KEY  && 'CARD_ISSUER_API_KEY',
+      !process.env.SUDO_CUSTOMER_ID     && 'SUDO_CUSTOMER_ID',
+      !process.env.SUDO_FUND_ACCOUNT_ID && 'SUDO_FUND_ACCOUNT_ID',
+    ].filter(Boolean).join(', ');
+    const err: any = new Error(
+      `Card service not configured for production. Missing: ${missing}`
+    );
+    err.statusCode = 503;
+    throw err;
+  }
+}
+
+// ─── Fund-account balance ─────────────────────────────────────────────────────
+export async function getSudoFundAccountBalance(): Promise<{ available: number; ledger: number } | null> {
+  if (isSandbox() || !process.env.SUDO_FUND_ACCOUNT_ID) return null;
+  try {
+    const res = await fetch(
+      `${SUDO_BASE}/accounts/${process.env.SUDO_FUND_ACCOUNT_ID}`,
+      { headers: authHeaders() }
+    );
+    if (!res.ok) throw new Error(`Sudo API ${res.status}`);
+    const data: any = await res.json();
+    const account = data?.data;
+    return {
+      available: Number(account?.availableBalance ?? 0) / 100,
+      ledger:    Number(account?.ledgerBalance   ?? 0) / 100,
+    };
+  } catch (err) {
+    console.error('[sudo] Fund account balance fetch failed:', err);
+    return null;
+  }
+}
+
+// ─── Fund / top-up a specific card ───────────────────────────────────────────
+export async function fundCard(providerCardId: string, amountNaira: number): Promise<void> {
+  if (isSandbox() || providerCardId.startsWith('sandbox_')) return;
+
+  const res = await fetch(`${SUDO_BASE}/cards/${providerCardId}/fund`, {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify({
+      amount:         Math.round(amountNaira * 100), // kobo
+      debitAccountId: process.env.SUDO_FUND_ACCOUNT_ID,
+    }),
+  });
+
+  if (!res.ok) {
+    const err: any = await res.json().catch(() => ({}));
+    throw new Error(
+      `Sudo fundCard failed ${res.status}: ${err?.message || res.statusText}`
+    );
+  }
+}
+
 // ─── HMAC webhook signature verification ─────────────────────────────────────
 export function verifyWebhookSignature(
   rawBody: string,
