@@ -104,10 +104,11 @@ export async function createSudoCustomer(opts: {
   });
 
   if (!res.ok) {
-    const err: any = await res.json().catch(() => ({}));
-    throw new Error(
-      `Sudo createCustomer failed ${res.status}: ${err?.message || res.statusText}`
-    );
+    const errBody = await res.text().catch(() => '');
+    let errMsg = res.statusText;
+    try { errMsg = JSON.parse(errBody)?.message || errBody || res.statusText; } catch {}
+    console.error('[sudo] createCustomer failed', res.status, errBody);
+    throw new Error(`Sudo createCustomer failed ${res.status}: ${errMsg}`);
   }
 
   const data: any = await res.json();

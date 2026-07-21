@@ -86,22 +86,33 @@ router.post('/issue', requireAuth, requireUUID, async (req: AuthRequest, res: Re
     let sudoCustomerId: string = user.sudo_customer_id || '';
 
     if (!sudoCustomerId && process.env.CARD_ISSUER_API_KEY && process.env.SUDO_SANDBOX !== 'true') {
-      // Parse name into parts — first_name may be "First Last" or just "First"
-      const nameParts  = (user.first_name || 'BorderPay User').trim().split(/\s+/);
-      const firstName  = nameParts[0] || 'BorderPay';
-      const lastName   = nameParts.slice(1).join(' ') || 'User';
+      // Prefer the shared business-level Sudo customer (SUDO_CUSTOMER_ID env var).
+      // Sudo Africa requires BVN + phone to create per-user customers; we don't
+      // store those in plaintext, so we fall back to the business customer instead.
+      if (process.env.SUDO_CUSTOMER_ID) {
+        sudoCustomerId = process.env.SUDO_CUSTOMER_ID;
+        // Persist so subsequent card issuances skip this check
+        await pool.query(
+          'UPDATE users SET sudo_customer_id = $1, updated_at = NOW() WHERE id = $2',
+          [sudoCustomerId, req.user!.userId]
+        );
+      } else {
+        // Last resort: attempt per-user customer creation (requires full KYC data)
+        const nameParts = (user.first_name || 'BorderPay User').trim().split(/\s+/);
+        const firstName = nameParts[0] || 'BorderPay';
+        const lastName  = nameParts.slice(1).join(' ') || 'User';
 
-      sudoCustomerId = await createSudoCustomer({
-        firstName,
-        lastName,
-        email: user.email || undefined,
-      });
+        sudoCustomerId = await createSudoCustomer({
+          firstName,
+          lastName,
+          email: user.email || undefined,
+        });
 
-      // Persist so we don't create a new customer on every card
-      await pool.query(
-        'UPDATE users SET sudo_customer_id = $1, updated_at = NOW() WHERE id = $2',
-        [sudoCustomerId, req.user!.userId]
-      );
+        await pool.query(
+          'UPDATE users SET sudo_customer_id = $1, updated_at = NOW() WHERE id = $2',
+          [sudoCustomerId, req.user!.userId]
+        );
+      }
     }
 
     await client.query('BEGIN');
