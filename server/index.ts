@@ -198,6 +198,10 @@ async function runMigrations() {
       `ALTER TABLE user_kyc    ADD COLUMN IF NOT EXISTS updated_at      TIMESTAMPTZ  DEFAULT NOW()`,
       `ALTER TABLE users       ADD COLUMN IF NOT EXISTS kyc_rejection_reason TEXT`,
       `ALTER TABLE users       ADD COLUMN IF NOT EXISTS updated_at      TIMESTAMPTZ  DEFAULT NOW()`,
+      // Sudo Africa card account link (needed for account-to-account top-up transfers)
+      `ALTER TABLE cards       ADD COLUMN IF NOT EXISTS sudo_account_id  VARCHAR(255)`,
+      // Card expiry stored at issue time (Sudo returns expiryMonth + expiryYear)
+      `ALTER TABLE cards       ADD COLUMN IF NOT EXISTS expiry           VARCHAR(10)`,
     ];
 
     let ok = 0;

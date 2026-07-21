@@ -2,3 +2,4 @@
 - [TypeScript req.params issue](ts-params-cast.md) — req.params values need String() cast when passed to typed functions in this Express/ts-node version
 - [Database connection pattern](db-connection.md) — prefer PGHOST/PGDATABASE over DATABASE_URL; user secret can corrupt the latter
 - [P2P send design](p2p-send-design.md) — Telegram-to-Telegram only; no external withdrawal; username stored on auth
+- [Sudo Africa API audit](sudo-api-audit.md) — confirmed bugs fixed: status casing, fundingSourceId, issuerCountry, vault for PAN/CVV, accounts/transfer for top-ups

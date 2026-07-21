@@ -22,6 +22,10 @@ export default function HomePage({ user, onNavigate }: Props) {
   const [balanceHidden, setBalanceHidden] = useState(false);
   const [copied, setCopied]       = useState(false);
   const [receiptTx, setReceiptTx] = useState<any | null>(null);
+  const [withdrawModal, setWithdrawModal]   = useState(false);
+  const [exchangeModal, setExchangeModal]   = useState(false);
+  const [txModal, setTxModal]               = useState(false);
+  const [menuDrawer, setMenuDrawer]         = useState(false);
 
   const { data: wallets = [], isLoading: walletsLoading } = useQuery({
     queryKey: ['wallets'], queryFn: walletApi.list, refetchInterval: 30_000,
@@ -225,7 +229,7 @@ export default function HomePage({ user, onNavigate }: Props) {
           <button className="icon-btn" style={{ position: 'relative' }} onClick={() => qc.invalidateQueries()}>
             <Bell size={18} color="var(--text-muted)" />
           </button>
-          <button className="icon-btn">
+          <button className="icon-btn" onClick={() => setMenuDrawer(true)}>
             <Menu size={18} color="var(--text-muted)" />
           </button>
         </div>
@@ -326,11 +330,11 @@ export default function HomePage({ user, onNavigate }: Props) {
           <div className="quick-grid">
             {[
               { icon: <Wallet size={20} color="var(--purple)" />, label: 'Fund\nWallet', action: () => setView('fund'), bg: 'rgba(108,92,231,0.1)' },
-              { icon: <ArrowUpCircle size={20} color="#EF4444" />, label: 'With-\ndraw', action: () => {}, bg: 'rgba(239,68,68,0.1)' },
+              { icon: <ArrowUpCircle size={20} color="#EF4444" />, label: 'With-\ndraw', action: () => setWithdrawModal(true), bg: 'rgba(239,68,68,0.1)' },
               { icon: <Send size={20} color="var(--purple)" />, label: 'Send\nMoney', action: () => onNavigate?.('send'), bg: 'rgba(108,92,231,0.1)' },
-              { icon: <ArrowRightLeft size={20} color="var(--gold-dark)" />, label: 'Exchange\nCurrency', action: () => {}, bg: 'rgba(244,180,0,0.1)' },
+              { icon: <ArrowRightLeft size={20} color="var(--gold-dark)" />, label: 'Exchange\nCurrency', action: () => setExchangeModal(true), bg: 'rgba(244,180,0,0.1)' },
               { icon: <CreditCard size={20} color="var(--emerald)" />, label: 'Virtual\nCards', action: () => onNavigate?.('cards'), bg: 'rgba(34,197,94,0.1)' },
-              { icon: <BarChart2 size={20} color="#8B5CF6" />, label: 'Trans-\nactions', action: () => {}, bg: 'rgba(139,92,246,0.1)' },
+              { icon: <BarChart2 size={20} color="#8B5CF6" />, label: 'Trans-\nactions', action: () => setTxModal(true), bg: 'rgba(139,92,246,0.1)' },
             ].map((qa, i) => (
               <div key={i} className="quick-action" onClick={qa.action}>
                 <div className="quick-icon" style={{ background: qa.bg }}>
@@ -454,6 +458,126 @@ export default function HomePage({ user, onNavigate }: Props) {
       </div>
 
       {receiptTx && <TransactionReceipt tx={receiptTx} onClose={() => setReceiptTx(null)} />}
+
+      {/* Withdraw modal */}
+      {withdrawModal && (
+        <div className="modal-centre">
+          <div className="modal-centre-card">
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(239,68,68,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+              <ArrowUpCircle size={28} color="var(--danger)" />
+            </div>
+            <h3 style={{ fontSize: '20px', fontWeight: 900, marginBottom: '8px' }}>Withdraw Funds</h3>
+            <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px', lineHeight: 1.6 }}>
+              Direct bank withdrawals are coming soon. Currently you can send money to other BorderPay users instantly.
+            </p>
+            <div style={{ padding: '12px 14px', borderRadius: '12px', background: 'rgba(108,92,231,0.07)', border: '1px solid rgba(108,92,231,0.18)', marginBottom: '24px' }}>
+              <p style={{ fontSize: '13px', color: 'var(--purple)', fontWeight: 600 }}>
+                💡 Use <strong>Send Money</strong> to transfer NGN to any BorderPay user by their Telegram username — zero fees, instant delivery.
+              </p>
+            </div>
+            <button className="btn-primary" onClick={() => { setWithdrawModal(false); onNavigate?.('send'); }}>
+              Send to a User Instead
+            </button>
+            <button className="btn-ghost" onClick={() => setWithdrawModal(false)} style={{ marginTop: '10px' }}>Close</button>
+          </div>
+        </div>
+      )}
+
+      {/* Exchange modal */}
+      {exchangeModal && (
+        <div className="modal-centre">
+          <div className="modal-centre-card">
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(244,180,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+              <ArrowRightLeft size={28} color="var(--gold-dark)" />
+            </div>
+            <h3 style={{ fontSize: '20px', fontWeight: 900, marginBottom: '8px' }}>Currency Exchange</h3>
+            <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '20px', lineHeight: 1.6 }}>
+              Multi-currency exchange is coming soon. We're integrating real-time FX rates for NGN ↔ USD, GBP, EUR, and more.
+            </p>
+            <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginBottom: '24px', flexWrap: 'wrap' }}>
+              {['NGN ↔ USD', 'NGN ↔ GBP', 'NGN ↔ EUR', 'NGN ↔ USDT'].map(p => (
+                <span key={p} style={{ fontSize: '12px', fontWeight: 700, padding: '5px 12px', borderRadius: '20px', background: 'rgba(244,180,0,0.1)', color: 'var(--gold-dark)', border: '1px solid rgba(244,180,0,0.25)' }}>{p}</span>
+              ))}
+            </div>
+            <button className="btn-ghost" onClick={() => setExchangeModal(false)}>Got it</button>
+          </div>
+        </div>
+      )}
+
+      {/* All Transactions modal */}
+      {txModal && (
+        <div className="modal-overlay" style={{ zIndex: 200 }}>
+          <div className="modal-sheet" style={{ maxHeight: '85vh', overflowY: 'auto' }}>
+            <div className="modal-drag" />
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ fontSize: '20px', fontWeight: 900 }}>All Transactions</h3>
+              <span style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: 700 }}>{transactions.length} total</span>
+            </div>
+            {transactions.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                <div style={{ fontSize: '40px', marginBottom: '12px' }}>💸</div>
+                <p style={{ fontWeight: 700 }}>No transactions yet</p>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                {transactions.map((tx: any) => {
+                  const isCredit = !!tx.credit_wallet_id;
+                  const meta = (() => { try { return JSON.parse(tx.metadata || '{}'); } catch { return {}; } })();
+                  return (
+                    <div
+                      key={tx.id}
+                      onClick={() => { setTxModal(false); setReceiptTx(tx); }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 0', borderBottom: '1px solid var(--border-sm)', cursor: 'pointer' }}
+                    >
+                      <div style={{ width: '40px', height: '40px', borderRadius: '12px', flexShrink: 0, background: isCredit ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {isCredit ? <ArrowDownCircle size={18} color="var(--emerald)" /> : <ArrowUpCircle size={18} color="var(--danger)" />}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ fontSize: '13px', fontWeight: 700, marginBottom: '2px' }}>{purposeLabel(tx.purpose)}</p>
+                        <p style={{ fontSize: '11px', color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {meta.recipientName ? `To ${meta.recipientName}` : meta.senderName ? `From ${meta.senderName}` : new Date(tx.created_at).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                      </div>
+                      <p style={{ fontSize: '13px', fontWeight: 800, color: isCredit ? 'var(--emerald)' : 'var(--danger)', flexShrink: 0 }}>
+                        {isCredit ? '+' : '-'}₦{Number(tx.amount).toLocaleString('en-NG')}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            <button className="btn-ghost" onClick={() => setTxModal(false)} style={{ marginTop: '16px' }}>Close</button>
+          </div>
+        </div>
+      )}
+
+      {/* Menu drawer */}
+      {menuDrawer && (
+        <div className="modal-overlay" onClick={() => setMenuDrawer(false)}>
+          <div className="modal-sheet" onClick={e => e.stopPropagation()} style={{ paddingBottom: '32px' }}>
+            <div className="modal-drag" />
+            <h3 style={{ fontSize: '18px', fontWeight: 900, marginBottom: '20px' }}>Quick Navigation</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              {[
+                { emoji: '🏠', label: 'Home',            action: () => setMenuDrawer(false) },
+                { emoji: '➕', label: 'Add Funds',       action: () => { setMenuDrawer(false); setView('fund'); } },
+                { emoji: '📤', label: 'Send Money',      action: () => { setMenuDrawer(false); onNavigate?.('send'); } },
+                { emoji: '💳', label: 'Virtual Cards',   action: () => { setMenuDrawer(false); onNavigate?.('cards'); } },
+                { emoji: '🔄', label: 'All Transactions',action: () => { setMenuDrawer(false); setTxModal(true); } },
+                { emoji: '👤', label: 'Profile',         action: () => { setMenuDrawer(false); onNavigate?.('profile'); } },
+              ].map(item => (
+                <button key={item.label} onClick={item.action} style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '14px', borderRadius: '14px', background: 'none', border: 'none', cursor: 'pointer', width: '100%', fontFamily: 'inherit', color: 'var(--text)', transition: 'background 0.15s' }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface-2)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                >
+                  <span style={{ fontSize: '22px', width: '28px', textAlign: 'center' }}>{item.emoji}</span>
+                  <span style={{ fontSize: '15px', fontWeight: 700 }}>{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

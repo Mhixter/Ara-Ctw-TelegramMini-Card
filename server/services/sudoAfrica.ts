@@ -2,15 +2,40 @@
  * sudoAfrica.ts — Sudo Africa card API wrapper.
  *
  * Env vars:
- *   CARD_ISSUER_API_KEY   – Sudo Africa secret key
- *   SUDO_CUSTOMER_ID      – Pre-created Sudo customer / business ID
- *   SUDO_FUND_ACCOUNT_ID  – Sudo funding account ID to debit for card issuance
- *   SUDO_SANDBOX=true     – Force sandbox mode even if API key is present
+ *   CARD_ISSUER_API_KEY      – Sudo Africa secret key
+ *   SUDO_CUSTOMER_ID         – Pre-created Sudo customer / business ID
+ *   SUDO_FUNDING_SOURCE_ID   – Sudo funding source ID (linked to your settlement account)
+ *   SUDO_FUND_ACCOUNT_ID     – Sudo account ID used as debit source for card top-ups
+ *   SUDO_SANDBOX=true        – Force sandbox mode even if API key is present
  *
  * Falls back to sandbox (local mock) when any required var is missing.
+ *
+ * ── API base URLs ─────────────────────────────────────────────────────────────
+ * Cards API:   https://api.sudo.africa          (live)
+ *              https://api.sandbox.sudo.cards    (sandbox)
+ * Vault API:   https://vault.sudo.cards         (live — PCI-compliant card reveal)
+ *              https://vault.sandbox.sudo.cards  (sandbox)
+ *
+ * Sensitive card data (PAN, CVV2) is REDACTED from the regular cards endpoint.
+ * It must be fetched from the Vault endpoint. This is a PCI-DSS requirement.
+ * ─────────────────────────────────────────────────────────────────────────────
  */
 
-const SUDO_BASE = 'https://api.sudo.africa';
+function isSandbox() {
+  return !process.env.CARD_ISSUER_API_KEY || process.env.SUDO_SANDBOX === 'true';
+}
+
+function sudoBase() {
+  return isSandbox()
+    ? 'https://api.sandbox.sudo.cards'
+    : 'https://api.sudo.africa';
+}
+
+function vaultBase() {
+  return isSandbox()
+    ? 'https://vault.sandbox.sudo.cards'
+    : 'https://vault.sudo.cards';
+}
 
 function authHeaders() {
   return {
@@ -19,17 +44,15 @@ function authHeaders() {
   };
 }
 
-function isSandbox() {
-  return !process.env.CARD_ISSUER_API_KEY || process.env.SUDO_SANDBOX === 'true';
-}
-
 function canIssueRealCard() {
   return (
     !isSandbox() &&
     !!process.env.SUDO_CUSTOMER_ID &&
-    !!process.env.SUDO_FUND_ACCOUNT_ID
+    !!process.env.SUDO_FUNDING_SOURCE_ID
   );
 }
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface SudoCard {
   providerCardId: string;
@@ -39,10 +62,15 @@ export interface SudoCard {
   brand: string;
   currency: string;
   type: string;
+  /** Sudo account ID attached to this card — used for account-to-account top-ups */
+  accountId: string | null;
+  /** Formatted expiry e.g. "09/28" */
+  expiry: string;
 }
 
 export interface SudoCardDetails {
   maskPan: string;
+  pan: string | null;
   cvv: string | null;
   expiry: string;
   billingAddress?: string;
@@ -61,6 +89,7 @@ export async function issueCard(opts: {
     // Sandbox fallback — generate plausible mock values
     const { v4: uuidv4 } = await import('uuid');
     const pan = `4111${Math.random().toString().slice(2, 8).padStart(6, '0')}${Math.floor(1000 + Math.random() * 9000)}`;
+    const expYear = String(new Date().getFullYear() + 3).slice(-2);
     return {
       providerCardId: `sandbox_${uuidv4()}`,
       cardToken: `tok_${uuidv4().replace(/-/g, '')}`,
@@ -69,24 +98,35 @@ export async function issueCard(opts: {
       brand: opts.brand,
       currency: opts.currency,
       type: 'VIRTUAL',
+      accountId: null,
+      expiry: `12/${expYear}`,
     };
   }
 
+  // Docs: POST /cards
+  // status, type, currency, issuerCountry are all lowercase in Sudo's API.
+  // fundingSourceId links the card to a Sudo funding source (not the account).
+  // spendingControls.channels enables card usage on web/pos/atm/mobile.
   const body = {
-    type: 'VIRTUAL',
-    brand: opts.brand,
-    currency: opts.currency,
-    status: 'ACTIVE',
-    debitAccountId: process.env.SUDO_FUND_ACCOUNT_ID,
-    spendingLimits: [
-      { amount: opts.dailyLimit * 100, interval: 'DAILY' },
-      { amount: opts.monthlyLimit * 100, interval: 'MONTHLY' },
-    ],
-    customerId: process.env.SUDO_CUSTOMER_ID,
-    metadata: { internalUserId: opts.userId, tier: opts.tier },
+    customerId:      process.env.SUDO_CUSTOMER_ID,
+    type:            'virtual',
+    currency:        opts.currency,
+    status:          'active',          // MUST be lowercase
+    issuerCountry:   'NGA',
+    fundingSourceId: process.env.SUDO_FUNDING_SOURCE_ID,
+    metadata:        JSON.stringify({ internalUserId: opts.userId, tier: opts.tier }),
+    spendingControls: {
+      allowedCategories: [],
+      blockedCategories: [],
+      channels: { atm: false, pos: true, web: true, mobile: true },
+      spendingLimits: [
+        { amount: opts.dailyLimit * 100,   interval: 'daily' },
+        { amount: opts.monthlyLimit * 100, interval: 'monthly' },
+      ],
+    },
   };
 
-  const res = await fetch(`${SUDO_BASE}/cards`, {
+  const res = await fetch(`${sudoBase()}/cards`, {
     method: 'POST',
     headers: authHeaders(),
     body: JSON.stringify(body),
@@ -101,73 +141,139 @@ export async function issueCard(opts: {
 
   const data: any = await res.json();
   const card = data?.data;
+
+  const expiryMonth = String(card?.expiryMonth || '12').padStart(2, '0');
+  const expiryYear  = String(card?.expiryYear  || new Date().getFullYear() + 3).slice(-2);
+
   return {
     providerCardId: card?._id || card?.id,
-    cardToken: card?.token || card?._id,
-    maskPan: card?.maskedPan || `${card?.bin}XXXXXX${card?.last4}`,
-    status: card?.status,
-    brand: card?.brand,
-    currency: card?.currency,
-    type: card?.type,
+    cardToken:      card?.token || card?._id,
+    maskPan:        card?.maskedPan || `${card?.bin}XXXXXX${card?.last4}`,
+    status:         (card?.status || 'active').toUpperCase(),
+    brand:          (card?.brand  || opts.brand).toUpperCase(),
+    currency:       card?.currency || opts.currency,
+    type:           card?.type || 'VIRTUAL',
+    accountId:      card?.account?._id || card?.account || null,
+    expiry:         `${expiryMonth}/${expiryYear}`,
   };
 }
 
-// ─── Fetch card details (PAN + one-time CVV) ─────────────────────────────────
+// ─── Fetch card details from Vault (PAN + CVV2) ───────────────────────────────
+// Sudo redacts sensitive fields from the regular /cards/:id endpoint.
+// PCI-DSS compliant retrieval requires the Vault endpoint.
+// In production, prefer the Secure Proxy Show JS library (client-side iframe)
+// to avoid PAN passing through your servers at all.
 export async function getCardDetails(providerCardId: string): Promise<SudoCardDetails> {
   const expYear = new Date().getFullYear() + 3;
+
   if (isSandbox() || providerCardId.startsWith('sandbox_')) {
     return {
-      maskPan: providerCardId.startsWith('sandbox_') ? '411111XXXXXX1234' : '411111XXXXXX1234',
-      cvv: '***',
-      expiry: `12/${String(expYear).slice(-2)}`,
+      maskPan: '411111XXXXXX1234',
+      pan:     null, // not returned in sandbox
+      cvv:     '***',
+      expiry:  `12/${String(expYear).slice(-2)}`,
       billingAddress: 'No. 1 Fintech Way, Lagos, Nigeria',
     };
   }
 
-  const res = await fetch(`${SUDO_BASE}/cards/${providerCardId}`, {
-    headers: authHeaders(),
-  });
+  // Vault endpoint returns unredacted PAN and CVV2.
+  // The ?reveal=pan,cvv2 param is required to get sensitive fields.
+  const res = await fetch(
+    `${vaultBase()}/cards/${providerCardId}?reveal=pan,cvv2`,
+    { headers: authHeaders() }
+  );
 
   if (!res.ok) {
     const err: any = await res.json().catch(() => ({}));
     throw new Error(
-      `Sudo getCardDetails failed ${res.status}: ${err?.message || res.statusText}`
+      `Sudo Vault getCardDetails failed ${res.status}: ${err?.message || res.statusText}`
     );
   }
 
   const data: any = await res.json();
   const card = data?.data;
+
+  const month = String(card?.expiryMonth || '12').padStart(2, '0');
+  const year  = String(card?.expiryYear  || expYear).slice(-2);
+
   return {
-    maskPan: card?.maskedPan || `${card?.bin}XXXXXX${card?.last4}`,
-    cvv: card?.cvv || null,
-    expiry:
-      card?.expiry ||
-      `${card?.expiryMonth}/${String(card?.expiryYear || expYear).slice(-2)}`,
+    maskPan:        card?.maskedPan || `${card?.bin}XXXXXX${card?.last4}`,
+    pan:            card?.pan       || null,
+    cvv:            card?.cvv2      || card?.cvv || null,
+    expiry:         card?.expiry    || `${month}/${year}`,
     billingAddress: card?.billingAddress?.line1,
   };
 }
 
 // ─── Freeze / Unfreeze via Sudo API ──────────────────────────────────────────
+// Docs: PUT /cards/{id}
+// Status values in Sudo's API are lowercase: active, inactive, cancelled
 export async function updateCardStatus(
   providerCardId: string,
-  status: 'ACTIVE' | 'INACTIVE'
+  status: 'ACTIVE' | 'INACTIVE' | 'TERMINATED'
 ): Promise<void> {
   if (isSandbox() || providerCardId.startsWith('sandbox_')) return;
 
-  await fetch(`${SUDO_BASE}/cards/${providerCardId}`, {
+  // Map our uppercase statuses to Sudo's lowercase ones
+  const sudoStatus =
+    status === 'ACTIVE'     ? 'active'    :
+    status === 'TERMINATED' ? 'cancelled' : 'inactive';
+
+  await fetch(`${sudoBase()}/cards/${providerCardId}`, {
     method: 'PUT',
     headers: authHeaders(),
-    body: JSON.stringify({ status }),
+    body: JSON.stringify({ status: sudoStatus }),
   });
+}
+
+// ─── Fund / top-up a specific card via account transfer ──────────────────────
+// There is no direct POST /cards/:id/fund endpoint in production.
+// Funding is done via POST /accounts/transfer from the fund account
+// to the card's linked account (stored in cards.sudo_account_id).
+// SUDO_FUND_ACCOUNT_ID is the source (your settlement/float account).
+export async function fundCard(
+  providerCardId: string,
+  cardAccountId: string | null,
+  amountNaira: number
+): Promise<void> {
+  if (isSandbox() || providerCardId.startsWith('sandbox_')) return;
+
+  if (!cardAccountId) {
+    throw new Error(
+      'Card account ID not available — card was issued without an account link. Re-issue or update manually.'
+    );
+  }
+  if (!process.env.SUDO_FUND_ACCOUNT_ID) {
+    throw new Error('SUDO_FUND_ACCOUNT_ID env var is not set.');
+  }
+
+  const res = await fetch(`${sudoBase()}/accounts/transfer`, {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify({
+      debitAccountId:  process.env.SUDO_FUND_ACCOUNT_ID,
+      creditAccountId: cardAccountId,
+      amount:          Math.round(amountNaira * 100), // kobo
+      narration:       'BorderPay card top-up',
+      currency:        'NGN',
+    }),
+  });
+
+  if (!res.ok) {
+    const err: any = await res.json().catch(() => ({}));
+    throw new Error(
+      `Sudo fundCard transfer failed ${res.status}: ${err?.message || res.statusText}`
+    );
+  }
 }
 
 // ─── Production-mode guard ────────────────────────────────────────────────────
 export function assertSudoProductionReady(): void {
   if (process.env.NODE_ENV === 'production' && !canIssueRealCard()) {
     const missing = [
-      !process.env.CARD_ISSUER_API_KEY  && 'CARD_ISSUER_API_KEY',
-      !process.env.SUDO_CUSTOMER_ID     && 'SUDO_CUSTOMER_ID',
-      !process.env.SUDO_FUND_ACCOUNT_ID && 'SUDO_FUND_ACCOUNT_ID',
+      !process.env.CARD_ISSUER_API_KEY      && 'CARD_ISSUER_API_KEY',
+      !process.env.SUDO_CUSTOMER_ID         && 'SUDO_CUSTOMER_ID',
+      !process.env.SUDO_FUNDING_SOURCE_ID   && 'SUDO_FUNDING_SOURCE_ID',
     ].filter(Boolean).join(', ');
     const err: any = new Error(
       `Card service not configured for production. Missing: ${missing}`
@@ -178,11 +284,12 @@ export function assertSudoProductionReady(): void {
 }
 
 // ─── Fund-account balance ─────────────────────────────────────────────────────
+// Fetches the balance of our settlement/float account (SUDO_FUND_ACCOUNT_ID).
 export async function getSudoFundAccountBalance(): Promise<{ available: number; ledger: number } | null> {
   if (isSandbox() || !process.env.SUDO_FUND_ACCOUNT_ID) return null;
   try {
     const res = await fetch(
-      `${SUDO_BASE}/accounts/${process.env.SUDO_FUND_ACCOUNT_ID}`,
+      `${sudoBase()}/accounts/${process.env.SUDO_FUND_ACCOUNT_ID}`,
       { headers: authHeaders() }
     );
     if (!res.ok) throw new Error(`Sudo API ${res.status}`);
@@ -195,27 +302,6 @@ export async function getSudoFundAccountBalance(): Promise<{ available: number; 
   } catch (err) {
     console.error('[sudo] Fund account balance fetch failed:', err);
     return null;
-  }
-}
-
-// ─── Fund / top-up a specific card ───────────────────────────────────────────
-export async function fundCard(providerCardId: string, amountNaira: number): Promise<void> {
-  if (isSandbox() || providerCardId.startsWith('sandbox_')) return;
-
-  const res = await fetch(`${SUDO_BASE}/cards/${providerCardId}/fund`, {
-    method: 'POST',
-    headers: authHeaders(),
-    body: JSON.stringify({
-      amount:         Math.round(amountNaira * 100), // kobo
-      debitAccountId: process.env.SUDO_FUND_ACCOUNT_ID,
-    }),
-  });
-
-  if (!res.ok) {
-    const err: any = await res.json().catch(() => ({}));
-    throw new Error(
-      `Sudo fundCard failed ${res.status}: ${err?.message || res.statusText}`
-    );
   }
 }
 

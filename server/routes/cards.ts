@@ -11,7 +11,7 @@ router.get('/', requireAuth, requireUUID, async (req: AuthRequest, res: Response
   try {
     const cards = await pool.query(
       `SELECT id, provider_card_id, mask_pan, card_tier, card_brand, card_currency,
-              daily_limit, monthly_limit, amount_spent_today, status, created_at
+              daily_limit, monthly_limit, amount_spent_today, status, expiry, created_at
        FROM cards WHERE user_id = $1 ORDER BY created_at DESC`,
       [req.user!.userId]
     );
@@ -26,7 +26,7 @@ router.get('/:cardId/details', requireAuth, requireUUID, async (req: AuthRequest
   try {
     const { cardId } = req.params;
     const cardResult = await pool.query(
-      'SELECT id, provider_card_id, mask_pan, card_brand, card_tier, status FROM cards WHERE id = $1 AND user_id = $2',
+      'SELECT id, provider_card_id, mask_pan, card_brand, card_tier, status, expiry FROM cards WHERE id = $1 AND user_id = $2',
       [cardId, req.user!.userId]
     );
     const card = cardResult.rows[0];
@@ -35,14 +35,15 @@ router.get('/:cardId/details', requireAuth, requireUUID, async (req: AuthRequest
 
     const details = await getCardDetails(card.provider_card_id);
     res.json({
-      id: card.id,
-      maskPan: details.maskPan,
-      cvv: details.cvv,
-      expiry: details.expiry,
+      id:             card.id,
+      maskPan:        details.maskPan,
+      pan:            details.pan,       // full PAN from vault (null if not available)
+      cvv:            details.cvv,
+      expiry:         details.expiry || card.expiry,
       billingAddress: details.billingAddress,
-      brand: card.card_brand,
-      tier: card.card_tier,
-      status: card.status,
+      brand:          card.card_brand,
+      tier:           card.card_tier,
+      status:         card.status,
     });
   } catch (err: any) {
     console.error('Card details error:', err);
@@ -115,19 +116,22 @@ router.post('/issue', requireAuth, requireUUID, async (req: AuthRequest, res: Re
 
     const cardResult = await client.query(
       `INSERT INTO cards
-         (user_id, provider_card_id, card_token, mask_pan, card_tier, card_brand, card_currency, daily_limit, monthly_limit, status)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'ACTIVE')
-       RETURNING id, mask_pan, card_tier, card_brand, card_currency, daily_limit, monthly_limit, status, created_at`,
+         (user_id, provider_card_id, card_token, mask_pan, card_tier, card_brand, card_currency,
+          daily_limit, monthly_limit, status, sudo_account_id, expiry)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'ACTIVE',$10,$11)
+       RETURNING id, mask_pan, card_tier, card_brand, card_currency, daily_limit, monthly_limit, status, expiry, created_at`,
       [
         req.user!.userId,
         sudoCard.providerCardId,
         sudoCard.cardToken,
         sudoCard.maskPan,
         tier,
-        brand,
+        (sudoCard.brand || brand).toUpperCase(),
         'NGN',
         dailyLimit,
         monthlyLimit,
+        sudoCard.accountId || null,
+        sudoCard.expiry    || null,
       ]
     );
 
@@ -341,8 +345,13 @@ router.patch('/:cardId/status', requireAuth, requireUUID, async (req: AuthReques
   try {
     const { cardId } = req.params;
     const { status } = req.body;
-    if (!['ACTIVE', 'FROZEN'].includes(status)) {
+    if (!['ACTIVE', 'FROZEN', 'TERMINATED'].includes(status)) {
       return res.status(400).json({ error: 'Invalid status' });
+    }
+    // TERMINATED cards cannot be reactivated
+    const existing = await pool.query('SELECT status FROM cards WHERE id = $1 AND user_id = $2', [cardId, req.user!.userId]);
+    if (existing.rows[0]?.status === 'TERMINATED') {
+      return res.status(400).json({ error: 'Terminated cards cannot be modified' });
     }
 
     const result = await pool.query(
@@ -409,7 +418,7 @@ router.post('/:cardId/topup', requireAuth, requireUUID, async (req: AuthRequest,
 
     // Verify card ownership and state
     const cardResult = await pool.query(
-      'SELECT id, provider_card_id, mask_pan, status FROM cards WHERE id = $1 AND user_id = $2',
+      'SELECT id, provider_card_id, mask_pan, status, sudo_account_id FROM cards WHERE id = $1 AND user_id = $2',
       [cardId, req.user!.userId]
     );
     const card = cardResult.rows[0];
@@ -452,8 +461,9 @@ router.post('/:cardId/topup', requireAuth, requireUUID, async (req: AuthRequest,
     client.release();
 
     // Fund card via Sudo — after commit so wallet is already debited atomically
+    // Passes sudo_account_id so the service uses POST /accounts/transfer (correct production path)
     try {
-      await fundCard(card.provider_card_id, amount);
+      await fundCard(card.provider_card_id, card.sudo_account_id ?? null, amount);
     } catch (sudoErr: any) {
       console.error('[cards/topup] Sudo fundCard failed after wallet debit:', sudoErr.message);
       return res.status(207).json({

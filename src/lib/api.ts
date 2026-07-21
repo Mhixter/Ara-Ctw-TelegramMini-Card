@@ -81,6 +81,8 @@ export const cardsApi = {
     api.post(`/cards/${cardId}/spend`, { amount, merchant }).then(r => r.data),
   topup: (cardId: string, amount: number) =>
     api.post(`/cards/${cardId}/topup`, { amount }).then(r => r.data),
+  terminate: (cardId: string) =>
+    api.patch(`/cards/${cardId}/status`, { status: 'TERMINATED' }).then(r => r.data),
 };
 
 export const adminApi = {

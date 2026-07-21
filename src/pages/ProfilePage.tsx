@@ -9,9 +9,14 @@ import SecurityPage from './profile/SecurityPage';
 import NotificationsPage from './profile/NotificationsPage';
 import HelpPage from './profile/HelpPage';
 import TermsPage from './profile/TermsPage';
+import PersonalInfoPage from './profile/PersonalInfoPage';
+import ReferralPage from './profile/ReferralPage';
+import LimitsPage from './profile/LimitsPage';
+import PrivacyPolicyPage from './profile/PrivacyPolicyPage';
+import AboutPage from './profile/AboutPage';
 
 interface Props { user: User; onLogout: () => void; }
-type SubPage = null | 'security' | 'notifications' | 'help' | 'terms';
+type SubPage = null | 'security' | 'notifications' | 'help' | 'terms' | 'personalinfo' | 'referral' | 'limits' | 'privacy' | 'about' | 'apikeys' | 'devices' | 'loginhistory';
 
 export default function ProfilePage({ user, onLogout }: Props) {
   const [subPage, setSubPage]   = useState<SubPage>(null);
@@ -21,6 +26,69 @@ export default function ProfilePage({ user, onLogout }: Props) {
   if (subPage === 'notifications') return <NotificationsPage onBack={() => setSubPage(null)} />;
   if (subPage === 'help')          return <HelpPage onBack={() => setSubPage(null)} />;
   if (subPage === 'terms')         return <TermsPage onBack={() => setSubPage(null)} />;
+  if (subPage === 'personalinfo')  return <PersonalInfoPage user={user} onBack={() => setSubPage(null)} />;
+  if (subPage === 'referral')      return <ReferralPage user={user} onBack={() => setSubPage(null)} />;
+  if (subPage === 'limits')        return <LimitsPage user={user} onBack={() => setSubPage(null)} />;
+  if (subPage === 'privacy')       return <PrivacyPolicyPage onBack={() => setSubPage(null)} />;
+  if (subPage === 'about')         return <AboutPage onBack={() => setSubPage(null)} />;
+
+  if (subPage === 'apikeys') return (
+    <div className="page" style={{ paddingTop: '16px' }}>
+      <button onClick={() => setSubPage(null)} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', color: 'var(--accent)', fontSize: '14px', cursor: 'pointer', marginBottom: '24px', padding: 0, fontFamily: 'inherit', fontWeight: 700 }}>
+        <ChevronRight size={18} style={{ transform: 'rotate(180deg)' }} /> Back
+      </button>
+      <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+        <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔑</div>
+        <h2 style={{ fontSize: '20px', fontWeight: 900, marginBottom: '8px' }}>API Access</h2>
+        <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.6 }}>Developer API key management is coming soon. You'll be able to generate keys for third-party integrations.</p>
+      </div>
+    </div>
+  );
+
+  if (subPage === 'devices') return (
+    <div className="page" style={{ paddingTop: '16px' }}>
+      <button onClick={() => setSubPage(null)} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', color: 'var(--accent)', fontSize: '14px', cursor: 'pointer', marginBottom: '24px', padding: 0, fontFamily: 'inherit', fontWeight: 700 }}>
+        <ChevronRight size={18} style={{ transform: 'rotate(180deg)' }} /> Back
+      </button>
+      <h2 style={{ fontSize: '22px', fontWeight: 900, marginBottom: '4px' }}>Connected Devices</h2>
+      <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '20px' }}>Devices with active sessions</p>
+      <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '20px', boxShadow: 'var(--shadow-sm)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(34,197,94,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Smartphone size={20} color="var(--emerald)" />
+          </div>
+          <div>
+            <p style={{ fontSize: '14px', fontWeight: 800 }}>Telegram Mobile</p>
+            <p style={{ fontSize: '12px', color: 'var(--emerald)', fontWeight: 700 }}>● Active now</p>
+            <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>This device · Signed in via Telegram</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (subPage === 'loginhistory') return (
+    <div className="page" style={{ paddingTop: '16px' }}>
+      <button onClick={() => setSubPage(null)} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none', color: 'var(--accent)', fontSize: '14px', cursor: 'pointer', marginBottom: '24px', padding: 0, fontFamily: 'inherit', fontWeight: 700 }}>
+        <ChevronRight size={18} style={{ transform: 'rotate(180deg)' }} /> Back
+      </button>
+      <h2 style={{ fontSize: '22px', fontWeight: 900, marginBottom: '4px' }}>Login History</h2>
+      <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '20px' }}>Your recent account activity</p>
+      <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '20px', boxShadow: 'var(--shadow-sm)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(108,92,231,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Clock size={20} color="var(--purple)" />
+          </div>
+          <div>
+            <p style={{ fontSize: '14px', fontWeight: 800 }}>Telegram Login</p>
+            <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Just now · via Telegram Mini App</p>
+            <p style={{ fontSize: '11px', color: 'var(--emerald)', fontWeight: 700 }}>Current session</p>
+          </div>
+        </div>
+        <p style={{ fontSize: '12px', color: 'var(--text-hint)', marginTop: '14px' }}>Full login history coming soon.</p>
+      </div>
+    </div>
+  );
 
   const kycLabel: Record<string, string> = {
     PENDING: 'Unverified', PENDING_REVIEW: 'Under Review',
@@ -36,26 +104,26 @@ export default function ProfilePage({ user, onLogout }: Props) {
   const menuGroups = [
     {
       items: [
-        { icon: UserIcon, color: '#6C5CE7', label: 'Personal Information', desc: 'Update your personal details', badge: null, action: () => {} },
+        { icon: UserIcon, color: '#6C5CE7', label: 'Personal Information', desc: 'Update your personal details', badge: null, action: () => setSubPage('personalinfo') },
         { icon: Lock, color: '#22C55E', label: 'Security', desc: 'Password, 2FA, PIN, and security preferences', badge: 'Secure', badgeColor: 'var(--emerald)', action: () => setSubPage('security') },
         { icon: Bell, color: '#6C5CE7', label: 'Notifications', desc: 'Manage your notification preferences', badge: 'Enabled', badgeColor: 'var(--emerald)', action: () => setSubPage('notifications') },
-        { icon: Key, color: '#F4B400', label: 'API Keys', desc: 'Generate and manage your API keys', badge: null, action: () => {} },
+        { icon: Key, color: '#F4B400', label: 'API Keys', desc: 'Generate and manage your API keys', badge: null, action: () => setSubPage('apikeys') },
       ],
     },
     {
       items: [
-        { icon: Users, color: '#22C55E', label: 'Referral Program', desc: 'Invite friends and earn rewards', badge: null, action: () => {} },
-        { icon: SlidersHorizontal, color: '#6C5CE7', label: 'Limits', desc: 'View and manage your transaction limits', badge: 'View Limits', badgeColor: 'var(--purple)', action: () => {} },
-        { icon: Smartphone, color: '#EF4444', label: 'Connected Devices', desc: 'Manage devices connected to your account', badge: null, action: () => {} },
-        { icon: Clock, color: '#7474A0', label: 'Login History', desc: 'Review your recent login activity', badge: null, action: () => {} },
+        { icon: Users, color: '#22C55E', label: 'Referral Program', desc: 'Invite friends and earn rewards', badge: null, action: () => setSubPage('referral') },
+        { icon: SlidersHorizontal, color: '#6C5CE7', label: 'Limits', desc: 'View and manage your transaction limits', badge: 'View Limits', badgeColor: 'var(--purple)', action: () => setSubPage('limits') },
+        { icon: Smartphone, color: '#EF4444', label: 'Connected Devices', desc: 'Manage devices connected to your account', badge: null, action: () => setSubPage('devices') },
+        { icon: Clock, color: '#7474A0', label: 'Login History', desc: 'Review your recent login activity', badge: null, action: () => setSubPage('loginhistory') },
       ],
     },
     {
       items: [
         { icon: HelpCircle, color: '#F4B400', label: 'Help Center', desc: 'Get help and support', badge: null, action: () => setSubPage('help') },
         { icon: FileText, color: '#22C55E', label: 'Terms of Service', desc: 'Read our terms and conditions', badge: null, action: () => setSubPage('terms') },
-        { icon: Shield, color: '#6C5CE7', label: 'Privacy Policy', desc: 'Learn how we protect your data', badge: null, action: () => {} },
-        { icon: Info, color: '#7474A0', label: 'About BorderPay', desc: 'Learn more about the BorderPay platform', badge: null, action: () => {} },
+        { icon: Shield, color: '#6C5CE7', label: 'Privacy Policy', desc: 'Learn how we protect your data', badge: null, action: () => setSubPage('privacy') },
+        { icon: Info, color: '#7474A0', label: 'About BorderPay', desc: 'Learn more about the BorderPay platform', badge: null, action: () => setSubPage('about') },
       ],
     },
   ];
