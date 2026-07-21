@@ -264,13 +264,14 @@ async function ensureSuperAdmin() {
 function logProductionWarnings(): void {
   if (process.env.NODE_ENV !== 'production') return;
   const required: Record<string, string | undefined> = {
-    TELEGRAM_BOT_TOKEN:   process.env.TELEGRAM_BOT_TOKEN,
-    CARD_ISSUER_API_KEY:  process.env.CARD_ISSUER_API_KEY,
-    SUDO_CUSTOMER_ID:     process.env.SUDO_CUSTOMER_ID,
-    SUDO_FUND_ACCOUNT_ID: process.env.SUDO_FUND_ACCOUNT_ID,
-    PAYPOINT_API_KEY:     process.env.PAYPOINT_API_KEY,
-    WEBHOOK_SECRET:       process.env.WEBHOOK_SECRET,
-    JWT_SECRET:           process.env.JWT_SECRET,
+    TELEGRAM_BOT_TOKEN:          process.env.TELEGRAM_BOT_TOKEN,
+    CARD_ISSUER_API_KEY:         process.env.CARD_ISSUER_API_KEY,
+    SUDO_FUND_ACCOUNT_ID:        process.env.SUDO_FUND_ACCOUNT_ID,
+    SUDO_FUNDING_SOURCE_ID_VISA: process.env.SUDO_FUNDING_SOURCE_ID_VISA || process.env.SUDO_FUNDING_SOURCE_ID,
+    SUDO_FUNDING_SOURCE_ID_MC:   process.env.SUDO_FUNDING_SOURCE_ID_MC,
+    PAYPOINT_API_KEY:            process.env.PAYPOINT_API_KEY,
+    WEBHOOK_SECRET:              process.env.WEBHOOK_SECRET,
+    JWT_SECRET:                  process.env.JWT_SECRET,
   };
   const optional: Record<string, string | undefined> = {
     SUDO_COLLECTION_ACCOUNT_NUMBER: process.env.SUDO_COLLECTION_ACCOUNT_NUMBER,

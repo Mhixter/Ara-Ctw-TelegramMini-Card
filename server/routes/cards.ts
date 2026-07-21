@@ -56,15 +56,15 @@ router.get('/:cardId/details', requireAuth, requireUUID, async (req: AuthRequest
 router.post('/issue', requireAuth, requireUUID, async (req: AuthRequest, res: Response) => {
   const client = await pool.connect();
   try {
-    // Guard: fail fast in production when Sudo keys are not set
-    try { assertSudoProductionReady(); } catch (e: any) {
-      client.release();
-      return res.status(e.statusCode || 503).json({ error: e.message });
-    }
-
     const { currency = 'NGN', brand = 'VISA' } = req.body;
     if (!['VISA', 'MASTERCARD'].includes(brand)) {
       return res.status(400).json({ error: 'Only VISA and MASTERCARD are supported' });
+    }
+
+    // Brand-specific guard — ensures the funding source for THIS brand is set
+    try { assertSudoProductionReady(brand as 'VISA' | 'MASTERCARD'); } catch (e: any) {
+      client.release();
+      return res.status(e.statusCode || 503).json({ error: e.message });
     }
 
     const userResult = await pool.query(

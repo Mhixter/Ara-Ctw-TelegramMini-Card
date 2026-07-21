@@ -154,12 +154,20 @@ export async function issueCard(opts: {
   // - metadata must be a plain object, NOT a JSON-serialised string.
   // - Empty allowedCategories/blockedCategories arrays must be omitted entirely.
   // - spendingLimits amount is in kobo (multiply by 100).
+  const fsId = fundingSourceId(opts.brand);
+  if (!fsId) {
+    throw new Error(
+      `No funding source configured for ${opts.brand}. ` +
+      `Set ${opts.brand === 'MASTERCARD' ? 'SUDO_FUNDING_SOURCE_ID_MC' : 'SUDO_FUNDING_SOURCE_ID_VISA'} env var.`
+    );
+  }
+
   const body: Record<string, any> = {
     customerId:      opts.sudoCustomerId,
     type:            'virtual',
     currency:        opts.currency.toLowerCase(),
     issuerCountry:   'NGA',
-    fundingSourceId: fundingSourceId(opts.brand),
+    fundingSourceId: fsId,
     metadata:        { internalUserId: opts.userId, tier: opts.tier },
     spendingControls: {
       channels: { atm: false, pos: true, web: true, mobile: true },
@@ -317,17 +325,31 @@ export async function fundCard(
 }
 
 // ─── Production-mode guard ────────────────────────────────────────────────────
-export function assertSudoProductionReady(): void {
-  const visaOk = !!fundingSourceId('VISA');
-  const mcOk   = !!fundingSourceId('MASTERCARD');
-  if (process.env.NODE_ENV === 'production' && !isSandbox() && !visaOk && !mcOk) {
-    const missing = [
-      !process.env.CARD_ISSUER_API_KEY                 && 'CARD_ISSUER_API_KEY',
-      !visaOk && 'SUDO_FUNDING_SOURCE_ID_VISA (or SUDO_FUNDING_SOURCE_ID)',
-      !mcOk   && 'SUDO_FUNDING_SOURCE_ID_MC',
-    ].filter(Boolean).join(', ');
+// Throws 503 if the card service is not fully configured.
+// Call this at the top of /cards/issue before touching the DB.
+export function assertSudoProductionReady(brand?: 'VISA' | 'MASTERCARD'): void {
+  if (isSandbox()) return; // sandbox mode — always ok
+
+  const missing: string[] = [];
+  if (!process.env.CARD_ISSUER_API_KEY) missing.push('CARD_ISSUER_API_KEY');
+  if (brand) {
+    if (!fundingSourceId(brand)) {
+      missing.push(
+        brand === 'MASTERCARD'
+          ? 'SUDO_FUNDING_SOURCE_ID_MC'
+          : 'SUDO_FUNDING_SOURCE_ID_VISA (or SUDO_FUNDING_SOURCE_ID)'
+      );
+    }
+  } else {
+    // No brand specified — require at least one funding source
+    if (!fundingSourceId('VISA') && !fundingSourceId('MASTERCARD')) {
+      missing.push('SUDO_FUNDING_SOURCE_ID_VISA or SUDO_FUNDING_SOURCE_ID_MC');
+    }
+  }
+
+  if (missing.length) {
     const err: any = new Error(
-      `Card service not configured for production. Missing: ${missing}`
+      `Card service not configured. Missing env vars: ${missing.join(', ')}`
     );
     err.statusCode = 503;
     throw err;
