@@ -148,28 +148,6 @@ export default function HomePage({ user, onNavigate }: Props) {
             </div>
           )}
 
-          {/* Other funding methods */}
-          <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '20px', marginBottom: '16px', boxShadow: 'var(--shadow-sm)' }}>
-            <p style={{ fontSize: '15px', fontWeight: 800, marginBottom: '16px' }}>Other Funding Methods</p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px' }}>
-              {[
-                { icon: '🏦', label: 'Bank Transfer', sub: 'Popular' },
-                { icon: '💳', label: 'Card Deposit', sub: null },
-                { icon: '₿', label: 'Crypto', sub: null },
-                { icon: '  ', label: 'Apple Pay', sub: null },
-                { icon: 'G', label: 'Google Pay', sub: null },
-              ].map(m => (
-                <div key={m.label} style={{ textAlign: 'center' }}>
-                  <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'var(--surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 6px', fontSize: '20px', boxShadow: 'var(--shadow-xs)' }}>
-                    {m.icon}
-                  </div>
-                  <p style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', lineHeight: 1.2 }}>{m.label}</p>
-                  {m.sub && <span style={{ fontSize: '9px', color: 'var(--purple)', fontWeight: 700 }}>{m.sub}</span>}
-                </div>
-              ))}
-            </div>
-          </div>
-
           {/* Recent funding transactions */}
           {fundingTxs.length > 0 && (
             <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '20px', boxShadow: 'var(--shadow-sm)' }}>

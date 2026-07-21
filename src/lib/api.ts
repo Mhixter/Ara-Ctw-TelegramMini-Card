@@ -59,10 +59,8 @@ export const walletApi = {
 
 export const kycApi = {
   status: () => api.get('/kyc/status').then(r => r.data),
-  tier1: (data: {
-    fullName: string; dateOfBirth: string; country: string;
-    idType: string; idNumber?: string; bvn?: string; nin?: string;
-  }) => api.post('/kyc/tier1', data).then(r => r.data),
+  tier1: (data: { bvn: string; phone: string }) =>
+    api.post('/kyc/tier1', data).then(r => r.data),
   tier2: (data: { documentUrl: string; livenessScore: number }) =>
     api.post('/kyc/tier2', data).then(r => r.data),
 };

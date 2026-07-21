@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import pool from '../db';
 import { requireAuth, requireUUID, AuthRequest } from '../middleware/auth';
 import { issueCard, createSudoCustomer, getCardDetails, updateCardStatus, verifyWebhookSignature, fundCard, assertSudoProductionReady } from '../services/sudoAfrica';
+import { decryptField } from './kyc';
 
 const router = Router();
 
@@ -87,8 +88,6 @@ router.post('/issue', requireAuth, requireUUID, async (req: AuthRequest, res: Re
 
     if (!sudoCustomerId && process.env.CARD_ISSUER_API_KEY && process.env.SUDO_SANDBOX !== 'true') {
       // Prefer the shared business-level Sudo customer (SUDO_CUSTOMER_ID env var).
-      // Sudo Africa requires BVN + phone to create per-user customers; we don't
-      // store those in plaintext, so we fall back to the business customer instead.
       if (process.env.SUDO_CUSTOMER_ID) {
         sudoCustomerId = process.env.SUDO_CUSTOMER_ID;
         // Persist so subsequent card issuances skip this check
@@ -97,7 +96,20 @@ router.post('/issue', requireAuth, requireUUID, async (req: AuthRequest, res: Re
           [sudoCustomerId, req.user!.userId]
         );
       } else {
-        // Last resort: attempt per-user customer creation (requires full KYC data)
+        // Create per-user Sudo customer using BVN + phone from KYC
+        const kycRow = await pool.query(
+          'SELECT bvn_encrypted, phone FROM user_kyc WHERE user_id = $1',
+          [req.user!.userId]
+        );
+        const kyc = kycRow.rows[0];
+
+        let bvn: string | undefined;
+        let phone: string | undefined = kyc?.phone || undefined;
+
+        if (kyc?.bvn_encrypted) {
+          try { bvn = decryptField(kyc.bvn_encrypted); } catch { bvn = undefined; }
+        }
+
         const nameParts = (user.first_name || 'BorderPay User').trim().split(/\s+/);
         const firstName = nameParts[0] || 'BorderPay';
         const lastName  = nameParts.slice(1).join(' ') || 'User';
@@ -106,6 +118,8 @@ router.post('/issue', requireAuth, requireUUID, async (req: AuthRequest, res: Re
           firstName,
           lastName,
           email: user.email || undefined,
+          phoneNumber: phone,
+          bvn,
         });
 
         await pool.query(

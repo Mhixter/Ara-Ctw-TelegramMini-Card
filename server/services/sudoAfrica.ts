@@ -87,6 +87,7 @@ export async function createSudoCustomer(opts: {
   lastName: string;
   email?: string;
   phoneNumber?: string;
+  bvn?: string;
 }): Promise<string> {
   const res = await fetch(`${sudoBase()}/customers`, {
     method: 'POST',
@@ -99,6 +100,7 @@ export async function createSudoCustomer(opts: {
       individual: {
         firstName: opts.firstName,
         lastName:  opts.lastName,
+        ...(opts.bvn ? { identity: { type: 'BVN', number: opts.bvn } } : {}),
       },
     }),
   });

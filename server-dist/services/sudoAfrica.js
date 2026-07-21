@@ -106,12 +106,19 @@ async function createSudoCustomer(opts) {
             individual: {
                 firstName: opts.firstName,
                 lastName: opts.lastName,
+                ...(opts.bvn ? { identity: { type: 'BVN', number: opts.bvn } } : {}),
             },
         }),
     });
     if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(`Sudo createCustomer failed ${res.status}: ${err?.message || res.statusText}`);
+        const errBody = await res.text().catch(() => '');
+        let errMsg = res.statusText;
+        try {
+            errMsg = JSON.parse(errBody)?.message || errBody || res.statusText;
+        }
+        catch { }
+        console.error('[sudo] createCustomer failed', res.status, errBody);
+        throw new Error(`Sudo createCustomer failed ${res.status}: ${errMsg}`);
     }
     const data = await res.json();
     const customerId = data?.data?._id;

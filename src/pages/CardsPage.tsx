@@ -96,7 +96,6 @@ export default function CardsPage({ user }: Props) {
   const [spendModal, setSpendModal] = useState<any | null>(null);
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
   const [issueBrand, setIssueBrand] = useState<'VISA' | 'MASTERCARD'>('VISA');
-  const [issueType, setIssueType]   = useState<'Virtual' | 'Premium' | 'Business'>('Virtual');
   const [dailyLimit, setDailyLimit] = useState('');
   const [monthlyLimit, setMonthlyLimit] = useState('');
   const [spendAmount, setSpendAmount] = useState('');
@@ -402,20 +401,6 @@ export default function CardsPage({ user }: Props) {
                       <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#F79E1B', marginLeft: -8 }} />
                     </div>
                   )}
-                </button>
-              ))}
-            </div>
-
-            <p style={{ fontSize: '13px', fontWeight: 700, marginBottom: '10px' }}>Card Type</p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '20px' }}>
-              {(['Virtual', 'Premium', 'Business'] as const).map(t => (
-                <button key={t} onClick={() => setIssueType(t)} style={{
-                  padding: '12px 8px', borderRadius: '12px', border: `1.5px solid ${issueType === t ? 'var(--purple)' : 'var(--border)'}`,
-                  background: issueType === t ? 'rgba(108,92,231,0.08)' : 'var(--surface-2)',
-                  cursor: 'pointer', fontFamily: 'inherit', textAlign: 'center',
-                }}>
-                  <p style={{ fontSize: '12px', fontWeight: 800, color: issueType === t ? 'var(--purple)' : 'var(--text)' }}>{t}</p>
-                  <p style={{ fontSize: '10px', color: 'var(--text-hint)' }}>{t === 'Virtual' ? 'Online use only' : t === 'Premium' ? 'Higher limits' : 'Expense control'}</p>
                 </button>
               ))}
             </div>

@@ -8,6 +8,7 @@ const uuid_1 = require("uuid");
 const db_1 = __importDefault(require("../db"));
 const auth_1 = require("../middleware/auth");
 const sudoAfrica_1 = require("../services/sudoAfrica");
+const kyc_1 = require("./kyc");
 const router = (0, express_1.Router)();
 // ── List user's cards ─────────────────────────────────────────────────────────
 router.get('/', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
@@ -80,17 +81,38 @@ router.post('/issue', auth_1.requireAuth, auth_1.requireUUID, async (req, res) =
         // In sandbox mode: issueCard ignores the customerId, so any placeholder works.
         let sudoCustomerId = user.sudo_customer_id || '';
         if (!sudoCustomerId && process.env.CARD_ISSUER_API_KEY && process.env.SUDO_SANDBOX !== 'true') {
-            // Parse name into parts — first_name may be "First Last" or just "First"
-            const nameParts = (user.first_name || 'BorderPay User').trim().split(/\s+/);
-            const firstName = nameParts[0] || 'BorderPay';
-            const lastName = nameParts.slice(1).join(' ') || 'User';
-            sudoCustomerId = await (0, sudoAfrica_1.createSudoCustomer)({
-                firstName,
-                lastName,
-                email: user.email || undefined,
-            });
-            // Persist so we don't create a new customer on every card
-            await db_1.default.query('UPDATE users SET sudo_customer_id = $1, updated_at = NOW() WHERE id = $2', [sudoCustomerId, req.user.userId]);
+            // Prefer the shared business-level Sudo customer (SUDO_CUSTOMER_ID env var).
+            if (process.env.SUDO_CUSTOMER_ID) {
+                sudoCustomerId = process.env.SUDO_CUSTOMER_ID;
+                // Persist so subsequent card issuances skip this check
+                await db_1.default.query('UPDATE users SET sudo_customer_id = $1, updated_at = NOW() WHERE id = $2', [sudoCustomerId, req.user.userId]);
+            }
+            else {
+                // Create per-user Sudo customer using BVN + phone from KYC
+                const kycRow = await db_1.default.query('SELECT bvn_encrypted, phone FROM user_kyc WHERE user_id = $1', [req.user.userId]);
+                const kyc = kycRow.rows[0];
+                let bvn;
+                let phone = kyc?.phone || undefined;
+                if (kyc?.bvn_encrypted) {
+                    try {
+                        bvn = (0, kyc_1.decryptField)(kyc.bvn_encrypted);
+                    }
+                    catch {
+                        bvn = undefined;
+                    }
+                }
+                const nameParts = (user.first_name || 'BorderPay User').trim().split(/\s+/);
+                const firstName = nameParts[0] || 'BorderPay';
+                const lastName = nameParts.slice(1).join(' ') || 'User';
+                sudoCustomerId = await (0, sudoAfrica_1.createSudoCustomer)({
+                    firstName,
+                    lastName,
+                    email: user.email || undefined,
+                    phoneNumber: phone,
+                    bvn,
+                });
+                await db_1.default.query('UPDATE users SET sudo_customer_id = $1, updated_at = NOW() WHERE id = $2', [sudoCustomerId, req.user.userId]);
+            }
         }
         await client.query('BEGIN');
         const walletResult = await client.query('SELECT * FROM wallets WHERE user_id = $1 AND currency = $2 FOR UPDATE', [req.user.userId, 'NGN']);

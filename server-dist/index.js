@@ -197,6 +197,9 @@ async function runMigrations() {
             `ALTER TABLE cards       ADD COLUMN IF NOT EXISTS expiry           VARCHAR(10)`,
             // Per-user Sudo Africa customer ID (created on first card issuance, reused after)
             `ALTER TABLE users       ADD COLUMN IF NOT EXISTS sudo_customer_id VARCHAR(255)`,
+            // KYC simplified to BVN + phone; phone stored in plaintext, BVN stored encrypted (AES-256)
+            `ALTER TABLE user_kyc    ADD COLUMN IF NOT EXISTS phone           VARCHAR(30)`,
+            `ALTER TABLE user_kyc    ADD COLUMN IF NOT EXISTS bvn_encrypted   TEXT`,
         ];
         let ok = 0;
         let failed = 0;
