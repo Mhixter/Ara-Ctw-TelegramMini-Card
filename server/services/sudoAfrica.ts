@@ -2,11 +2,11 @@
  * sudoAfrica.ts — Sudo Africa card API wrapper.
  *
  * Env vars:
- *   CARD_ISSUER_API_KEY      – Sudo Africa secret key
- *   SUDO_CUSTOMER_ID         – Pre-created Sudo customer / business ID
- *   SUDO_FUNDING_SOURCE_ID   – Sudo funding source ID (linked to your settlement account)
- *   SUDO_FUND_ACCOUNT_ID     – Sudo account ID used as debit source for card top-ups
- *   SUDO_SANDBOX=true        – Force sandbox mode even if API key is present
+ *   CARD_ISSUER_API_KEY         – Sudo Africa secret key
+ *   SUDO_FUNDING_SOURCE_ID_VISA – Card Program Unique Reference for Visa (e.g. SUDO-ASNL-BP-…)
+ *   SUDO_FUNDING_SOURCE_ID_MC   – Card Program Unique Reference for Mastercard (e.g. SUDO-ASNL-BPMC-…)
+ *   SUDO_FUND_ACCOUNT_ID        – Sudo account ID used as debit source for card top-ups
+ *   SUDO_SANDBOX=true           – Force sandbox mode even if API key is present
  *
  * Falls back to sandbox (local mock) when any required var is missing.
  *
@@ -44,11 +44,15 @@ function authHeaders() {
   };
 }
 
-function canIssueRealCard() {
-  return (
-    !isSandbox() &&
-    !!process.env.SUDO_FUNDING_SOURCE_ID
-  );
+/** Returns the Card Program ID for the given brand, or undefined if not configured. */
+function fundingSourceId(brand: 'VISA' | 'MASTERCARD'): string | undefined {
+  return brand === 'MASTERCARD'
+    ? (process.env.SUDO_FUNDING_SOURCE_ID_MC   || process.env.SUDO_FUNDING_SOURCE_ID)
+    : (process.env.SUDO_FUNDING_SOURCE_ID_VISA || process.env.SUDO_FUNDING_SOURCE_ID);
+}
+
+function canIssueRealCard(brand: 'VISA' | 'MASTERCARD' = 'VISA') {
+  return !isSandbox() && !!fundingSourceId(brand);
 }
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -123,7 +127,7 @@ export async function issueCard(opts: {
   /** Per-user Sudo customer _id (created by createSudoCustomer) */
   sudoCustomerId: string;
 }): Promise<SudoCard> {
-  if (!canIssueRealCard()) {
+  if (!canIssueRealCard(opts.brand)) {
     // Sandbox fallback — generate plausible mock values
     const { v4: uuidv4 } = await import('uuid');
     const pan = `4111${Math.random().toString().slice(2, 8).padStart(6, '0')}${Math.floor(1000 + Math.random() * 9000)}`;
@@ -151,7 +155,7 @@ export async function issueCard(opts: {
     currency:        opts.currency,
     status:          'active',          // MUST be lowercase
     issuerCountry:   'NGA',
-    fundingSourceId: process.env.SUDO_FUNDING_SOURCE_ID,
+    fundingSourceId: fundingSourceId(opts.brand),
     metadata:        JSON.stringify({ internalUserId: opts.userId, tier: opts.tier }),
     spendingControls: {
       allowedCategories: [],
@@ -307,10 +311,13 @@ export async function fundCard(
 
 // ─── Production-mode guard ────────────────────────────────────────────────────
 export function assertSudoProductionReady(): void {
-  if (process.env.NODE_ENV === 'production' && !canIssueRealCard()) {
+  const visaOk = !!fundingSourceId('VISA');
+  const mcOk   = !!fundingSourceId('MASTERCARD');
+  if (process.env.NODE_ENV === 'production' && !isSandbox() && !visaOk && !mcOk) {
     const missing = [
-      !process.env.CARD_ISSUER_API_KEY      && 'CARD_ISSUER_API_KEY',
-      !process.env.SUDO_FUNDING_SOURCE_ID   && 'SUDO_FUNDING_SOURCE_ID',
+      !process.env.CARD_ISSUER_API_KEY                 && 'CARD_ISSUER_API_KEY',
+      !visaOk && 'SUDO_FUNDING_SOURCE_ID_VISA (or SUDO_FUNDING_SOURCE_ID)',
+      !mcOk   && 'SUDO_FUNDING_SOURCE_ID_MC',
     ].filter(Boolean).join(', ');
     const err: any = new Error(
       `Card service not configured for production. Missing: ${missing}`
