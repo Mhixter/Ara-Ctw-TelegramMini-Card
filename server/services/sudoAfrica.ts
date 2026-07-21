@@ -47,7 +47,6 @@ function authHeaders() {
 function canIssueRealCard() {
   return (
     !isSandbox() &&
-    !!process.env.SUDO_CUSTOMER_ID &&
     !!process.env.SUDO_FUNDING_SOURCE_ID
   );
 }
@@ -76,6 +75,43 @@ export interface SudoCardDetails {
   billingAddress?: string;
 }
 
+// ─── Create a Sudo customer for a BorderPay user ─────────────────────────────
+// Called once per user before their first card is issued.
+// Returns the Sudo customer _id to store on users.sudo_customer_id.
+export async function createSudoCustomer(opts: {
+  firstName: string;
+  lastName: string;
+  email?: string;
+  phoneNumber?: string;
+}): Promise<string> {
+  const res = await fetch(`${sudoBase()}/customers`, {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify({
+      type:         'individual',
+      name:         `${opts.firstName} ${opts.lastName}`.trim(),
+      emailAddress: opts.email        || undefined,
+      phoneNumber:  opts.phoneNumber  || undefined,
+      individual: {
+        firstName: opts.firstName,
+        lastName:  opts.lastName,
+      },
+    }),
+  });
+
+  if (!res.ok) {
+    const err: any = await res.json().catch(() => ({}));
+    throw new Error(
+      `Sudo createCustomer failed ${res.status}: ${err?.message || res.statusText}`
+    );
+  }
+
+  const data: any = await res.json();
+  const customerId: string | undefined = data?.data?._id;
+  if (!customerId) throw new Error('Sudo createCustomer: no _id in response');
+  return customerId;
+}
+
 // ─── Issue a card ─────────────────────────────────────────────────────────────
 export async function issueCard(opts: {
   brand: 'VISA' | 'MASTERCARD';
@@ -84,6 +120,8 @@ export async function issueCard(opts: {
   dailyLimit: number;
   monthlyLimit: number;
   userId: string;
+  /** Per-user Sudo customer _id (created by createSudoCustomer) */
+  sudoCustomerId: string;
 }): Promise<SudoCard> {
   if (!canIssueRealCard()) {
     // Sandbox fallback — generate plausible mock values
@@ -108,7 +146,7 @@ export async function issueCard(opts: {
   // fundingSourceId links the card to a Sudo funding source (not the account).
   // spendingControls.channels enables card usage on web/pos/atm/mobile.
   const body = {
-    customerId:      process.env.SUDO_CUSTOMER_ID,
+    customerId:      opts.sudoCustomerId,
     type:            'virtual',
     currency:        opts.currency,
     status:          'active',          // MUST be lowercase
@@ -272,7 +310,6 @@ export function assertSudoProductionReady(): void {
   if (process.env.NODE_ENV === 'production' && !canIssueRealCard()) {
     const missing = [
       !process.env.CARD_ISSUER_API_KEY      && 'CARD_ISSUER_API_KEY',
-      !process.env.SUDO_CUSTOMER_ID         && 'SUDO_CUSTOMER_ID',
       !process.env.SUDO_FUNDING_SOURCE_ID   && 'SUDO_FUNDING_SOURCE_ID',
     ].filter(Boolean).join(', ');
     const err: any = new Error(

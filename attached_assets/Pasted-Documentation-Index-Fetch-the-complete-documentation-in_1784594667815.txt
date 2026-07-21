@@ -1,0 +1,266 @@
+Documentation Index
+Fetch the complete documentation index at: /llms.txt
+
+Use this file to discover all available pages before exploring further.
+
+Skip to main content
+
+Search...
+Ctrl K
+Support
+Get API Key
+
+Guides
+API Reference
+Overview
+Introduction
+Customers
+Overview
+POST
+Create Customer
+GET
+Get Customers
+GET
+Get Customer
+PUT
+Update Customer
+PUT
+Generate Customer Document URL
+Funding Sources
+Overview
+POST
+Create Funding Source
+GET
+Get Funding Sources
+GET
+Get Funding Source
+PUT
+Update Funding Source
+Card Programs
+Overview
+POST
+Create Card Program
+GET
+Get Card Programs
+GET
+Get a Card Program
+GET
+Get Cards By a Program
+PATCH
+Update a Card Program
+Cards
+Overview
+POST
+Create Card
+GET
+Get Cards
+GET
+Get Customer Cards
+GET
+Get Card
+GET
+Get Card Balance
+PUT
+Send Default Card PIN
+PUT
+Change Card PIN
+PUT
+Enroll Card for 2FA
+PUT
+Update Card
+GET
+Generate Card Token
+PUT
+Digitalize Card
+POST
+Order Cards
+Accounts
+Overview
+POST
+Create Account
+GET
+Get Accounts
+GET
+Get Account
+GET
+Get Account Balance
+GET
+Get Account Transactions
+GET
+Transfer Rate
+Authorizations
+Overview
+GET
+Get Authorizations
+GET
+Get Card Authorizations
+GET
+Get Authorization
+PUT
+Update Authorization
+Transactions
+Overview
+GET
+Get Transactions
+GET
+Get Card Transactions
+GET
+Get Transaction
+PUT
+Update Transaction
+Disputes
+Overview
+POST
+Create Dispute
+GET
+Get Disputes
+GET
+Get Dispute
+PUT
+Update Dispute
+Simulator (Sandbox Only)
+Overview
+POST
+Fund Account
+GET
+Generate Test Card
+POST
+Balance Enquiry
+POST
+Simulate Authorization
+GET
+Simulate Authorization Reversal
+Get Card Programs
+
+curl --request GET \
+  --url https://api.sandbox.sudo.cards/card-programs \
+  --header 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTNjNjIxMTgxNDQ0ZDAxOGVkOGI2OWYiLCJlbWFpbEFkZHJlc3MiOiJpbmZvQGFyYXBvaW50LmNvbS5uZyIsImp0aSI6IjZhNDA2ODcxMTM0YzM5MTk4ZmRmMTljNCIsIm1lbWJlcnNoaXAiOnsiX2lkIjoiNmEzYzYyMTE4MTQ0NGQwMThlZDhiNmExIiwiYnVzaW5lc3MiOnsiX2lkIjoiNmEzYzYyMTE4MTQ0NGQwMThlZDhiNjlhIiwibmFtZSI6IkFSQVBPSU5UIFNPTFVUSU9OUyBOSUcgTFREIiwiaXNBcHByb3ZlZCI6ZmFsc2V9LCJ1c2VyIjoiNmEzYzYyMTE4MTQ0NGQwMThlZDhiNjlmIiwicm9sZSI6IkFQSUtleSJ9LCJpYXQiOjE3ODI2MDU5MzcsImV4cCI6MTgxNDE2MzUzN30.JIxK3zJWLz7XdTpBOLGv3poPzpA9pVHOl0mtts8YnWA'
+
+200
+
+400
+
+401
+{
+  "statusCode": 200,
+  "message": "Card programs fetched successfully.",
+  "data": [
+    {
+      "name": "Physical Verve Prepaid Cards",
+      "description": "For Physical Verve Prepaid Cards",
+      "reference": "250604-2156",
+      "status": "active",
+      "business": "670cec9d25852ba485d74273",
+      "debitAccount": "67974b365c184d20fc340889",
+      "fundingSource": "670cec9d25852ba485d74286",
+      "currency": "NGN",
+      "design": null,
+      "cardBrand": "Verve",
+      "cardType": "physical",
+      "spendingControls": {
+        "channels": {
+          "atm": true,
+          "pos": true,
+          "web": true,
+          "mobile": true
+        },
+        "allowedCategories": [],
+        "blockedCategories": [],
+        "spendingLimits": [
+          {
+            "amount": 1500000,
+            "interval": "daily",
+            "categories": []
+          }
+        ]
+      },
+      "isDeleted": false,
+      "createdAt": "2025-06-04T21:05:26.115Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "_id": "6840b5161443c90831ba07a5",
+      "__v": 0
+    }
+  ],
+  "pagination": {
+    "total": 8,
+    "pages": 1,
+    "page": 0,
+    "limit": 50
+  }
+}
+Card Programs
+Get Card Programs
+GET
+/
+card-programs
+
+Try it
+Authorizations
+​
+Authorization
+stringheaderdefault:{{APIKey}}required
+Query Parameters
+​
+searchTerm
+string
+​
+cardType
+string
+​
+cardBrand
+string
+​
+currency
+string
+​
+status
+string
+​
+fromDate
+string
+​
+toDate
+string
+​
+limit
+string
+​
+page
+string
+Response
+
+200
+
+application/json
+Card programs fetched successfully.
+
+​
+statusCode
+integer
+Status code of the response. 200 indicates a successful request.
+
+​
+message
+string
+Human-readable description of the result.
+
+​
+data
+object[]
+Array of objects for the requested page.
+
+Show child attributes
+
+​
+pagination
+object
+Pagination metadata for the result set.
+
+Show child attributes
+
+Create Card Program
+Get a Card Program
+Powered by
+This documentation is built and hosted on Mintlify, a developer documentation platform
+Get Card Programs - Introduction

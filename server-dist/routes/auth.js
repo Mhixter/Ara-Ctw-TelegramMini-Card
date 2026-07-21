@@ -11,12 +11,13 @@ const router = (0, express_1.Router)();
 const IS_PRODUCTION = !!auth_1.BOT_TOKEN;
 // ── Helper: upsert Telegram user + wallet ─────────────────────────────────────
 async function upsertTelegramUser(telegramId, username, firstName) {
-    const result = await db_1.default.query(`INSERT INTO users (telegram_id, first_name, kyc_status, is_active)
-     VALUES ($1, $2, 'PENDING', true)
+    const result = await db_1.default.query(`INSERT INTO users (telegram_id, username, first_name, kyc_status, is_active)
+     VALUES ($1, $2, $3, 'PENDING', true)
      ON CONFLICT (telegram_id) DO UPDATE
        SET first_name = COALESCE(EXCLUDED.first_name, users.first_name),
+           username   = COALESCE(EXCLUDED.username, users.username),
            updated_at = NOW()
-     RETURNING *`, [telegramId, firstName || username || null]);
+     RETURNING *`, [telegramId, username || null, firstName || username || null]);
     const user = result.rows[0];
     await db_1.default.query(`INSERT INTO wallets (user_id, currency, balance)
      VALUES ($1, 'NGN', 0)
@@ -61,13 +62,13 @@ router.post('/telegram', async (req, res) => {
             return res.status(401).json({ error: 'Could not identify Telegram user.' });
         }
         const user = await upsertTelegramUser(telegramUser.telegramId, telegramUser.username, telegramUser.firstName);
-        const token = (0, auth_1.generateJWT)(telegramUser.telegramId, user.id);
+        const token = (0, auth_1.generateJWT)(telegramUser.telegramId, String(user.id));
         res.json({
             token,
             user: {
                 id: user.id,
                 telegramId: telegramUser.telegramId,
-                username: telegramUser.username,
+                username: telegramUser.username || user.username,
                 firstName: telegramUser.firstName || user.first_name,
                 kycStatus: user.kyc_status,
                 isActive: user.is_active,
@@ -93,7 +94,7 @@ router.post('/admin/login', async (req, res) => {
         const valid = await bcryptjs_1.default.compare(password, admin.password_hash);
         if (!valid)
             return res.status(401).json({ error: 'Invalid credentials.' });
-        const token = (0, auth_1.generateJWT)(0, admin.id, admin.role);
+        const token = (0, auth_1.generateJWT)(0, String(admin.id), admin.role);
         res.json({ token, admin: { id: admin.id, email: admin.email, role: admin.role } });
     }
     catch (err) {

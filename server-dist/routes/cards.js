@@ -13,7 +13,7 @@ const router = (0, express_1.Router)();
 router.get('/', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
     try {
         const cards = await db_1.default.query(`SELECT id, provider_card_id, mask_pan, card_tier, card_brand, card_currency,
-              daily_limit, monthly_limit, amount_spent_today, status, created_at
+              daily_limit, monthly_limit, amount_spent_today, status, expiry, created_at
        FROM cards WHERE user_id = $1 ORDER BY created_at DESC`, [req.user.userId]);
         res.json(cards.rows);
     }
@@ -25,7 +25,7 @@ router.get('/', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
 router.get('/:cardId/details', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
     try {
         const { cardId } = req.params;
-        const cardResult = await db_1.default.query('SELECT id, provider_card_id, mask_pan, card_brand, card_tier, status FROM cards WHERE id = $1 AND user_id = $2', [cardId, req.user.userId]);
+        const cardResult = await db_1.default.query('SELECT id, provider_card_id, mask_pan, card_brand, card_tier, status, expiry FROM cards WHERE id = $1 AND user_id = $2', [cardId, req.user.userId]);
         const card = cardResult.rows[0];
         if (!card)
             return res.status(404).json({ error: 'Card not found' });
@@ -35,8 +35,9 @@ router.get('/:cardId/details', auth_1.requireAuth, auth_1.requireUUID, async (re
         res.json({
             id: card.id,
             maskPan: details.maskPan,
+            pan: details.pan, // full PAN from vault (null if not available)
             cvv: details.cvv,
-            expiry: details.expiry,
+            expiry: details.expiry || card.expiry,
             billingAddress: details.billingAddress,
             brand: card.card_brand,
             tier: card.card_tier,
@@ -52,11 +53,19 @@ router.get('/:cardId/details', auth_1.requireAuth, auth_1.requireUUID, async (re
 router.post('/issue', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
     const client = await db_1.default.connect();
     try {
+        // Guard: fail fast in production when Sudo keys are not set
+        try {
+            (0, sudoAfrica_1.assertSudoProductionReady)();
+        }
+        catch (e) {
+            client.release();
+            return res.status(e.statusCode || 503).json({ error: e.message });
+        }
         const { currency = 'NGN', brand = 'VISA' } = req.body;
         if (!['VISA', 'MASTERCARD'].includes(brand)) {
             return res.status(400).json({ error: 'Only VISA and MASTERCARD are supported' });
         }
-        const userResult = await db_1.default.query('SELECT kyc_status FROM users WHERE id = $1', [req.user.userId]);
+        const userResult = await db_1.default.query('SELECT kyc_status, first_name, email, sudo_customer_id FROM users WHERE id = $1', [req.user.userId]);
         const user = userResult.rows[0];
         if (!user)
             return res.status(404).json({ error: 'User not found' });
@@ -66,6 +75,23 @@ router.post('/issue', auth_1.requireAuth, auth_1.requireUUID, async (req, res) =
         const tier = user.kyc_status === 'TIER_2' ? 'PLATINUM' : 'GOLD';
         const dailyLimit = tier === 'PLATINUM' ? 5000 : 500;
         const monthlyLimit = tier === 'PLATINUM' ? 50000 : 5000;
+        // ── Resolve per-user Sudo customer ID ────────────────────────────────────
+        // In production: create a Sudo customer on first card issuance, reuse after.
+        // In sandbox mode: issueCard ignores the customerId, so any placeholder works.
+        let sudoCustomerId = user.sudo_customer_id || '';
+        if (!sudoCustomerId && process.env.CARD_ISSUER_API_KEY && process.env.SUDO_SANDBOX !== 'true') {
+            // Parse name into parts — first_name may be "First Last" or just "First"
+            const nameParts = (user.first_name || 'BorderPay User').trim().split(/\s+/);
+            const firstName = nameParts[0] || 'BorderPay';
+            const lastName = nameParts.slice(1).join(' ') || 'User';
+            sudoCustomerId = await (0, sudoAfrica_1.createSudoCustomer)({
+                firstName,
+                lastName,
+                email: user.email || undefined,
+            });
+            // Persist so we don't create a new customer on every card
+            await db_1.default.query('UPDATE users SET sudo_customer_id = $1, updated_at = NOW() WHERE id = $2', [sudoCustomerId, req.user.userId]);
+        }
         await client.query('BEGIN');
         const walletResult = await client.query('SELECT * FROM wallets WHERE user_id = $1 AND currency = $2 FOR UPDATE', [req.user.userId, 'NGN']);
         const wallet = walletResult.rows[0];
@@ -91,20 +117,24 @@ router.post('/issue', auth_1.requireAuth, auth_1.requireUUID, async (req, res) =
             dailyLimit,
             monthlyLimit,
             userId: String(req.user.userId),
+            sudoCustomerId,
         });
         const cardResult = await client.query(`INSERT INTO cards
-         (user_id, provider_card_id, card_token, mask_pan, card_tier, card_brand, card_currency, daily_limit, monthly_limit, status)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'ACTIVE')
-       RETURNING id, mask_pan, card_tier, card_brand, card_currency, daily_limit, monthly_limit, status, created_at`, [
+         (user_id, provider_card_id, card_token, mask_pan, card_tier, card_brand, card_currency,
+          daily_limit, monthly_limit, status, sudo_account_id, expiry)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'ACTIVE',$10,$11)
+       RETURNING id, mask_pan, card_tier, card_brand, card_currency, daily_limit, monthly_limit, status, expiry, created_at`, [
             req.user.userId,
             sudoCard.providerCardId,
             sudoCard.cardToken,
             sudoCard.maskPan,
             tier,
-            brand,
+            (sudoCard.brand || brand).toUpperCase(),
             'NGN',
             dailyLimit,
             monthlyLimit,
+            sudoCard.accountId || null,
+            sudoCard.expiry || null,
         ]);
         await client.query('COMMIT');
         res.json({ success: true, card: cardResult.rows[0], message: `${tier} card issued successfully!` });
@@ -283,8 +313,13 @@ router.patch('/:cardId/status', auth_1.requireAuth, auth_1.requireUUID, async (r
     try {
         const { cardId } = req.params;
         const { status } = req.body;
-        if (!['ACTIVE', 'FROZEN'].includes(status)) {
+        if (!['ACTIVE', 'FROZEN', 'TERMINATED'].includes(status)) {
             return res.status(400).json({ error: 'Invalid status' });
+        }
+        // TERMINATED cards cannot be reactivated
+        const existing = await db_1.default.query('SELECT status FROM cards WHERE id = $1 AND user_id = $2', [cardId, req.user.userId]);
+        if (existing.rows[0]?.status === 'TERMINATED') {
+            return res.status(400).json({ error: 'Terminated cards cannot be modified' });
         }
         const result = await db_1.default.query('UPDATE cards SET status = $1 WHERE id = $2 AND user_id = $3 RETURNING id, provider_card_id, status', [status, cardId, req.user.userId]);
         if (!result.rows.length)
@@ -319,6 +354,77 @@ router.patch('/:cardId/limits', auth_1.requireAuth, auth_1.requireUUID, async (r
     }
     catch {
         res.status(500).json({ error: 'Server error' });
+    }
+});
+// ── Top up a card from wallet balance ─────────────────────────────────────────
+router.post('/:cardId/topup', auth_1.requireAuth, auth_1.requireUUID, async (req, res) => {
+    const client = await db_1.default.connect();
+    try {
+        const cardId = String(req.params.cardId);
+        const amount = Number(req.body.amount);
+        if (!amount || amount < 100) {
+            client.release();
+            return res.status(400).json({ error: 'Minimum top-up is ₦100' });
+        }
+        // Verify card ownership and state
+        const cardResult = await db_1.default.query('SELECT id, provider_card_id, mask_pan, status, sudo_account_id FROM cards WHERE id = $1 AND user_id = $2', [cardId, req.user.userId]);
+        const card = cardResult.rows[0];
+        if (!card) {
+            client.release();
+            return res.status(404).json({ error: 'Card not found' });
+        }
+        if (card.status !== 'ACTIVE') {
+            client.release();
+            return res.status(400).json({ error: 'Card must be active to top up' });
+        }
+        await client.query('BEGIN');
+        // Lock wallet and check balance
+        const walletResult = await client.query("SELECT * FROM wallets WHERE user_id = $1 AND currency = 'NGN' FOR UPDATE", [req.user.userId]);
+        const wallet = walletResult.rows[0];
+        if (!wallet) {
+            await client.query('ROLLBACK');
+            client.release();
+            return res.status(404).json({ error: 'NGN wallet not found' });
+        }
+        if (Number(wallet.balance) < amount) {
+            await client.query('ROLLBACK');
+            client.release();
+            return res.status(400).json({
+                error: `Insufficient balance. Available: ₦${Number(wallet.balance).toLocaleString('en-NG', { minimumFractionDigits: 2 })}`,
+            });
+        }
+        // Debit wallet
+        await client.query('UPDATE wallets SET balance = balance - $1, updated_at = NOW() WHERE id = $2', [amount, wallet.id]);
+        const ref = `CARD-TOPUP-${(0, uuid_1.v4)()}`;
+        // Ledger entry
+        await client.query(`INSERT INTO ledger_entries (id, debit_wallet_id, amount, currency, purpose, transaction_reference, metadata, created_at)
+       VALUES (gen_random_uuid(), $1, $2, 'NGN', 'CARD_FUNDING', $3, $4, NOW())`, [wallet.id, amount, ref, JSON.stringify({ cardId: card.id, maskPan: card.mask_pan })]);
+        await client.query('COMMIT');
+        client.release();
+        // Fund card via Sudo — after commit so wallet is already debited atomically
+        // Passes sudo_account_id so the service uses POST /accounts/transfer (correct production path)
+        try {
+            await (0, sudoAfrica_1.fundCard)(card.provider_card_id, card.sudo_account_id ?? null, amount);
+        }
+        catch (sudoErr) {
+            console.error('[cards/topup] Sudo fundCard failed after wallet debit:', sudoErr.message);
+            return res.status(207).json({
+                success: true,
+                warning: 'Wallet debited. Card funding is queued — contact support if it does not reflect shortly.',
+                reference: ref,
+            });
+        }
+        res.json({
+            success: true,
+            message: `₦${amount.toLocaleString('en-NG', { minimumFractionDigits: 2 })} added to card`,
+            reference: ref,
+        });
+    }
+    catch (err) {
+        await client.query('ROLLBACK').catch(() => { });
+        client.release();
+        console.error('[cards/topup]', err);
+        res.status(500).json({ error: err.message || 'Server error' });
     }
 });
 exports.default = router;

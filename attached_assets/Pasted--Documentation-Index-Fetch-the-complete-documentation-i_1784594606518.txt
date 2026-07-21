@@ -1,0 +1,210 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.sudo.africa/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Get Funding Sources
+
+> Fetches existing funding sources.
+
+
+
+## OpenAPI
+
+````yaml openapi.json get /fundingsources
+openapi: 3.1.0
+info:
+  title: Sudo Sandbox API
+  version: '1.0'
+servers:
+  - url: https://api.sandbox.sudo.cards
+security:
+  - sec0: []
+paths:
+  /fundingsources:
+    get:
+      summary: Get Funding Sources
+      description: Fetches existing funding sources.
+      operationId: get-funding-sources
+      responses:
+        '200':
+          description: Funding sources fetched successfully.
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+              example: Express
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+              example: '*'
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              example: '250000'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              example: '249999'
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              example: '0'
+            Content-Type:
+              schema:
+                type: string
+              example: application/json; charset=utf-8
+            ETag:
+              schema:
+                type: string
+              example: W/"2dd-sfRBgLV2BqnKnzwqFCi2UGdBgUQ"
+            Connection:
+              schema:
+                type: string
+              example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+              example: timeout=5
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    description: >-
+                      Status code of the response. `200` indicates a successful
+                      request.
+                  message:
+                    type: string
+                    description: Human-readable description of the result.
+                  data:
+                    type: array
+                    description: Array of objects for the requested page.
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          description: Unique identifier of the object.
+                        business:
+                          type: string
+                          description: Identifier of the business that owns this object.
+                        type:
+                          type: string
+                          description: Type of the object.
+                        status:
+                          type: string
+                          description: Current status of the object.
+                        isDeleted:
+                          type: boolean
+                          description: Whether the object has been soft-deleted.
+                        createdAt:
+                          type: string
+                          format: date-time
+                          description: ISO 8601 timestamp of when the object was created.
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          description: >-
+                            ISO 8601 timestamp of when the object was last
+                            updated.
+                        __v:
+                          type: integer
+                          description: Internal document version (Mongo).
+                  pagination:
+                    type: object
+                    description: Pagination metadata for the result set.
+                    properties:
+                      total:
+                        type: integer
+                        description: >-
+                          Total number of records matching the query across all
+                          pages.
+                      pages:
+                        type: integer
+                        description: Total number of pages available for the current query.
+                      page:
+                        type: integer
+                        description: >-
+                          Current page index (zero-based; matches the `page`
+                          query parameter).
+                      limit:
+                        type: integer
+                        description: >-
+                          Maximum number of records returned per page (matches
+                          the `limit` query parameter).
+              example:
+                statusCode: 200
+                message: Funding sources fetched successfully.
+                data:
+                  - _id: 670cec9d25852ba485d74286
+                    business: 670cec9d25852ba485d74273
+                    type: default
+                    status: active
+                    isDeleted: false
+                    createdAt: '2025-06-04T21:05:26.115Z'
+                    updatedAt: '2025-06-05T09:15:00.000Z'
+                    __v: 0
+                pagination:
+                  total: 8
+                  pages: 1
+                  page: 0
+                  limit: 50
+        '400':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    description: >-
+                      Status code of the response. `200` indicates a successful
+                      request.
+                  message:
+                    type: string
+                    description: Human-readable description of the result.
+                  data:
+                    nullable: true
+                    description: Always `null` for error responses.
+              example:
+                statusCode: 400
+                message: Invalid pagination parameters.
+                data: null
+        '401':
+          description: Authentication failed — missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    description: >-
+                      Status code of the response. `200` indicates a successful
+                      request.
+                  message:
+                    type: string
+                    description: Human-readable description of the result.
+                  data:
+                    nullable: true
+                    description: Response payload.
+              example:
+                statusCode: 401
+                message: >-
+                  Unauthorized. Provide a valid API key in the Authorization
+                  header.
+                data: null
+      deprecated: false
+components:
+  securitySchemes:
+    sec0:
+      type: apiKey
+      in: header
+      name: Authorization
+      x-bearer-format: bearer
+      x-default: '{{APIKey}}'
+
+````

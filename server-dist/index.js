@@ -82,6 +82,7 @@ async function runMigrations() {
       CREATE TABLE IF NOT EXISTS users (
         id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         telegram_id  BIGINT UNIQUE NOT NULL,
+        username     VARCHAR(255),
         email        VARCHAR(255),
         kyc_status   VARCHAR(20)  DEFAULT 'PENDING',
         is_active    BOOLEAN      DEFAULT true,
@@ -163,6 +164,7 @@ async function runMigrations() {
             `ALTER TABLE users       ADD COLUMN IF NOT EXISTS google_id     VARCHAR(255)`,
             `ALTER TABLE users       ADD COLUMN IF NOT EXISTS github_id     VARCHAR(255)`,
             `CREATE UNIQUE INDEX IF NOT EXISTS users_github_id_idx ON users(github_id) WHERE github_id IS NOT NULL`,
+            `ALTER TABLE users       ADD COLUMN IF NOT EXISTS username      VARCHAR(255)`,
             `ALTER TABLE users       ADD COLUMN IF NOT EXISTS first_name    VARCHAR(255)`,
             `ALTER TABLE users       ADD COLUMN IF NOT EXISTS kyc_status    VARCHAR(20)  DEFAULT 'PENDING'`,
             `ALTER TABLE users       ADD COLUMN IF NOT EXISTS is_active     BOOLEAN      DEFAULT true`,
@@ -189,6 +191,12 @@ async function runMigrations() {
             `ALTER TABLE user_kyc    ADD COLUMN IF NOT EXISTS updated_at      TIMESTAMPTZ  DEFAULT NOW()`,
             `ALTER TABLE users       ADD COLUMN IF NOT EXISTS kyc_rejection_reason TEXT`,
             `ALTER TABLE users       ADD COLUMN IF NOT EXISTS updated_at      TIMESTAMPTZ  DEFAULT NOW()`,
+            // Sudo Africa card account link (needed for account-to-account top-up transfers)
+            `ALTER TABLE cards       ADD COLUMN IF NOT EXISTS sudo_account_id  VARCHAR(255)`,
+            // Card expiry stored at issue time (Sudo returns expiryMonth + expiryYear)
+            `ALTER TABLE cards       ADD COLUMN IF NOT EXISTS expiry           VARCHAR(10)`,
+            // Per-user Sudo Africa customer ID (created on first card issuance, reused after)
+            `ALTER TABLE users       ADD COLUMN IF NOT EXISTS sudo_customer_id VARCHAR(255)`,
         ];
         let ok = 0;
         let failed = 0;
@@ -234,8 +242,39 @@ async function ensureSuperAdmin() {
     }
 }
 // ─── Startup ──────────────────────────────────────────────────────────────────
+function logProductionWarnings() {
+    if (process.env.NODE_ENV !== 'production')
+        return;
+    const required = {
+        TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
+        CARD_ISSUER_API_KEY: process.env.CARD_ISSUER_API_KEY,
+        SUDO_CUSTOMER_ID: process.env.SUDO_CUSTOMER_ID,
+        SUDO_FUND_ACCOUNT_ID: process.env.SUDO_FUND_ACCOUNT_ID,
+        PAYPOINT_API_KEY: process.env.PAYPOINT_API_KEY,
+        WEBHOOK_SECRET: process.env.WEBHOOK_SECRET,
+        JWT_SECRET: process.env.JWT_SECRET,
+    };
+    const optional = {
+        SUDO_COLLECTION_ACCOUNT_NUMBER: process.env.SUDO_COLLECTION_ACCOUNT_NUMBER,
+        SUDO_COLLECTION_BANK_CODE: process.env.SUDO_COLLECTION_BANK_CODE,
+        PAYPOINT_WEBHOOK_SECRET: process.env.PAYPOINT_WEBHOOK_SECRET,
+    };
+    const missing = Object.entries(required).filter(([, v]) => !v).map(([k]) => k);
+    const missingOpt = Object.entries(optional).filter(([, v]) => !v).map(([k]) => k);
+    if (missing.length) {
+        console.warn(`[startup] ⚠️  PRODUCTION — missing required env vars: ${missing.join(', ')}`);
+        console.warn('[startup]    Card issuance and virtual accounts will return 503 until these are set.');
+    }
+    else {
+        console.log('[startup] ✅ All required production env vars present.');
+    }
+    if (missingOpt.length) {
+        console.warn(`[startup] ℹ️  Optional env vars not set (sweeps disabled): ${missingOpt.join(', ')}`);
+    }
+}
 app.listen(PORT, async () => {
     console.log(`Server running on port ${PORT}`);
+    logProductionWarnings();
     try {
         await runMigrations();
         await ensureSuperAdmin();

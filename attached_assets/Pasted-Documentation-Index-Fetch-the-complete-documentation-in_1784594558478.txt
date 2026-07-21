@@ -1,0 +1,337 @@
+Documentation Index
+Fetch the complete documentation index at: /llms.txt
+
+Use this file to discover all available pages before exploring further.
+
+Skip to main content
+
+Search...
+Ctrl K
+Support
+Get API Key
+
+Guides
+API Reference
+Overview
+Introduction
+Customers
+Overview
+POST
+Create Customer
+GET
+Get Customers
+GET
+Get Customer
+PUT
+Update Customer
+PUT
+Generate Customer Document URL
+Funding Sources
+Overview
+POST
+Create Funding Source
+GET
+Get Funding Sources
+GET
+Get Funding Source
+PUT
+Update Funding Source
+Card Programs
+Overview
+POST
+Create Card Program
+GET
+Get Card Programs
+GET
+Get a Card Program
+GET
+Get Cards By a Program
+PATCH
+Update a Card Program
+Cards
+Overview
+POST
+Create Card
+GET
+Get Cards
+GET
+Get Customer Cards
+GET
+Get Card
+GET
+Get Card Balance
+PUT
+Send Default Card PIN
+PUT
+Change Card PIN
+PUT
+Enroll Card for 2FA
+PUT
+Update Card
+GET
+Generate Card Token
+PUT
+Digitalize Card
+POST
+Order Cards
+Accounts
+Overview
+POST
+Create Account
+GET
+Get Accounts
+GET
+Get Account
+GET
+Get Account Balance
+GET
+Get Account Transactions
+GET
+Transfer Rate
+Authorizations
+Overview
+GET
+Get Authorizations
+GET
+Get Card Authorizations
+GET
+Get Authorization
+PUT
+Update Authorization
+Transactions
+Overview
+GET
+Get Transactions
+GET
+Get Card Transactions
+GET
+Get Transaction
+PUT
+Update Transaction
+Disputes
+Overview
+POST
+Create Dispute
+GET
+Get Disputes
+GET
+Get Dispute
+PUT
+Update Dispute
+Simulator (Sandbox Only)
+Overview
+POST
+Fund Account
+GET
+Generate Test Card
+POST
+Balance Enquiry
+POST
+Simulate Authorization
+GET
+Simulate Authorization Reversal
+Get Customers
+
+curl --request GET \
+  --url 'https://api.sandbox.sudo.cards/customers?limit=100' \
+  --header 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTNjNjIxMTgxNDQ0ZDAxOGVkOGI2OWYiLCJlbWFpbEFkZHJlc3MiOiJpbmZvQGFyYXBvaW50LmNvbS5uZyIsImp0aSI6IjZhNDA2ODcxMTM0YzM5MTk4ZmRmMTljNCIsIm1lbWJlcnNoaXAiOnsiX2lkIjoiNmEzYzYyMTE4MTQ0NGQwMThlZDhiNmExIiwiYnVzaW5lc3MiOnsiX2lkIjoiNmEzYzYyMTE4MTQ0NGQwMThlZDhiNjlhIiwibmFtZSI6IkFSQVBPSU5UIFNPTFVUSU9OUyBOSUcgTFREIiwiaXNBcHByb3ZlZCI6ZmFsc2V9LCJ1c2VyIjoiNmEzYzYyMTE4MTQ0NGQwMThlZDhiNjlmIiwicm9sZSI6IkFQSUtleSJ9LCJpYXQiOjE3ODI2MDU5MzcsImV4cCI6MTgxNDE2MzUzN30.JIxK3zJWLz7XdTpBOLGv3poPzpA9pVHOl0mtts8YnWA'
+
+200
+
+400
+
+401
+{
+  "statusCode": 200,
+  "message": "Customers fetched successfully.",
+  "data": [
+    {
+      "_id": "64a1b2c3d4e5f6a7b8c9d0e1",
+      "business": "63f0a1b2c3d4e5f6a7b8c9d0",
+      "type": "individual",
+      "name": "John Doe",
+      "status": "active",
+      "isApproved": true,
+      "phoneNumber": "+2348000000000",
+      "emailAddress": "johndoe@example.com",
+      "individual": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "otherNames": "",
+        "dob": "1990/01/01",
+        "identity": {
+          "type": "BVN",
+          "number": "22212345678"
+        },
+        "documents": {
+          "idFrontUrl": "https://sudo-documents.s3.amazonaws.com/customers/64a1b2c3d4e5f6a7b8c9d0e1/id-front.png",
+          "idBackUrl": "https://sudo-documents.s3.amazonaws.com/customers/64a1b2c3d4e5f6a7b8c9d0e1/id-back.png",
+          "addressVerificationUrl": "https://sudo-documents.s3.amazonaws.com/customers/64a1b2c3d4e5f6a7b8c9d0e1/utility-bill.pdf"
+        }
+      },
+      "billingAddress": {
+        "line1": "4 Barnawa Close",
+        "line2": "Off Challawa Crescent",
+        "city": "Barnawa",
+        "state": "Kaduna",
+        "postalCode": "800243",
+        "country": "Nigeria"
+      },
+      "createdAt": "2024-09-06T12:34:56.789Z",
+      "updatedAt": "2024-09-06T12:34:56.789Z",
+      "__v": 0
+    }
+  ],
+  "pagination": {
+    "total": 8,
+    "pages": 1,
+    "page": 0,
+    "limit": 50
+  }
+}
+Customers
+Get Customers
+Fetches existing customer objects according to query parameters.
+
+GET
+/
+customers
+
+Try it
+Authorizations
+​
+Authorization
+stringheaderdefault:{{APIKey}}required
+Query Parameters
+​
+page
+integer<int32>default:0
+Specifies the position the response data should begin from.
+
+​
+limit
+integer<int32>default:100
+The number of customers to fetch.
+
+Response
+
+200
+
+application/json
+Customers fetched successfully.
+
+​
+statusCode
+integer
+Status code of the response. 200 indicates a successful request.
+
+​
+message
+string
+Human-readable description of the result.
+
+​
+data
+object[]
+Array of objects for the requested page.
+
+Show child attributes
+
+​
+pagination
+object
+Pagination metadata for the result set.
+
+Show child attributes
+
+Create Customer
+Get Customer
+Powered by
+This documentation is built and hosted on Mintlify, a developer documentation platform
+Get Customers - Introduction
+
+GET
+Get Customers
+GET
+/
+customers
+
+Send
+Get Customers
+Fetches existing customer objects according to query parameters.
+
+Authorization
+Authorization
+string
+required
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTNjNjIxMTgxNDQ0ZDAxOGVkOGI2OWYiLCJlbWFpbEFkZHJlc3MiOiJpbmZvQGFyYXBvaW50LmNvbS5uZyIsImp0aSI6IjZhNDA2ODcxMTM0YzM5MTk4ZmRmMTljNCIsIm1lbWJlcnNoaXAiOnsiX2lkIjoiNmEzYzYyMTE4MTQ0NGQwMThlZDhiNmExIiwiYnVzaW5lc3MiOnsiX2lkIjoiNmEzYzYyMTE4MTQ0NGQwMThlZDhiNjlhIiwibmFtZSI6IkFSQVBPSU5UIFNPTFVUSU9OUyBOSUcgTFREIiwiaXNBcHByb3ZlZCI6ZmFsc2V9LCJ1c2VyIjoiNmEzYzYyMTE4MTQ0NGQwMThlZDhiNjlmIiwicm9sZSI6IkFQSUtleSJ9LCJpYXQiOjE3ODI2MDU5MzcsImV4cCI6MTgxNDE2MzUzN30.JIxK3zJWLz7XdTpBOLGv3poPzpA9pVHOl0mtts8YnWA
+Query
+page
+integer<int32>
+Specifies the position the response data should begin from.
+
+enter page
+limit
+integer<int32>
+The number of customers to fetch.
+
+100
+Get Customers
+
+curl --request GET \
+  --url 'https://api.sandbox.sudo.cards/customers?limit=100' \
+  --header 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTNjNjIxMTgxNDQ0ZDAxOGVkOGI2OWYiLCJlbWFpbEFkZHJlc3MiOiJpbmZvQGFyYXBvaW50LmNvbS5uZyIsImp0aSI6IjZhNDA2ODcxMTM0YzM5MTk4ZmRmMTljNCIsIm1lbWJlcnNoaXAiOnsiX2lkIjoiNmEzYzYyMTE4MTQ0NGQwMThlZDhiNmExIiwiYnVzaW5lc3MiOnsiX2lkIjoiNmEzYzYyMTE4MTQ0NGQwMThlZDhiNjlhIiwibmFtZSI6IkFSQVBPSU5UIFNPTFVUSU9OUyBOSUcgTFREIiwiaXNBcHByb3ZlZCI6ZmFsc2V9LCJ1c2VyIjoiNmEzYzYyMTE4MTQ0NGQwMThlZDhiNjlmIiwicm9sZSI6IkFQSUtleSJ9LCJpYXQiOjE3ODI2MDU5MzcsImV4cCI6MTgxNDE2MzUzN30.JIxK3zJWLz7XdTpBOLGv3poPzpA9pVHOl0mtts8YnWA'
+
+200
+
+400
+
+401
+{
+  "statusCode": 200,
+  "message": "Customers fetched successfully.",
+  "data": [
+    {
+      "_id": "64a1b2c3d4e5f6a7b8c9d0e1",
+      "business": "63f0a1b2c3d4e5f6a7b8c9d0",
+      "type": "individual",
+      "name": "John Doe",
+      "status": "active",
+      "isApproved": true,
+      "phoneNumber": "+2348000000000",
+      "emailAddress": "johndoe@example.com",
+      "individual": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "otherNames": "",
+        "dob": "1990/01/01",
+        "identity": {
+          "type": "BVN",
+          "number": "22212345678"
+        },
+        "documents": {
+          "idFrontUrl": "https://sudo-documents.s3.amazonaws.com/customers/64a1b2c3d4e5f6a7b8c9d0e1/id-front.png",
+          "idBackUrl": "https://sudo-documents.s3.amazonaws.com/customers/64a1b2c3d4e5f6a7b8c9d0e1/id-back.png",
+          "addressVerificationUrl": "https://sudo-documents.s3.amazonaws.com/customers/64a1b2c3d4e5f6a7b8c9d0e1/utility-bill.pdf"
+        }
+      },
+      "billingAddress": {
+        "line1": "4 Barnawa Close",
+        "line2": "Off Challawa Crescent",
+        "city": "Barnawa",
+        "state": "Kaduna",
+        "postalCode": "800243",
+        "country": "Nigeria"
+      },
+      "createdAt": "2024-09-06T12:34:56.789Z",
+      "updatedAt": "2024-09-06T12:34:56.789Z",
+      "__v": 0
+    }
+  ],
+  "pagination": {
+    "total": 8,
+    "pages": 1,
+    "page": 0,
+    "limit": 50
+  }
+}

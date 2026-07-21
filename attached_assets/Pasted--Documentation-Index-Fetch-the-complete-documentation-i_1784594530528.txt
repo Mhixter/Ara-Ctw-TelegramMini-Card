@@ -1,0 +1,502 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.sudo.africa/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Create Card
+
+> Create, map or replace cards for a specific customer.
+
+
+
+## OpenAPI
+
+````yaml openapi.json post /cards
+openapi: 3.1.0
+info:
+  title: Sudo Sandbox API
+  version: '1.0'
+servers:
+  - url: https://api.sandbox.sudo.cards
+security:
+  - sec0: []
+paths:
+  /cards:
+    post:
+      summary: Create Card
+      description: Create, map or replace cards for a specific customer.
+      operationId: create-card
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - customerId
+                - type
+                - currency
+                - status
+              properties:
+                customerId:
+                  type: string
+                  description: The customer `_id`.
+                fundingSourceId:
+                  type: string
+                  description: >-
+                    The funding source `_id`. Required if you wish to map card
+                    to an existing funding source.
+                type:
+                  type: string
+                  description: The card type.
+                  default: physical
+                  enum:
+                    - physical
+                    - virtual
+                brand:
+                  type: string
+                  description: The card brand.
+                  enum:
+                    - Verve
+                    - AfriGo
+                    - MasterCard
+                    - Visa
+                number:
+                  type: string
+                  description: >-
+                    The card PAN (Verve or AfriGo) or Card ID (Visa). Required
+                    if `type` is `physical`.
+                enable2FA:
+                  type: boolean
+                  description: >-
+                    Enable 2FA for the card, this enables the card to receive
+                    OTP for web and mobile transactions.
+                  default: false
+                currency:
+                  type: string
+                  description: The currency type.
+                  default: NGN
+                  enum:
+                    - NGN
+                    - USD
+                issuerCountry:
+                  type: string
+                  description: >-
+                    3 Digits Issuer Country. `NGA` for Nigeria and `USA` for
+                    United States. Defaults to `NGA`.
+                  default: NGA
+                  enum:
+                    - NGA
+                    - USA
+                status:
+                  type: string
+                  description: The initial card status.
+                  default: active
+                  enum:
+                    - active
+                    - inactive
+                metadata:
+                  type: string
+                  description: >-
+                    The metadata object to attach to the card. Stored in
+                    key-value pair
+                  format: json
+                spendingControls:
+                  type: object
+                  description: >-
+                    Card spending controls.  Default usage limits will be
+                    applied if non is provided.
+                  properties:
+                    allowedCategories:
+                      type: array
+                      description: Array of allowed categories (MCC).
+                      default: []
+                      items:
+                        type: string
+                    blockedCategories:
+                      type: array
+                      description: Array of blocked categories (MCC).
+                      default: []
+                      items:
+                        type: string
+                    channels:
+                      type: object
+                      description: Channels allowed to use card on
+                      properties:
+                        atm:
+                          type: boolean
+                          description: >-
+                            Set to `true` to allow atm transactions. Otherwise,
+                            set to `false`.
+                          default: true
+                        pos:
+                          type: boolean
+                          description: >-
+                            Set to `true` to allow pos transactions. Otherwise,
+                            set to `false`.
+                          default: true
+                        web:
+                          type: boolean
+                          description: >-
+                            Set to `true` to allow web transactions. Otherwise,
+                            set to `false`.
+                          default: true
+                        mobile:
+                          type: boolean
+                          description: Set to `true` to allow mobile transactions.
+                          default: true
+                    spendingLimits:
+                      type: array
+                      description: Array of spending limit objects.
+                      items:
+                        properties:
+                          amount:
+                            type: integer
+                            description: The amount to set as limit.
+                            format: int32
+                          interval:
+                            type: string
+                            description: The limit interval.
+                            default: daily
+                            enum:
+                              - daily
+                              - weekly
+                              - monthly
+                              - yearly
+                        required:
+                          - amount
+                          - interval
+                        type: object
+                bankCode:
+                  type: string
+                  description: >-
+                    The bank code of existing account. Required if you wish to
+                    map card to existing account.
+                accountNumber:
+                  type: string
+                  description: >-
+                    The account number of existing account. Required if you wish
+                    to map card to existing account.
+                replacementFor:
+                  type: string
+                  description: >-
+                    The `_id` of the current card you wish to replace. Required
+                    for card replacement.
+                replacementReason:
+                  type: string
+                  description: The reason for replacement. Required for card replacement.
+                  enum:
+                    - lost
+                    - stolen
+                debitAccountId:
+                  type: string
+                  description: >-
+                    Debit account `_id`. Required for all virtual cards and
+                    giftcards.
+                amount:
+                  type: integer
+                  description: Funding amount. Required for mastercard.
+                  format: int32
+                sendPINSMS:
+                  type: boolean
+                  description: Send default PIN to customer phone number via SMS.
+                  default: false
+                expirationDate:
+                  type: string
+                  description: >-
+                    Card expiry date. Applies to Visa cards only. Format
+                    `MMM-YYYY` example `AUG-2025`. All cards are subject to
+                    maximum of 3 years validity.
+      responses:
+        '201':
+          description: Card created successfully.
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+              example: Express
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+              example: '*'
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              example: '250000'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              example: '249999'
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              example: '0'
+            Content-Type:
+              schema:
+                type: string
+              example: application/json; charset=utf-8
+            ETag:
+              schema:
+                type: string
+              example: W/"2dd-sfRBgLV2BqnKnzwqFCi2UGdBgUQ"
+            Connection:
+              schema:
+                type: string
+              example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+              example: timeout=5
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    description: >-
+                      Status code of the response. `200` indicates a successful
+                      request.
+                  message:
+                    type: string
+                    description: Human-readable description of the result.
+                  data:
+                    type: object
+                    description: Response payload.
+                    properties:
+                      business:
+                        type: string
+                        description: Identifier of the business that owns this object.
+                      customer:
+                        type: string
+                        description: >-
+                          Associated customer — an id, or a summary object on
+                          nested resources.
+                      account:
+                        type: string
+                        description: >-
+                          Associated account — an id, or a summary object on
+                          nested resources.
+                      fundingSource:
+                        type: string
+                        description: Identifier of the funding source backing this object.
+                      type:
+                        type: string
+                        description: Type of the object.
+                      brand:
+                        type: string
+                        description: Card scheme/brand (e.g. `Verve`, `MasterCard`).
+                      currency:
+                        type: string
+                        description: ISO 4217 currency code (e.g. `NGN`).
+                      maskedPan:
+                        type: string
+                        description: Masked card number (PAN).
+                      expiryMonth:
+                        type: string
+                        description: Card expiry month (MM).
+                      expiryYear:
+                        type: string
+                        description: Card expiry year (YYYY).
+                      metadata:
+                        type: object
+                        description: Arbitrary key-value pairs attached to the object.
+                        properties:
+                          createdBy:
+                            type: string
+                            description: Identifier of the actor that created the object.
+                          purpose:
+                            type: string
+                            description: Free-text purpose of the card.
+                      status:
+                        type: string
+                        description: Current status of the object.
+                      spendingControls:
+                        type: object
+                        description: >-
+                          Spending limits and channel/category controls applied
+                          to the card.
+                        properties:
+                          channels:
+                            type: object
+                            description: Channels through which the card may be used.
+                            properties:
+                              atm:
+                                type: boolean
+                                description: Whether ATM usage is allowed.
+                              pos:
+                                type: boolean
+                                description: Whether POS usage is allowed.
+                              web:
+                                type: boolean
+                                description: Whether web/online usage is allowed.
+                              mobile:
+                                type: boolean
+                                description: Whether mobile usage is allowed.
+                              _id:
+                                type: string
+                                description: Unique identifier of the object.
+                          allowedCategories:
+                            type: array
+                            description: Merchant category codes (MCC) explicitly allowed.
+                            items: {}
+                          blockedCategories:
+                            type: array
+                            description: Merchant category codes (MCC) explicitly blocked.
+                            items: {}
+                          spendingLimits:
+                            type: array
+                            description: Configured spending limits.
+                            items:
+                              type: object
+                              properties:
+                                amount:
+                                  type: integer
+                                  description: >-
+                                    Amount in the minor currency unit (e.g.
+                                    kobo).
+                                interval:
+                                  type: string
+                                  description: >-
+                                    Interval the limit applies over (`daily`,
+                                    `weekly`, `monthly`, `yearly`).
+                                categories:
+                                  type: array
+                                  description: >-
+                                    Merchant category codes the limit applies
+                                    to.
+                                  items: {}
+                                _id:
+                                  type: string
+                                  description: Unique identifier of the object.
+                          _id:
+                            type: string
+                            description: Unique identifier of the object.
+                      is2FAEnrolled:
+                        type: boolean
+                        description: Whether the card is enrolled for 3-D Secure / 2FA.
+                      isDefaultPINChanged:
+                        type: boolean
+                        description: Whether the default PIN has been changed.
+                      disposable:
+                        type: boolean
+                        description: Whether the card is single-use / disposable.
+                      refundAccount:
+                        nullable: true
+                        description: Account to which refunds are routed, if any.
+                      isDeleted:
+                        type: boolean
+                        description: Whether the object has been soft-deleted.
+                      createdAt:
+                        type: string
+                        format: date-time
+                        description: ISO 8601 timestamp of when the object was created.
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        description: >-
+                          ISO 8601 timestamp of when the object was last
+                          updated.
+                      _id:
+                        type: string
+                        description: Unique identifier of the object.
+                      __v:
+                        type: integer
+                        description: Internal document version (Mongo).
+              example:
+                statusCode: 200
+                message: Card created successfully.
+                data:
+                  business: 670cec9d25852ba485d74273
+                  customer: 64a1b2c3d4e5f6a7b8c9d0e1
+                  account: 67974b365c184d20fc340889
+                  fundingSource: 670cec9d25852ba485d74286
+                  type: virtual
+                  brand: Verve
+                  currency: NGN
+                  maskedPan: 506110******1234
+                  expiryMonth: '09'
+                  expiryYear: '2028'
+                  metadata:
+                    createdBy: api
+                    purpose: general
+                  status: active
+                  spendingControls:
+                    channels:
+                      atm: true
+                      pos: true
+                      web: true
+                      mobile: true
+                      _id: 6840b5161443c90831ba07b1
+                    allowedCategories: []
+                    blockedCategories: []
+                    spendingLimits:
+                      - amount: 1500000
+                        interval: daily
+                        categories: []
+                        _id: 6840b5161443c90831ba07b2
+                    _id: 6840b5161443c90831ba07b0
+                  is2FAEnrolled: false
+                  isDefaultPINChanged: false
+                  disposable: false
+                  refundAccount: null
+                  isDeleted: false
+                  createdAt: '2025-06-04T21:05:26.115Z'
+                  updatedAt: '2025-06-05T09:15:00.000Z'
+                  _id: 6418eb71a37e405064694518
+                  __v: 0
+        '400':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    description: >-
+                      Status code of the response. `200` indicates a successful
+                      request.
+                  message:
+                    type: string
+                    description: Human-readable description of the result.
+                  data:
+                    nullable: true
+                    description: Always `null` for error responses.
+              example:
+                statusCode: 400
+                message: '"customerId" is required'
+                data: null
+        '401':
+          description: Authentication failed — missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    description: >-
+                      Status code of the response. `200` indicates a successful
+                      request.
+                  message:
+                    type: string
+                    description: Human-readable description of the result.
+                  data:
+                    nullable: true
+                    description: Response payload.
+              example:
+                statusCode: 401
+                message: >-
+                  Unauthorized. Provide a valid API key in the Authorization
+                  header.
+                data: null
+      deprecated: false
+components:
+  securitySchemes:
+    sec0:
+      type: apiKey
+      in: header
+      name: Authorization
+      x-bearer-format: bearer
+      x-default: '{{APIKey}}'
+
+````

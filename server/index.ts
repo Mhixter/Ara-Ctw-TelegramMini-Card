@@ -202,6 +202,8 @@ async function runMigrations() {
       `ALTER TABLE cards       ADD COLUMN IF NOT EXISTS sudo_account_id  VARCHAR(255)`,
       // Card expiry stored at issue time (Sudo returns expiryMonth + expiryYear)
       `ALTER TABLE cards       ADD COLUMN IF NOT EXISTS expiry           VARCHAR(10)`,
+      // Per-user Sudo Africa customer ID (created on first card issuance, reused after)
+      `ALTER TABLE users       ADD COLUMN IF NOT EXISTS sudo_customer_id VARCHAR(255)`,
     ];
 
     let ok = 0;

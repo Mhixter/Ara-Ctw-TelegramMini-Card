@@ -2,7 +2,7 @@ import { Router, Response, Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import pool from '../db';
 import { requireAuth, requireUUID, AuthRequest } from '../middleware/auth';
-import { issueCard, getCardDetails, updateCardStatus, verifyWebhookSignature, fundCard, assertSudoProductionReady } from '../services/sudoAfrica';
+import { issueCard, createSudoCustomer, getCardDetails, updateCardStatus, verifyWebhookSignature, fundCard, assertSudoProductionReady } from '../services/sudoAfrica';
 
 const router = Router();
 
@@ -66,7 +66,10 @@ router.post('/issue', requireAuth, requireUUID, async (req: AuthRequest, res: Re
       return res.status(400).json({ error: 'Only VISA and MASTERCARD are supported' });
     }
 
-    const userResult = await pool.query('SELECT kyc_status FROM users WHERE id = $1', [req.user!.userId]);
+    const userResult = await pool.query(
+      'SELECT kyc_status, first_name, email, sudo_customer_id FROM users WHERE id = $1',
+      [req.user!.userId]
+    );
     const user = userResult.rows[0];
     if (!user) return res.status(404).json({ error: 'User not found' });
     if (user.kyc_status === 'PENDING' || user.kyc_status === 'BANNED') {
@@ -76,6 +79,30 @@ router.post('/issue', requireAuth, requireUUID, async (req: AuthRequest, res: Re
     const tier = user.kyc_status === 'TIER_2' ? 'PLATINUM' : 'GOLD';
     const dailyLimit = tier === 'PLATINUM' ? 5000 : 500;
     const monthlyLimit = tier === 'PLATINUM' ? 50000 : 5000;
+
+    // ── Resolve per-user Sudo customer ID ────────────────────────────────────
+    // In production: create a Sudo customer on first card issuance, reuse after.
+    // In sandbox mode: issueCard ignores the customerId, so any placeholder works.
+    let sudoCustomerId: string = user.sudo_customer_id || '';
+
+    if (!sudoCustomerId && process.env.CARD_ISSUER_API_KEY && process.env.SUDO_SANDBOX !== 'true') {
+      // Parse name into parts — first_name may be "First Last" or just "First"
+      const nameParts  = (user.first_name || 'BorderPay User').trim().split(/\s+/);
+      const firstName  = nameParts[0] || 'BorderPay';
+      const lastName   = nameParts.slice(1).join(' ') || 'User';
+
+      sudoCustomerId = await createSudoCustomer({
+        firstName,
+        lastName,
+        email: user.email || undefined,
+      });
+
+      // Persist so we don't create a new customer on every card
+      await pool.query(
+        'UPDATE users SET sudo_customer_id = $1, updated_at = NOW() WHERE id = $2',
+        [sudoCustomerId, req.user!.userId]
+      );
+    }
 
     await client.query('BEGIN');
 
@@ -111,7 +138,8 @@ router.post('/issue', requireAuth, requireUUID, async (req: AuthRequest, res: Re
       tier: tier as 'GOLD' | 'PLATINUM',
       dailyLimit,
       monthlyLimit,
-      userId: String(req.user!.userId),
+      userId:         String(req.user!.userId),
+      sudoCustomerId,
     });
 
     const cardResult = await client.query(

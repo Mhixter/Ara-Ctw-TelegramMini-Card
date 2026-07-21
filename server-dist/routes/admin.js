@@ -4,10 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const uuid_1 = require("uuid");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const db_1 = __importDefault(require("../db"));
 const auth_1 = require("../middleware/auth");
 const telegramNotify_1 = require("../services/telegramNotify");
+const sudoAfrica_1 = require("../services/sudoAfrica");
+const paypoint_1 = require("../services/paypoint");
 async function provisionVirtualAccount(userId, client) {
     const walletResult = await client.query('SELECT id, virtual_account_number FROM wallets WHERE user_id = $1 AND currency = $2', [userId, 'NGN']);
     if (walletResult.rows.length > 0 && !walletResult.rows[0].virtual_account_number) {
@@ -221,6 +224,49 @@ router.post('/admins', auth_1.requireAdmin, (0, auth_1.requireRole)('SUPER_ADMIN
         if (err.code === '23505')
             return res.status(409).json({ error: 'Email already exists' });
         res.status(500).json({ error: 'Server error' });
+    }
+});
+// ── Treasury: fund-account balance vs wallet exposure ─────────────────────────
+router.get('/treasury', auth_1.requireAdmin, (0, auth_1.requireRole)('SUPER_ADMIN', 'FINANCE_AUDITOR'), async (_req, res) => {
+    try {
+        const [walletExposure, cardStats, sudoBalance] = await Promise.all([
+            db_1.default.query("SELECT COALESCE(SUM(balance), 0) as total FROM wallets WHERE currency = 'NGN'"),
+            db_1.default.query("SELECT COUNT(*) as count, COALESCE(SUM(monthly_limit), 0) as monthly_exposure FROM cards WHERE status = 'ACTIVE'"),
+            (0, sudoAfrica_1.getSudoFundAccountBalance)(),
+        ]);
+        res.json({
+            walletExposure: Number(walletExposure.rows[0].total),
+            activeCards: Number(cardStats.rows[0].count),
+            cardMonthlyExposure: Number(cardStats.rows[0].monthly_exposure),
+            sudoFundAccount: sudoBalance,
+            sudoConfigured: !!process.env.CARD_ISSUER_API_KEY && !!process.env.SUDO_FUND_ACCOUNT_ID,
+            paypointConfigured: !!process.env.PAYPOINT_API_KEY,
+            sweepConfigured: !!process.env.SUDO_COLLECTION_ACCOUNT_NUMBER,
+        });
+    }
+    catch {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+// ── Treasury: trigger PayPoint → Sudo fund sweep ──────────────────────────────
+router.post('/treasury/sweep', auth_1.requireAdmin, (0, auth_1.requireRole)('SUPER_ADMIN'), async (req, res) => {
+    try {
+        const amountNaira = Number(req.body.amountNaira);
+        if (!amountNaira || amountNaira <= 0) {
+            return res.status(400).json({ error: 'Valid amountNaira required' });
+        }
+        const reference = `SWEEP-${(0, uuid_1.v4)()}`;
+        const result = await (0, paypoint_1.initiateTransferToSudo)({
+            amountNaira,
+            reference,
+            narration: `BorderPay fund sweep ${new Date().toISOString().slice(0, 10)}`,
+        });
+        console.log(`[admin/treasury] Sweep initiated — ref=${reference} amount=₦${amountNaira}`);
+        res.json({ success: true, result });
+    }
+    catch (err) {
+        console.error('[admin/treasury/sweep]', err);
+        res.status(500).json({ error: err.message || 'Sweep failed' });
     }
 });
 exports.default = router;
