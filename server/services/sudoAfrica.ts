@@ -149,20 +149,19 @@ export async function issueCard(opts: {
   }
 
   // Docs: POST /cards
-  // status, type, currency, issuerCountry are all lowercase in Sudo's API.
-  // fundingSourceId links the card to a Sudo funding source (not the account).
-  // spendingControls.channels enables card usage on web/pos/atm/mobile.
-  const body = {
+  // - type and currency are lowercase in Sudo's API.
+  // - Do NOT send status at creation — Sudo sets it to 'active' automatically.
+  // - metadata must be a plain object, NOT a JSON-serialised string.
+  // - Empty allowedCategories/blockedCategories arrays must be omitted entirely.
+  // - spendingLimits amount is in kobo (multiply by 100).
+  const body: Record<string, any> = {
     customerId:      opts.sudoCustomerId,
     type:            'virtual',
-    currency:        opts.currency,
-    status:          'active',          // MUST be lowercase
+    currency:        opts.currency.toLowerCase(),
     issuerCountry:   'NGA',
     fundingSourceId: fundingSourceId(opts.brand),
-    metadata:        JSON.stringify({ internalUserId: opts.userId, tier: opts.tier }),
+    metadata:        { internalUserId: opts.userId, tier: opts.tier },
     spendingControls: {
-      allowedCategories: [],
-      blockedCategories: [],
       channels: { atm: false, pos: true, web: true, mobile: true },
       spendingLimits: [
         { amount: opts.dailyLimit * 100,   interval: 'daily' },
@@ -171,6 +170,8 @@ export async function issueCard(opts: {
     },
   };
 
+  console.log('[sudo] issueCard request body:', JSON.stringify(body));
+
   const res = await fetch(`${sudoBase()}/cards`, {
     method: 'POST',
     headers: authHeaders(),
@@ -178,9 +179,12 @@ export async function issueCard(opts: {
   });
 
   if (!res.ok) {
-    const err: any = await res.json().catch(() => ({}));
+    const rawErr = await res.text().catch(() => '');
+    let errMsg = res.statusText;
+    try { errMsg = JSON.parse(rawErr)?.message || rawErr || res.statusText; } catch {}
+    console.error('[sudo] issueCard failed', res.status, rawErr);
     throw new Error(
-      `Sudo issueCard failed ${res.status}: ${err?.message || res.statusText}`
+      `Sudo issueCard failed ${res.status}: ${errMsg}`
     );
   }
 
