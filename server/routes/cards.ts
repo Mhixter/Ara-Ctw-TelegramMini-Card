@@ -156,6 +156,19 @@ router.post('/issue', requireAuth, requireUUID, async (req: AuthRequest, res: Re
       [feeRef, wallet.id, issuanceFee, 'CARD_ISSUANCE', JSON.stringify({ tier, brand, currency })]
     );
 
+    // Diagnostic: log env var presence (not values) before calling Sudo
+    console.log('[cards/issue] env check:', {
+      CARD_ISSUER_API_KEY:      !!process.env.CARD_ISSUER_API_KEY,
+      SUDO_CUSTOMER_ID:         !!process.env.SUDO_CUSTOMER_ID,
+      SUDO_FUNDING_SOURCE_ID_VISA: !!process.env.SUDO_FUNDING_SOURCE_ID_VISA,
+      SUDO_FUNDING_SOURCE_ID_MC:   !!process.env.SUDO_FUNDING_SOURCE_ID_MC,
+      SUDO_FUNDING_SOURCE_ID:      !!process.env.SUDO_FUNDING_SOURCE_ID,
+      SUDO_FUND_ACCOUNT_ID:    !!process.env.SUDO_FUND_ACCOUNT_ID,
+      SUDO_SANDBOX:            process.env.SUDO_SANDBOX,
+      resolvedSudoCustomerId:  sudoCustomerId ? `${sudoCustomerId.slice(0, 8)}…` : '(empty!)',
+      brand, currency, tier,
+    });
+
     // Call Sudo Africa (or sandbox fallback)
     const sudoCard = await issueCard({
       brand: brand as 'VISA' | 'MASTERCARD',

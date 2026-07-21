@@ -149,8 +149,10 @@ export async function issueCard(opts: {
   }
 
   // Docs: POST /cards
-  // - type and currency are lowercase in Sudo's API.
+  // - type: 'virtual' is the card delivery type (correct).
+  // - currency: uppercase ISO-4217 code ('NGN') — Sudo rejects lowercase.
   // - Do NOT send status at creation — Sudo sets it to 'active' automatically.
+  // - brand is NOT a create parameter — determined by the funding source.
   // - metadata must be a plain object, NOT a JSON-serialised string.
   // - Empty allowedCategories/blockedCategories arrays must be omitted entirely.
   // - spendingLimits amount is in kobo (multiply by 100).
@@ -162,10 +164,16 @@ export async function issueCard(opts: {
     );
   }
 
+  if (!opts.sudoCustomerId) {
+    throw new Error(
+      'Sudo customer ID is missing. Set the SUDO_CUSTOMER_ID env var (your business-level Sudo customer _id).'
+    );
+  }
+
   const body: Record<string, any> = {
     customerId:      opts.sudoCustomerId,
     type:            'virtual',
-    currency:        opts.currency.toLowerCase(),
+    currency:        opts.currency.toUpperCase(), // Sudo requires uppercase ISO-4217 (NGN, USD, etc.)
     issuerCountry:   'NGA',
     fundingSourceId: fsId,
     metadata:        { internalUserId: opts.userId, tier: opts.tier },
@@ -178,7 +186,8 @@ export async function issueCard(opts: {
     },
   };
 
-  console.log('[sudo] issueCard request body:', JSON.stringify(body));
+  console.log('[sudo] issueCard → POST', `${sudoBase()}/cards`);
+  console.log('[sudo] issueCard request body:', JSON.stringify(body, null, 2));
 
   const res = await fetch(`${sudoBase()}/cards`, {
     method: 'POST',
@@ -188,9 +197,13 @@ export async function issueCard(opts: {
 
   if (!res.ok) {
     const rawErr = await res.text().catch(() => '');
-    let errMsg = res.statusText;
-    try { errMsg = JSON.parse(rawErr)?.message || rawErr || res.statusText; } catch {}
-    console.error('[sudo] issueCard failed', res.status, rawErr);
+    let parsed: any = {};
+    try { parsed = JSON.parse(rawErr); } catch {}
+    const errMsg = parsed?.message || parsed?.error || rawErr || res.statusText;
+    // Log the full raw response so it appears in workflow logs for debugging
+    console.error('[sudo] issueCard FAILED —', res.status, res.statusText);
+    console.error('[sudo] issueCard error body:', rawErr);
+    console.error('[sudo] issueCard request that caused the error:', JSON.stringify(body, null, 2));
     throw new Error(
       `Sudo issueCard failed ${res.status}: ${errMsg}`
     );
